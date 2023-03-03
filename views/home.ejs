@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- Phần Header -->
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src = "socket.io/socket.io.js"></script>
+        <script src = "../public/js/FC1_Common.js"></script>
+        <script>
+            var socket = io("localhost:3000") // IP tĩnh (hoặc IP động, localhost)
+        </script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+        <link rel="stylesheet" href="CSS/styles.css">
+        <title>Scada hệ thống giám sát trên internet</title>
+    </head>
+    <!--Phần thân của website-->
+    <body>
+        <header class="text-center">
+            <a href="#"><img src="https://github.com/Luanpadao/WebServer_SCADA_HALA/blob/develop/images/LOGO_IUH.PNG?raw=true" title="Trường Đại học Công nghiệp Thành phố Hồ Chí Minh"
+                class="img-fluid m-0" alt=""></a>
+            <div class="text-center fw-bold text-danger">
+                ĐỀ TÀI: THIẾT KẾ HỆ THỐNG LƯU KHO TỰ ĐỘNG VÀ GIÁM SÁT BẰNG MÃ QR
+            </div>
+            <nav class="navbar navbar-expand-md bg-light p-0" id="navbar">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="index.html">
+                        <img src="https://github.com/Luanpadao/WebServer_SCADA_HALA/blob/develop/images/logo_HALA.png?raw=true" title="logo_HALA" height="60px" alt="Logo">
+                        HALA
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarResponsive">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item dropdown " id="n">
+                                <a class="nav-link dropdown-toggle active" id="bt_introduce" href="#introduce" role="button"
+                                    aria-expanded="false">
+                                    INTRODUCE
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" id="bt_tongquan" href="#TongQuan">TỔNG QUAN</a></li>
+                                    <hr class="dropdown-divider">
+                                    <li><a class="dropdown-item" id="bt_mohinh" href="#MoHinh">MÔ HÌNH</a></li>
+                                    <li>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="bt_control" href="#control">
+                                    CONTROL
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" id="bt_scada" href="#scada">SACADA</a></li>
+                                    <hr class="dropdown-divider">
+                                    <li><a class="dropdown-item" id="bt_table" href="#table">TABLE</a></li>
+                                    <li>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" id="bt_intructor" href="#intructor"> INTRUCTOR</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="bt_member" href="#member" role="button"
+                                aria-expanded="false">
+                                MEMBER
+                                </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" id="bt_member1" href="#member1">Bạch Hoàng Ân</a></li>
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item" id="bt_member2" href="#member2">Trần Tiến Anh</a></li>
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item" id="bt_member3" href="#member3">Nguyễn Phan Châu Huân</a>
+                                </li>
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item" id="bt_member4" href="#member4">Nguyễn Thành Luân</a></li>
+                                <li>
+                                </li>
+                            </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    </body>
+</html>
