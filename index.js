@@ -11,15 +11,6 @@ server.listen(3000);
 app.get("/", function(req, res){
     res.render("home")
 });
-// ///////////TRUYỀN NHẬN DỮ LIỆU VỚI TRÌNH DUYỆT WEB///////////////////
-io.on("connection", function(socket){
-    socket.on("sw_mode", function(data){
-		fn_Data_Write(sw_mode,data);
-	});
-    socket.on("sw_im_ex", function(data){
-		fn_Data_Write(sw_im_ex,data);
-	});
-});
 //////////////////////CẤU HÌNH KẾT NỐI KEPWARE////////////////////
 const {TagBuilder, IotGateway} = require('kepserverex-js');
 const tagBuilder = new TagBuilder({ namespace: 'Channel1.Device1' });
@@ -27,6 +18,17 @@ const iotGateway = new IotGateway({
     host: '127.0.0.1',
     port: 5000
 });
+///////////////////////////QUÉT DỮ LIỆU////////////////////////
+// Tạo Timer quét dữ liệu
+setInterval(
+	() => fn_read_data_scan(),
+	1000 //100ms = 1s
+);
+ 
+// Quét dữ liệu
+function fn_read_data_scan(){
+	fn_tagRead();	// Đọc giá trị tag
+}
 /////////////HÀM ĐỌC/GHI DỮ LIỆU XUỐNG KEPWARE(PLC)//////////////
 //Đọc dữ liệu
 var tagArr = [];
@@ -47,7 +49,7 @@ function fn_Data_Write(tag,data){
 }
 ///////////////////////////ĐỊNH NGHĨA TAG////////////////////////
 // Khai báo tag
-var sw_mode 	= 'sw_mode';    //tag bool
+var sw_mode 	= 'sw_mode';    //tag integer
 var sw_im_ex 	= 'sw_im_ex';   //tag bool
 var bt_run 		= 'bt_run';     //tag bool
 var bt_reset    = 'bt_reset';   //tag bool
@@ -55,9 +57,9 @@ var bt_e_stop 	= 'bt_e_stop';  //tag bool
 var bt_start 	= 'bt_start';   //tag bool
 var bt_stop 	= 'bt_stop';    //tag bool
 var bt_setup 	= 'bt_setup';   //tag bool
-var speed_x     = 'speed_x';    //tag real
-var speed_y     = 'speed_y';    //tag real
-var speed_z     = 'speed_z';    //tag real
+var speed_x     = 'speed_x';    //tag int
+var speed_y     = 'speed_y';    //tag int
+var speed_z     = 'speed_z';    //tag int
 var pos_x 	    = 'pos_x';      //tag integer 
 var pos_y 	    = 'pos_y';      //tag integer 
 var pos_z 	    = 'pos_z';      //tag integer
@@ -127,27 +129,16 @@ const TagList = tagBuilder
 .read(dc_o)
 .read(qr_code)
 .get();
-///////////////////////////QUÉT DỮ LIỆU////////////////////////
-// Tạo Timer quét dữ liệu
-setInterval(
-	() => fn_read_data_scan(),
-	1000 //100ms = 1s
-);
- 
-// Quét dữ liệu
-function fn_read_data_scan(){
-	fn_tagRead();	// Đọc giá trị tag
-}
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
     io.sockets.emit("sw_mode", tagArr[0]);  
     io.sockets.emit("sw_im_ex", tagArr[1]);
     io.sockets.emit("bt_run", tagArr[2]);
     io.sockets.emit("bt_reset", tagArr[3]);  
-    io.sockets.emit("sw_e_stop", tagArr[4]);
+    io.sockets.emit("bt_e_stop", tagArr[4]);
     io.sockets.emit("bt_start", tagArr[5]);
     io.sockets.emit("bt_stop", tagArr[6]);  
-    io.sockets.emit("sw_setup", tagArr[7]);
+    io.sockets.emit("bt_setup", tagArr[7]);
     io.sockets.emit("speed_x", tagArr[8]);
     io.sockets.emit("speed_y", tagArr[9]);
     io.sockets.emit("speed_z", tagArr[10]);
@@ -184,3 +175,15 @@ io.on("connection", function(socket){
     socket.on("Client-send-data", function(data){
     fn_tag();
 });});
+// ///////////TRUYỀN NHẬN DỮ LIỆU VỚI TRÌNH DUYỆT WEB///////////////////
+io.on("connection", function(socket){
+    socket.on("cmd_sw_mode", function(data){
+		fn_Data_Write(sw_mode,data);
+	});
+    socket.on("cmd_sw_im_ex", function(data){
+		fn_Data_Write(sw_im_ex,data);
+	});
+    socket.on("cmd_bt_run", function(data){
+		fn_Data_Write(bt_run,data);
+	});
+});

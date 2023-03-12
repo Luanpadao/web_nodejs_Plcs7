@@ -275,27 +275,27 @@
                             </div>
                             <div class="row form-text-label text-center" id="position">
                                 <div class="col">
-                                    <div>
+                                    <div class="text-primary">
                                         x-scale
                                     </div>
                                     <div>
-                                        <label id="p1">300</label>
+                                        <label class="text-bg-primary" id="px">300</label>
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div>
+                                    <div class="text-warning">
                                         y-scale
                                     </div>
                                     <div>
-                                        <label id="p1">100</label>
+                                        <label class="text-bg-warning" id="py">100</label>
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <div>
+                                    <div class="text-danger">
                                         z-scale
                                     </div>
                                     <div>
-                                        <label id="p1">-10</label>
+                                        <label class="text-bg-danger" id="pz">-100</label>
                                     </div>
                                 </div>
                             </div>
@@ -345,7 +345,7 @@
                                 <div class="col-8 form-text-label">
                                     <div class="row mt-1">
                                         <div class="col-5 text-center">
-                                            <label for="speedx">Speed x:</label>
+                                            <label class="text-primary" for="speedx">Speed x:</label>
                                         </div>
                                         <div class="col-7" >
                                             <input class="text-center" id="speedx" type="number" min="1" max="100" value="50"> %
@@ -353,7 +353,7 @@
                                     </div>
                                     <div class="row mt-1">
                                         <div class="col-5 text-center">
-                                            <label for="speedy">Speed y:</label>
+                                            <label class="text-warning" for="speedy">Speed y:</label>
                                         </div>
                                         <div class="col-7" >
                                             <input class="text-center" id="speedy" type="number" min="1" max="100" value="50"> %
@@ -361,7 +361,7 @@
                                     </div>
                                     <div class="row mt-1">
                                         <div class="col-5 text-center">
-                                            <label for="speedz">Speed z:</label>
+                                            <label class="text-danger" for="speedz">Speed z:</label>
                                         </div>
                                         <div class="col-7" >
                                             <input class="text-center" id="speedz" type="number" min="1" max="100" value="50"> %
@@ -377,27 +377,52 @@
                                 <label class="bg-primary">PANEL</label>
                             </div>
                             <div id="gd_dk">
-                                <div class="row led" id="power"></div>
+                                <div class="row" id="led">
+                                        <div class="circle" id="led_1">
+                                            <span>power</span>
+                                        </div>
+                                        <div class="circle" id="led_2">
+                                            <span>on</span>
+                                        </div>
+                                        <div class="circle" id="led_3">
+                                            <span>off</span>
+                                        </div>
+                                </div>
                                 <div class="d-block btn-group mx-auto" id="switch_mode">
                                     <div class="text-center">
                                       <input type="radio" id="mode1" name="mode" value= 1 checked>
-                                      <label for="mode1">S_A</label>
+                                      <label for="mode1">M</label>
                                       <input type="radio" id="mode2" name="mode" value= 2>
-                                      <label for="mode2">A</label>
+                                      <label for="mode2">S-A</label>
+                                      <input type="radio" id="mode3" name="mode" value= 3>
+                                      <label for="mode3">A</label>
                                     </div>
                                 </div>
                                 <div class="text-center" >
-                                    <input class="text-center" id="mode" type="text" size="12" disabled placeholder="SEMI-AUTO">
+                                    <input class="text-center" id="mode" type="text" size="12" disabled placeholder="MANUAL">
+                                </div>
+                                <div class="mx-auto btn_group text-center" id="mode_m">
+                                    <div class="mx-auto btn_group text-center">
+                                        <button type="button" class="btn btn-secondary bt_dc_in" title="DC IN">DC IN</button> 
+                                        <button type="button" class="btn btn-secondary buttonx" title="X+">X+</button>
+                                        <button type="button" class="btn btn-secondary buttony" title="Y+">Y+</button>
+                                        <button type="button" class="btn btn-secondary buttonz" title="Z+">Z+</button>
+                                    </div>
+                                    <div class="mx-auto  btn_group text-center">
+                                        <button type="button" class="btn btn-secondary bt_dc_out" title="DC IN">DC OUT</button> 
+                                        <button type="button" class="btn btn-secondary bt_x-" title="X-">X-</button>
+                                        <button type="button" class="btn btn-secondary bt_y-" title="Y-">Y-</button>
+                                        <button type="button" class="btn btn-secondary bt_z-" title="Z-">Z-</button>
+                                    </div>
                                 </div>
                                 <div class="mx-auto btn_group text-center" id="mode_sa">
                                     <div class="mx-auto btn_group text-center">
                                         <button type="button" class="btn btn-secondary bt_import" title="button import">IMPORT</button> 
                                         <button type="button" class="btn btn-secondary bt_export" title="button export">EXPORT</button>
                                     </div>
-                                    <button type="button" class="btn btn-secondary bt_run" title="button run">RUN</button>
                                     <div class="mx-auto  btn_group text-center">
-                                        <button type="button" class="btn btn-secondary bt_reset" title="button reset">RESET</button> 
-                                        <button type="button" class="btn btn-secondary bt_e-stop" title="button e-stop">E-STOP</button>
+                                        <button type="button" class="btn btn-secondary bt_run" title="button run">RUN</button>
+                                        <button type="button" class="btn btn-secondary bt_e-stop" title="button e-stop" >E-STOP</button>
                                     </div>
                                 </div>
                                 <div class="mx-auto  btn_group text-center" id="mode_a">
@@ -405,10 +430,9 @@
                                         <button type="button" class="btn btn-secondary bt_import" title="button import">IMPORT</button> 
                                         <button type="button" class="btn btn-secondary bt_export" title="button export">EXPORT</button>
                                     </div>
-                                    <button type="button" class="btn btn-secondary bt_start" title="button start">START</button> 
-                                    <button type="button" class="btn btn-secondary bt_stop" title="button stop">STOP</button>
                                     <div class="mx-auto  btn_group text-center">
-                                        <button type="button" class="btn btn-secondary bt_reset" title="button reset">RESET</button> 
+                                        <button type="button" class="btn btn-secondary bt_start" title="button start">START</button> 
+                                        <button type="button" class="btn btn-secondary bt_stop" title="button stop">STOP</button>
                                         <button type="button" class="btn btn-secondary bt_e-stop" title="button e-stop">E-STOP</button>
                                     </div>
                                 </div>
