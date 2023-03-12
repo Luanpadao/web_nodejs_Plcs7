@@ -74,7 +74,7 @@ ul li:hover .dropdown-menu{
 }
 .object .col-4{
     position:absolute;
-    left: 86%;
+    left: 67.2%;
 }
 .object .col-5{
     position:absolute;
@@ -82,7 +82,7 @@ ul li:hover .dropdown-menu{
 }
 .object .col-6{
     position:absolute;
-    left: 67.2%;
+    left: 86%;
 }
 .object img{
     position: absolute;
@@ -189,19 +189,19 @@ background-color: #2196F3;
         height: 60px;
     }
     .object .row-1{
-        top: 40.5%;
+        top: 18%;
     }
     .object .row-2{
-        top: 28.7%;
+        top: 29.5%;
     }
     .object .row-3{
-        top: 16.8%;
+        top: 41%;
     }
     .object .row-4{
-        top: 70.5%;
+        top: 70%;
     }
     .object .row-5{
-        top: 86%;
+        top: 84%;
     }
 }
 /*------------------------ Màn hình 110% --------------------------*/
@@ -221,25 +221,28 @@ background-color: #2196F3;
         height: 50px;
     }
     .object .row-1{
-        top: 41.8%;
+        top: 25%;
     }
     .object .row-2{
-        top: 31.3%;
+        top: 33.8%;
     }
     .object .row-3{
-        top: 21%;
+        top: 42.8%;
     }
     .object .row-4{
-        top: 68%;
+        top: 65.5%;
     }
     .object .row-5{
-        top: 81%;
+        top: 77%;
     }
     .circle {
         /* border: 2px solid black; */
         /* border-radius: 50%; */
         width: 45px;
         height: 45px;
+    }
+    #panel{
+        min-height: 760px;
     }
 }
 /*------------------------ Màn hình 150% --------------------------*/
@@ -262,23 +265,26 @@ background-color: #2196F3;
         height: 40px;
     }
     .object .row-1{
-        top: 43.2%;
+        top: 27.8%;
     }
     .object .row-2{
-        top: 34.5%;
+        top: 35.8%;
     }
     .object .row-3{
-        top: 26%;
+        top: 43.8%;
     }
     .object .row-4{
-        top: 65%;
+        top: 63.5%;
     }
     .object .row-5{
-        top: 76%;
+        top: 74%;
     }
     .circle {
         width: 40px;
         height: 40px;
+    }
+    #panel{
+        min-height: 710px;
     }
 }
 /*------------------------ Màn hình 175% --------------------------*/
@@ -301,13 +307,13 @@ background-color: #2196F3;
         height: 30px;
     }
     .object .row-1{
-        top: 45%;
+        top: 32%;
     }
     .object .row-2{
         top: 38.5%;
     }
     .object .row-3{
-        top: 32%;
+        top: 45%;
     }
     .object .row-4{
         top: 65%;
@@ -336,13 +342,13 @@ background-color: #2196F3;
         height: 30px;
     }
     .object .row-1{
-        top: 45%;
+        top: 32%;
     }
     .object .row-2{
         top: 38.5%;
     }
     .object .row-3{
-        top: 32%;
+        top: 45%;
     }
     .object .row-4{
         top: 61%;
