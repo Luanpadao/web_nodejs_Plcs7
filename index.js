@@ -18,6 +18,16 @@ const iotGateway = new IotGateway({
     host: '127.0.0.1',
     port: 5000
 });
+//////////////////////QUẢN LÝ CƠ SỞ DỮ LIỆU MYSQL////////////////////
+// Khai báo SQL
+var mysql = require('mysql');
+var sqlcon = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "012321323Vn",
+  database: "sql_plc",
+  dateStrings:true
+});
 ///////////////////////////QUÉT DỮ LIỆU////////////////////////
 // Tạo Timer quét dữ liệu
 setInterval(
@@ -28,6 +38,42 @@ setInterval(
 // Quét dữ liệu
 function fn_read_data_scan(){
 	fn_tagRead();	// Đọc giá trị tag
+  fn_sql_insert(); // Ghi dữ liệu vào SQL
+}
+// Ghi dữ liệu vào SQL
+var sqlins_done = false; // Biến báo đã ghi xong dữ liệu
+function fn_sql_insert(){
+    var trigger = tagArr[47];  // Trigger đọc về từ PLC
+    var sqltable_Name = "data";
+    // Lấy thời gian hiện tại
+    var tzoffset = (new Date()).getTimezoneOffset() * 60000; //Vùng Việt Nam (GMT7+)
+    var temp_datenow = new Date();
+ var timeNow = (new Date(temp_datenow - tzoffset)).toISOString().slice(0, -1).replace("T"," ");
+    var timeNow_toSQL = "'" + timeNow + "',";
+    // Ghi dữ liệu vào SQL
+    if (trigger == true & trigger != sqlins_done)
+    {
+        var sqlins1 = "INSERT INTO " 
+                    + sqltable_Name 
+                    + " (date_time, QR_Code, Name, Type, Position, Import/Export) VALUES (";
+        var sqlins2 = timeNow_toSQL 
+                    + tagArr[1]
+                    + tagArr[2]
+                    + tagArr[3]
+                    + tagArr[4]
+                    + tagArr[5]
+                    ;
+        var sqlins = sqlins1 + sqlins2 + ");";
+        // Thực hiện ghi dữ liệu vào SQL
+        sqlcon.query(sqlins, function (err, result) {
+            if (err) {
+                console.log(err);
+             } else {
+                console.log("SQL - Ghi dữ liệu thành công");
+              } 
+            });
+    }
+    sqlins_done = trigger;
 }
 /////////////HÀM ĐỌC/GHI DỮ LIỆU XUỐNG KEPWARE(PLC)//////////////
 //Đọc dữ liệu
@@ -57,6 +103,14 @@ var bt_e_stop 	= 'bt_e_stop';  //tag bool
 var bt_start 	= 'bt_start';   //tag bool
 var bt_stop 	= 'bt_stop';    //tag bool
 var bt_setup 	= 'bt_setup';   //tag bool
+var bt_xcong 	= 'bt_xcong';   //tag bool
+var bt_xtru 	= 'bt_xtru';    //tag bool
+var bt_ycong 	= 'bt_ycong';   //tag bool
+var bt_ytru 	= 'bt_ytru';    //tag bool
+var bt_zcong 	= 'bt_zcong';   //tag bool
+var bt_ztru 	= 'bt_ztru';    //tag bool
+var bt_dc_in 	= 'bt_dc_in';   //tag bool
+var bt_dc_out	= 'bt_dc_out';    //tag bool
 var speed_x     = 'speed_x';    //tag integer
 var speed_y     = 'speed_y';    //tag integer
 var speed_z     = 'speed_z';    //tag integer
@@ -87,6 +141,8 @@ var ss_o        = 'ss_o'        //tag_bool
 var dc_i        = 'dc_i'        //tag_bool 
 var dc_o        = 'dc_o'        //tag_bool 
 var qr_code     = 'qr_code'     //tag_string
+var processed   = 'processed'   //tag_bool 
+var sql_insert_Trigger = 'sql_insert_Trigger';
  
 // Đọc dữ liệu
 const TagList = tagBuilder
@@ -98,6 +154,14 @@ const TagList = tagBuilder
 .read(bt_start)
 .read(bt_stop)
 .read(bt_setup)
+.read(bt_xcong)
+.read(bt_xtru)
+.read(bt_ycong)
+.read(bt_ytru)
+.read(bt_zcong)
+.read(bt_ztru)
+.read(bt_dc_in)
+.read(bt_dc_out)
 .read(speed_x)
 .read(speed_y)
 .read(speed_z)
@@ -128,6 +192,8 @@ const TagList = tagBuilder
 .read(dc_i)
 .read(dc_o)
 .read(qr_code)
+.read(processed)
+.read(sql_insert_Trigger) 
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -139,36 +205,46 @@ function fn_tag(){
     io.sockets.emit("bt_start", tagArr[5]);
     io.sockets.emit("bt_stop", tagArr[6]);  
     io.sockets.emit("bt_setup", tagArr[7]);
-    io.sockets.emit("speed_x", tagArr[8]);
-    io.sockets.emit("speed_y", tagArr[9]);
-    io.sockets.emit("speed_z", tagArr[10]);
-    io.sockets.emit("pos_x", tagArr[11]);
-    io.sockets.emit("pos_y", tagArr[12]);
-    io.sockets.emit("pos_z", tagArr[13]);
-    io.sockets.emit("pos_1", tagArr[14]);
-    io.sockets.emit("pos_2", tagArr[15]);
-    io.sockets.emit("pos_3", tagArr[16]);
-    io.sockets.emit("pos_4", tagArr[17]);
-    io.sockets.emit("pos_5", tagArr[18]);
-    io.sockets.emit("pos_6", tagArr[19]);
-    io.sockets.emit("pos_7", tagArr[20]);
-    io.sockets.emit("pos_8", tagArr[21]);
-    io.sockets.emit("pos_9", tagArr[22]);
-    io.sockets.emit("pos_10", tagArr[23]);
-    io.sockets.emit("pos_11", tagArr[24]);
-    io.sockets.emit("pos_12", tagArr[25]);
-    io.sockets.emit("pos_13", tagArr[26]);
-    io.sockets.emit("pos_14", tagArr[27]);
-    io.sockets.emit("pos_15", tagArr[28]);
-    io.sockets.emit("pos_16", tagArr[29]);
-    io.sockets.emit("pos_17", tagArr[30]);
-    io.sockets.emit("pos_18", tagArr[31]);
-    io.sockets.emit("ss_i1", tagArr[32]);
-    io.sockets.emit("ss_i2", tagArr[33]);
-    io.sockets.emit("ss_o", tagArr[34]);
-    io.sockets.emit("dc_i", tagArr[35]);
-    io.sockets.emit("dc_o", tagArr[36]);
-    io.sockets.emit("qr_code", tagArr[37]);
+    io.sockets.emit("bt_xcong", tagArr[8]);
+    io.sockets.emit("bt_xtru", tagArr[9]);  
+    io.sockets.emit("bt_xcong", tagArr[10]);
+    io.sockets.emit("bt_xtru", tagArr[11]); 
+    io.sockets.emit("bt_xcong", tagArr[12]);
+    io.sockets.emit("bt_xtru", tagArr[13]); 
+    io.sockets.emit("bt_dc_in", tagArr[14]);
+    io.sockets.emit("bt_dc_out", tagArr[15]); 
+    io.sockets.emit("speed_x", tagArr[16]);
+    io.sockets.emit("speed_y", tagArr[17]);
+    io.sockets.emit("speed_z", tagArr[18]);
+    io.sockets.emit("pos_x", tagArr[19]);
+    io.sockets.emit("pos_y", tagArr[20]);
+    io.sockets.emit("pos_z", tagArr[21]);
+    io.sockets.emit("pos_1", tagArr[22]);
+    io.sockets.emit("pos_2", tagArr[23]);
+    io.sockets.emit("pos_3", tagArr[24]);
+    io.sockets.emit("pos_4", tagArr[25]);
+    io.sockets.emit("pos_5", tagArr[26]);
+    io.sockets.emit("pos_6", tagArr[27]);
+    io.sockets.emit("pos_7", tagArr[28]);
+    io.sockets.emit("pos_8", tagArr[29]);
+    io.sockets.emit("pos_9", tagArr[30]);
+    io.sockets.emit("pos_10", tagArr[31]);
+    io.sockets.emit("pos_11", tagArr[32]);
+    io.sockets.emit("pos_12", tagArr[33]);
+    io.sockets.emit("pos_13", tagArr[34]);
+    io.sockets.emit("pos_14", tagArr[35]);
+    io.sockets.emit("pos_15", tagArr[36]);
+    io.sockets.emit("pos_16", tagArr[37]);
+    io.sockets.emit("pos_17", tagArr[38]);
+    io.sockets.emit("pos_18", tagArr[39]);
+    io.sockets.emit("ss_i1", tagArr[40]);
+    io.sockets.emit("ss_i2", tagArr[41]);
+    io.sockets.emit("ss_o", tagArr[42]);
+    io.sockets.emit("dc_i", tagArr[43]);
+    io.sockets.emit("dc_o", tagArr[44]);
+    io.sockets.emit("qr_code", tagArr[45]);
+    io.sockets.emit("processed", tagArr[46]);
+    io.sockets.emit("sql_insert_Trigger", tagArr[47]);
 }
 // ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
@@ -177,13 +253,68 @@ io.on("connection", function(socket){
 });});
 // ///////////TRUYỀN NHẬN DỮ LIỆU VỚI TRÌNH DUYỆT WEB///////////////////
 io.on("connection", function(socket){
-    socket.on("cmd_sw_mode", function(data){
+  socket.on("cmd_sw_mode", function(data){
 		fn_Data_Write(sw_mode,data);
 	});
-    socket.on("cmd_sw_im_ex", function(data){
+  socket.on("cmd_sw_im_ex", function(data){
 		fn_Data_Write(sw_im_ex,data);
 	});
-    socket.on("cmd_bt_run", function(data){
+  socket.on("cmd_bt_run", function(data){
 		fn_Data_Write(bt_run,data);
 	});
+  socket.on("cmd_bt_start", function(data){
+		fn_Data_Write(bt_start,data);
+	});
+  socket.on("cmd_bt_stop", function(data){
+		fn_Data_Write(bt_stop,data);
+	});
+  socket.on("cmd_bt_e_stop", function(data){
+		fn_Data_Write(bt_e_stop,data);
+	});
+  socket.on("cmd_bt_setup", function(data){
+		fn_Data_Write(speed_x,data[0]);
+        fn_Data_Write(speed_y,data[1]);
+		fn_Data_Write(speed_z,data[2]);
+	});
+  socket.on("cmd_bt_x+", function(data){
+		fn_Data_Write(bt_xcong,data);
+	});
+  socket.on("cmd_bt_x-", function(data){
+		fn_Data_Write(bt_xtru,data);
+	});
+  socket.on("cmd_bt_y+", function(data){
+		fn_Data_Write(bt_ycong,data);
+	});
+  socket.on("cmd_bt_y-", function(data){
+		fn_Data_Write(bt_ytru,data);
+	});
+  socket.on("cmd_bt_z+", function(data){
+		fn_Data_Write(bt_zcong,data);
+	});
+  socket.on("cmd_bt_z-", function(data){
+		fn_Data_Write(bt_ztru,data);
+	});
+  socket.on("cmd_bt_dc_in", function(data){
+		fn_Data_Write(bt_dc_in,data);
+	});
+  socket.on("cmd_bt_dc_out", function(data){
+		fn_Data_Write(bt_dc_out,data);
+	});
+  socket.on("cmd_processed", function(data){
+		fn_Data_Write(processed,data);
+	});
+  socket.on("msg_SQL_Show_01", function(data)
+  {
+      var sqltable_Name = "pre_data";
+      var query = "SELECT * FROM " + sqltable_Name + ";" 
+      sqlcon.query(query, function(err, results, fields) {
+          if (err) {
+              console.log(err);
+          } else {
+              const objectifyRawPacket = row => ({...row});
+              const convertedResponse = results.map(objectifyRawPacket);
+              socket.emit('SQL_Show_01', convertedResponse);
+          } 
+      });
+  });
 });

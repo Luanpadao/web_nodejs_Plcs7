@@ -1,5 +1,7 @@
 var sw = false;
 var sw1 = false;
+var ArrSpeed = [];
+var temp = "";
 $(document).ready(function(){
     $("#introduce").show();
     $("#control").hide();
@@ -9,7 +11,6 @@ $(document).ready(function(){
     $("#mode_sa").hide();
     $("#mode_a").hide();
     $(".bt_import").css("background-color", "blue");
-    // mode.placeholder = "SEMI-AUTO";
     $("#bt_introduce").click(function()
     {
         $("#introduce").show();
@@ -56,6 +57,8 @@ $(document).ready(function(){
         $('#bt_member').removeClass('active');
         $('#bt_intructor').removeClass('active');
         $('#control').show();
+        $('#scada').show();
+        $("#table").hide();
         $('#introduce').hide();
     });
     $("#bt_scada").click(function(){
@@ -64,6 +67,8 @@ $(document).ready(function(){
         $('#bt_member').removeClass('active');
         $('#bt_intructor').removeClass('active');
         $('#control').show();
+        $('#scada').show();
+        $("#table").hide();
         $('#introduce').hide();
     });
     $("#bt_table").click(function(){
@@ -72,6 +77,8 @@ $(document).ready(function(){
         $('#bt_member').removeClass('active');
         $('#bt_intructor').removeClass('active');
         $('#control').show();
+        $('#scada').hide();
+        $("#table").show();
         $('#introduce').hide();
     });
 
@@ -175,20 +182,39 @@ $(document).ready(function(){
         socket.emit('cmd_bt_run', false);
     });
     //////////////////////////////////////////////////////bt_e_stop
-    $(".bt_e-stop").mousedown(function()
+    $(".bt_e_stop").mousedown(function()
     {
         $(this).css("background-color","green");
-        socket.emit('cmd_bt_e-stop', true);
+        socket.emit('cmd_bt_e_stop', true);
+    });
+    $(".bt_e_stop").mouseup(function()
+    {
+        $(this).css("background-color","#6c757d");
+        socket.emit('cmd_bt_e_stop', false);
+    });
+    $(".bt_e_stop").mouseout(function()
+    {
+        $(this).css("background-color","#6c757d");
+        socket.emit('cmd_bt_e_stop', false);
+    });
+    //////////////////////////////////////////////////////bt_setup
+    $(".bt_setup").mousedown(function()
+    {
+        ArrSpeed[0] = document.getElementById('speedx').value /5;
+        ArrSpeed[1] = document.getElementById('speedy').value /5;
+        ArrSpeed[2] = document.getElementById('speedz').value /5;
+        console.log(ArrSpeed);
+        $(this).css("background-color","green");
+        alert("đã thiết lập tốc độ thành công!");
+        socket.emit('cmd_bt_setup',ArrSpeed);
     });
     $(".bt_e-stop").mouseup(function()
     {
         $(this).css("background-color","#6c757d");
-        socket.emit('cmd_bt_e_stop', false);
     });
     $(".bt_e-stop").mouseout(function()
     {
         $(this).css("background-color","#6c757d");
-        socket.emit('cmd_bt_e_stop', false);
     });
     //////////////////////////////////////////////////////bt_x+
     $(".buttonx").mousedown(function()
@@ -308,12 +334,12 @@ $(document).ready(function(){
             if(sw1 == true)
             {
                 $(this).css("background-color","green");
-                socket.emit('cmd_bt_dc_out, true');
+                socket.emit('cmd_bt_dc_out', true);
             }
             else
             {
                 $(this).css("background-color","#6c757d");
-                socket.emit('cmd_bt_dc_out, false');
+                socket.emit('cmd_bt_dc_out', false);
             }
         });
 });
@@ -347,15 +373,31 @@ function myTimer() {
     fn_SymbolStatus('n16','','pos_16');
     fn_SymbolStatus('n17','','pos_17');
     fn_SymbolStatus('n18','','pos_18');
+    var sqlins_done1 = false;
+    socket.on('processed',function(data){
+        if(data == true & data != sqlins_done1 ){
+            fn_IOFieldDataShow('qr_code','i1',0);
+            fn_Table01_SQL_Show();
+        }
+        sqlins_done1 = data;
+    });
 }
  
 // Hàm hiển thị dữ liệu lên IO Field
 function fn_IOFieldDataShow(tag, IOField, tofix){
     socket.on(tag,function(data){
-        if(tofix == 0){
-            document.getElementById(IOField).innerHTML = data;
-        } else{
-            document.getElementById(IOField).innerHTML = data.toFixed(tofix);
+        if(IOField.substr(0,1) == "p")
+        {
+            temp = "";
+            if(tofix == 0){
+                document.getElementById(IOField).innerHTML = data;
+            } else{
+                document.getElementById(IOField).innerHTML = data.toFixed(tofix);
+            }
+        }
+        else
+        {
+            temp = data;
         }
     });
 }
@@ -408,4 +450,29 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
             }
         });
     }
+}
+// Yêu cầu dữ liệu bảng pre_data
+function fn_Table01_SQL_Show(){
+    socket.emit("msg_SQL_Show_01", "true");
+    socket.on('SQL_Show_01',function(data){
+        fn_table_01(data);
+    }); 
+}
+// Hiển thị dữ liệu ra bảng pre_data
+function fn_table_01(data){
+    if(data){
+        // $(".information").val("");
+        var len = data.length;
+        if(len > 0){
+            for(var i=0;i<len;i++){
+                if(data[i].QRCode == temp){
+                    $("#i3").val(data[i].ID);
+                    $("#i1").val(data[i].QRCode);
+                    $("#i2").val(data[i].Name);
+                    $("#i4").val(data[i].Type);
+                    break;
+                }
+            }
+        }
+    }   
 }
