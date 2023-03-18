@@ -42,26 +42,33 @@ function fn_read_data_scan(){
 }
 // Ghi dữ liệu vào SQL
 var sqlins_done = false; // Biến báo đã ghi xong dữ liệu
+var QRCode_table;
+var Name_table;
+var Type_table;
+var Position_table;
+var ImportExport_table;
 function fn_sql_insert(){
     var trigger = tagArr[47];  // Trigger đọc về từ PLC
     var sqltable_Name = "data";
     // Lấy thời gian hiện tại
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //Vùng Việt Nam (GMT7+)
     var temp_datenow = new Date();
- var timeNow = (new Date(temp_datenow - tzoffset)).toISOString().slice(0, -1).replace("T"," ");
+    var timeNow = (new Date(temp_datenow - tzoffset)).toISOString().slice(0, -1).replace("T"," ");
     var timeNow_toSQL = "'" + timeNow + "',";
+    // Dữ liệu đọc lên từ các tag
+    // var ImportExport_table =  "'" + "alo5" + "'";
     // Ghi dữ liệu vào SQL
     if (trigger == true & trigger != sqlins_done)
     {
         var sqlins1 = "INSERT INTO " 
                     + sqltable_Name 
-                    + " (date_time, QR_Code, Name, Type, Position, Import/Export) VALUES (";
+                    + " (date_time, QR_Code, Name, Type, Position, Import_Export) VALUES (";
         var sqlins2 = timeNow_toSQL 
-                    + tagArr[1]
-                    + tagArr[2]
-                    + tagArr[3]
-                    + tagArr[4]
-                    + tagArr[5]
+                    + QRCode_table
+                    + Name_table
+                    + Type_table
+                    + Position_table
+                    + ImportExport_table
                     ;
         var sqlins = sqlins1 + sqlins2 + ");";
         // Thực hiện ghi dữ liệu vào SQL
@@ -316,5 +323,12 @@ io.on("connection", function(socket){
               socket.emit('SQL_Show_01', convertedResponse);
           } 
       });
+  });
+  socket.on("msg_send_data_SQL",function(data){
+    QRCode_table = "'" + data[1] + "',";
+    Name_table = "'" + data[2] + "',";
+    Type_table = "'" + data[3] + "',";
+    Position_table = "'" + data[0] + "',";
+    ImportExport_table = "'" + data[4] + "'";
   });
 });

@@ -1,7 +1,12 @@
 var sw = false;
 var sw1 = false;
+var sw2 = 0;
 var ArrSpeed = [];
 var temp = "";
+var QRCode_table = "123-d";
+var Name_table = "";
+var Type_table = 0;
+var Position_table = 0;
 $(document).ready(function(){
     $("#introduce").show();
     $("#control").hide();
@@ -125,12 +130,14 @@ $(document).ready(function(){
     {
         $(".bt_import").css("background-color", "blue");
         $(".bt_export").css("background-color", "#6c757d");
+        sw2 = 0;
         socket.emit('cmd_sw_im_ex', false);
     });
     $(".bt_export").click(function()
     {
         $(".bt_import").css("background-color", "#6c757d");
         $(".bt_export").css("background-color", "blue");
+        sw2 = 1; 
         socket.emit('cmd_sw_im_ex', true);
     });
     //////////////////////////////////////////////////////bt_start
@@ -470,6 +477,16 @@ function fn_table_01(data){
                     $("#i1").val(data[i].QRCode);
                     $("#i2").val(data[i].Name);
                     $("#i4").val(data[i].Type);
+                    var tempArr=[];
+                    tempArr[0] = data[i].ID;
+                    tempArr[1] = data[i].QRCode;
+                    tempArr[2] = data[i].Name;
+                    tempArr[3] = data[i].Type;
+                    if(sw2 == 1)
+                        tempArr[4] = "Export";
+                    else
+                        tempArr[4] = "Import";
+                    socket.emit("msg_send_data_SQL",tempArr);
                     break;
                 }
             }
