@@ -142,14 +142,15 @@ var pos_15 	    = 'pos_15';     //tag bool
 var pos_16 	    = 'pos_16';     //tag bool 
 var pos_17 	    = 'pos_17';     //tag bool
 var pos_18 	    = 'pos_18';     //tag bool
-var ss_i1       = 'ss_i1'       //tag_bool 
-var ss_i2       = 'ss_i2'       //tag_bool 
-var ss_o        = 'ss_o'        //tag_bool 
-var dc_i        = 'dc_i'        //tag_bool 
-var dc_o        = 'dc_o'        //tag_bool 
-var qr_code     = 'qr_code'     //tag_string
-var processed   = 'processed'   //tag_bool 
-var sql_insert_Trigger = 'sql_insert_Trigger';
+var ss_i1       = 'ss_i1';       //tag bool 
+var ss_i2       = 'ss_i2';       //tag bool 
+var ss_o        = 'ss_o';        //tag bool 
+var dc_i        = 'dc_i';        //tag bool 
+var dc_o        = 'dc_o';        //tag bool 
+var qr_code     = 'qr_code';     //tag_string_10
+var processed   = 'processed';   //tag bool 
+var sql_insert_Trigger = 'sql_insert_Trigger'; //tag bool
+var counter = 'counter';         //tag array
  
 // Đọc dữ liệu
 const TagList = tagBuilder
@@ -200,7 +201,8 @@ const TagList = tagBuilder
 .read(dc_o)
 .read(qr_code)
 .read(processed)
-.read(sql_insert_Trigger) 
+.read(sql_insert_Trigger)
+.read(counter) 
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -252,6 +254,7 @@ function fn_tag(){
     io.sockets.emit("qr_code", tagArr[45]);
     io.sockets.emit("processed", tagArr[46]);
     io.sockets.emit("sql_insert_Trigger", tagArr[47]);
+    io.sockets.emit("counter", tagArr[48]);
 }
 // ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
@@ -309,6 +312,9 @@ io.on("connection", function(socket){
 	});
   socket.on("cmd_processed", function(data){
 		fn_Data_Write(processed,data);
+	});
+  socket.on("cmd_counter", function(data){
+		fn_Data_Write(counter,data);
 	});
   socket.on("msg_SQL_Show_01", function(data)
   {

@@ -169,6 +169,11 @@ background-color: #2196F3;
 #led_3{
     background-color: rgb(239, 239, 90);
 }
+#myModal {
+    position: fixed;
+    margin: 10px,100px;
+  }
+  
 /*------------------------ Màn hình 100% --------------------------*/
 @media (max-width: 1600px){
     #control {

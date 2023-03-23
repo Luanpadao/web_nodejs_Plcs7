@@ -1,12 +1,18 @@
-var sw = false;
+var sw = 1;
+var sw0 = false;
 var sw1 = false;
 var sw2 = 0;
 var ArrSpeed = [];
+var counter = [0, 0, 0];
 var temp = "";
-var QRCode_table = "123-d";
+var QRCode_table = "";
 var Name_table = "";
 var Type_table = 0;
 var Position_table = 0;
+var pl_done = false;
+var lock = 0;
+var lock_1 = 0;
+var lock_2 = 0;
 $(document).ready(function(){
     $("#introduce").show();
     $("#control").hide();
@@ -16,6 +22,15 @@ $(document).ready(function(){
     $("#mode_sa").hide();
     $("#mode_a").hide();
     $(".bt_import").css("background-color", "blue");
+    if(lock_1 == 0)
+    {
+        fn_IOFieldDataShow('speed_x','speedx',0);
+        fn_IOFieldDataShow('speed_y','speedy',0);
+        fn_IOFieldDataShow('speed_z','speedz',0);
+        fn_IOFieldDataShow('counter','',0);
+        lock_1 = 1;
+    }
+    //////////////////////////////////////////////////////bt_introduce_chuyen trang
     $("#bt_introduce").click(function()
     {
         $("#introduce").show();
@@ -28,6 +43,7 @@ $(document).ready(function(){
         bt_member.classList.remove('active');
         bt_intructor.classList.remove('active');
     });
+    //////////////////////////////////////////////////////bt_tongquan_chuyen trang
     $("#bt_tongquan").click(function(){
         $("#introduce").show();
         $("#control").hide();
@@ -40,7 +56,7 @@ $(document).ready(function(){
         bt_member.classList.remove('active');
         bt_intructor.classList.remove('active');
     });
-
+    //////////////////////////////////////////////////////bt_mohinh_chuyentrang
     $("#bt_mohinh").click(function(){
         $("#introduce").show();
         $("#control").hide();
@@ -53,8 +69,7 @@ $(document).ready(function(){
         bt_member.classList.remove('active');
         bt_intructor.classList.remove('active');
     });
-
-
+    //////////////////////////////////////////////////////bt_control_chuyen trang
     $("#bt_control").click(function()
     {
         $('#bt_introduce').removeClass('active');
@@ -66,6 +81,7 @@ $(document).ready(function(){
         $("#table").hide();
         $('#introduce').hide();
     });
+        //////////////////////////////////////////////////////bt_scada_chuyen trang
     $("#bt_scada").click(function(){
         $('#bt_introduce').removeClass('active');
         $('#bt_control').addClass('active');
@@ -76,6 +92,7 @@ $(document).ready(function(){
         $("#table").hide();
         $('#introduce').hide();
     });
+    //////////////////////////////////////////////////////bt_table_chuyen trang
     $("#bt_table").click(function(){
         $('#bt_introduce').removeClass('active');
         $('#bt_control').addClass('active');
@@ -86,8 +103,7 @@ $(document).ready(function(){
         $("#table").show();
         $('#introduce').hide();
     });
-
-
+    //////////////////////////////////////////////////////bt_member_chuyen trang
     $("#bt_member").click(function()
     {
         $('#bt_introduce').removeClass('active');
@@ -95,6 +111,7 @@ $(document).ready(function(){
         $('#bt_member').addClass('active');
         $('#bt_intructor').removeClass('active');
     });
+    //////////////////////////////////////////////////////bt_intructor_chuyen trang
     $("#bt_intructor").click(function()
     {
         $('#bt_introduce').removeClass('active');
@@ -102,8 +119,9 @@ $(document).ready(function(){
         $('#bt_member').removeClass('active');
         $('#bt_intructor').addClass('active');
     });
+    //////////////////////////////////////////////////////switch_Mode
     $("input[name='mode']").click(function(){
-        var sw = $(this).val();
+        sw = $(this).val();
         if (sw == 1){
             $("#mode_m").show();
             $("#mode_sa").hide();
@@ -126,6 +144,7 @@ $(document).ready(function(){
             socket.emit('cmd_sw_mode',3);
         }
     });
+    //////////////////////////////////////////////////////bt_import
     $(".bt_import").click(function()
     {
         $(".bt_import").css("background-color", "blue");
@@ -133,6 +152,7 @@ $(document).ready(function(){
         sw2 = 0;
         socket.emit('cmd_sw_im_ex', false);
     });
+    //////////////////////////////////////////////////////bt_export
     $(".bt_export").click(function()
     {
         $(".bt_import").css("background-color", "#6c757d");
@@ -322,8 +342,8 @@ $(document).ready(function(){
     //////////////////////////////////////////////////////bt_dc_in
     $(".bt_dc_in").click(function()
     {
-        sw = !sw;
-        if(sw == true)
+        sw0 = !sw0;
+        if(sw0 == true)
         {
             $(this).css("background-color","green");
             socket.emit('cmd_bt_dc_in', true);
@@ -334,21 +354,35 @@ $(document).ready(function(){
             socket.emit('cmd_bt_dc_in', false);
         }
     });
-        //////////////////////////////////////////////////////bt_dc_out
-        $(".bt_dc_out").click(function()
+    //////////////////////////////////////////////////////bt_dc_out
+    $(".bt_dc_out").click(function()
+    {
+        sw1 = !sw1;
+        if(sw1 == true)
         {
-            sw1 = !sw1;
-            if(sw1 == true)
-            {
-                $(this).css("background-color","green");
-                socket.emit('cmd_bt_dc_out', true);
-            }
-            else
-            {
-                $(this).css("background-color","#6c757d");
-                socket.emit('cmd_bt_dc_out', false);
-            }
-        });
+            $(this).css("background-color","green");
+            socket.emit('cmd_bt_dc_out', true);
+        }
+        else
+        {
+            $(this).css("background-color","#6c757d");
+            socket.emit('cmd_bt_dc_out', false);
+        }
+    });
+    //////////////////////////////////////////////////////bt_select
+    $("#bt_select").click(function()
+    {
+        if(($('#pos').val() != "") & ($('#pos').val() > 0) & ($('#pos').val() < 19) &($('#n'+$('#pos').val()).hasClass('d-none')))
+        {
+            var pos = $('#pos').val();
+            $("#i3").val(pos);
+        }
+        else
+        {
+            alert("không hợp lệ, vui lòng nhập lại");
+            $('#myModal').modal('show');
+        }
+    });
 });
 ////////////// YÊU CẦU DỮ LIỆU TỪ SERVER- REQUEST DATA //////////////
 var myVar = setInterval(myTimer, 100);
@@ -380,42 +414,59 @@ function myTimer() {
     fn_SymbolStatus('n16','','pos_16');
     fn_SymbolStatus('n17','','pos_17');
     fn_SymbolStatus('n18','','pos_18');
-    var sqlins_done1 = false;
-    socket.on('processed',function(data){
-        if(data == true & data != sqlins_done1 ){
-            fn_IOFieldDataShow('qr_code','i1',0);
-            fn_Table01_SQL_Show();
-        }
-        sqlins_done1 = data;
-    });
+    fn_IOFieldDataShow('qr_code','i1',0);
+    fn_pl();
 }
- 
+//Hàm chức năng phân loại sản phẩm
+function fn_pl()
+{
+    socket.on('processed',function(data){
+        if(data == true & pl_done != data ){
+            fn_Table01_SQL_Show();
+            socket.emit('cmd_processed', false);
+        }
+        pl_done = data;
+    });
+};
 // Hàm hiển thị dữ liệu lên IO Field
 function fn_IOFieldDataShow(tag, IOField, tofix){
     socket.on(tag,function(data){
-        if(IOField.substr(0,1) == "p")
+        if(tag == 'qr_code')
+            temp = data;
+        else if(tag == 'counter')
+        {
+            if(lock_2 == 0)
+            {
+                counter[0] = parseInt(data[1]);
+                counter[1] = parseInt(data[4]);
+                counter[2] = parseInt(data[7]);
+                lock_2 = 1;
+            }
+        }
+        else if(tag.substr(0,1) == "p")
         {
             temp = "";
-            if(tofix == 0){
+            if(tofix == 0)
                 document.getElementById(IOField).innerHTML = data;
-            } else{
+            else
                 document.getElementById(IOField).innerHTML = data.toFixed(tofix);
-            }
         }
         else
         {
-            temp = data;
+            if(tofix == 0)
+                document.getElementById(IOField).value = data * 5;
+            else
+                document.getElementById(IOField).value = data.toFixed(tofix);
         }
     });
 }
 // Hàm hiển thị màu nút nhấn
 function fn_btt_Color(tag, bttID, on_Color, off_Color){
     socket.on(tag,function(data){
-        if(data == true){
+        if(data == true)
             document.getElementById(bttID).style.backgroundColor = on_Color;
-        } else{
+        else
             document.getElementById(bttID).style.backgroundColor = off_Color; 
-        }
     });
 }
 // Chương trình con chuyển trang
@@ -433,13 +484,9 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
     {
         socket.on(Tag, function(data){
             if (data == false)
-            {
                 document.getElementById(ObjectID).classList.add('d-none');
-            }
             else if (data == true)
-            {
                 document.getElementById(ObjectID).classList.remove('d-none');
-            }
         });
     }
     else
@@ -448,19 +495,16 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
         var imglink_1 = "images/Symbol/" + SymName + "_1.png"; // Trạng thái tag = true
         socket.on(Tag, function(data){
             if (data == false)
-            {
                 document.getElementById(ObjectID).src = imglink_0;
-            }
             else if (data == true)
-            {
                 document.getElementById(ObjectID).src = imglink_1;
-            }
         });
     }
 }
 // Yêu cầu dữ liệu bảng pre_data
 function fn_Table01_SQL_Show(){
     socket.emit("msg_SQL_Show_01", "true");
+    lock = 0;
     socket.on('SQL_Show_01',function(data){
         fn_table_01(data);
     }); 
@@ -472,11 +516,26 @@ function fn_table_01(data){
         var len = data.length;
         if(len > 0){
             for(var i=0;i<len;i++){
-                if(data[i].QRCode == temp){
-                    $("#i3").val(data[i].ID);
+                if((data[i].QRCode == temp) & $('#n'+(i+1)).hasClass('d-none') ){
                     $("#i1").val(data[i].QRCode);
                     $("#i2").val(data[i].Name);
                     $("#i4").val(data[i].Type);
+                    if(sw == 2)
+                    {
+                        $("#i3").val("");
+                        $('#myModal').modal('show');
+                        $('#pos').val("");
+                    }
+                    else if(sw == 3)
+                        $("#i3").val(data[i].ID);
+                    if(lock == 0)
+                    {
+                        counter[data[i].Type-1]= counter[data[i].Type-1] + 1;
+                        $("#i5").val(counter[data[i].Type-1]);
+                        console.log(counter);
+                        socket.emit("cmd_counter",counter);
+                        lock = 1;
+                    }
                     var tempArr=[];
                     tempArr[0] = data[i].ID;
                     tempArr[1] = data[i].QRCode;
