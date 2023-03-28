@@ -146,6 +146,28 @@ background-color: #2196F3;
     width: 80%;
     background-color: #FFF;
 }
+.square {
+    border: 3px solid black;
+    width: 30px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+#type_1{
+    background-color: #2196F3;
+}
+#type_2{
+    background-color:orange;
+}
+#type_3{
+    background-color: rgb(219, 108, 108);
+}
+.counter{
+    border: 3px solid rgb(72, 143, 201) !important;
+    background-color: #fff;
+}
 .circle {
     border: 2px solid black;
     border-radius: 50%;
@@ -159,6 +181,10 @@ background-color: #2196F3;
 #led{
     margin-top: 12px !important;
     margin-bottom: 10px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
 }
 #led_1{
     background-color: rgb(190, 86, 86);
@@ -185,9 +211,6 @@ background-color: #2196F3;
     }
     .btn{
         --bs-btn-font-size: 0.4rem !important;
-    }
-    .bt_setup{
-        width: 80% !important;
     }
     .rounded-circle{
         width: 60px;
@@ -262,9 +285,6 @@ background-color: #2196F3;
     .btn{
         --bs-btn-font-size: 0.4rem !important;
     }
-    .bt_setup{
-        width: 100% !important;
-    }
     .rounded-circle{
         width: 40px;
         height: 40px;
@@ -304,9 +324,6 @@ background-color: #2196F3;
     .btn{
         --bs-btn-font-size: 0.2rem !important;
     }
-    .bt_setup{
-        width: 100% !important;
-    }
     .rounded-circle{
         width: 30px;
         height: 30px;
@@ -338,9 +355,6 @@ background-color: #2196F3;
     }
     .btn{
         --bs-btn-font-size: 0.2rem !important;
-    }
-    .bt_setup{
-        width: 100% !important;
     }
     .rounded-circle{
         width: 30px;

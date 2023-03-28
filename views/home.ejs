@@ -10,10 +10,10 @@
         <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src = "socket.io/socket.io.js"></script>
-        <script src = "js/FC1_Common.js"></script>
         <script>
             var socket = io("localhost:3000") // IP tĩnh (hoặc IP động, localhost)
         </script>
+        <script src = "js/FC1_Common.js"></script>
         <link rel="stylesheet" href="CSS/styles.css">
         <title>Scada hệ thống giám sát trên internet</title>       
     </head>
@@ -182,7 +182,6 @@
             </div>
             <div class="container" id="control">
                 <div id="scada">
-                    <div class="text-center bg-light">SCADA</div>
                     <div class="row" id="bg_scada">
                         <div class="col-8">
                             <div class="object">
@@ -308,8 +307,14 @@
                                     <div class="col-2">
                                         <label>QRcode:</label>
                                     </div>
-                                    <div class="col-10" >
-                                        <input class="text-center information" id="i1" type="text" size="30" disabled>
+                                    <div class="col-4" >
+                                        <input class="text-center information" id="i1" type="text" size="10" disabled>
+                                    </div>
+                                    <div class="col-2">
+                                        <label>Type:</label>
+                                    </div>
+                                    <div class="col-4" >
+                                        <input class="text-center information" id="i4" type="text" size="5" disabled>
                                     </div>
                                 </div>
                                 <div class="row mt-1">
@@ -326,96 +331,67 @@
                                         <input class="text-center information" id="i3" type="text" size="5" disabled>
                                     </div>
                                 </div>
-                                <div class="row mt-1">
-                                    <div class="col-2">
-                                        <label>Type:</label>
+                                <div class="row mt-3">
+                                    <div class="square" id="type_1">
+                                        <span>A</span>
                                     </div>
-                                    <div class="col-4" >
-                                        <input class="text-center information" id="i4" type="text" size="10" disabled>
+                                    <div class="square" id="type_2">
+                                        <span>B</span>
                                     </div>
-                                    <div class="col-2">
-                                        <label>Counter:</label>
+                                    <div class="square" id="type_3">
+                                        <span>C</span>
                                     </div>
-                                    <div class="col-4" >
-                                        <input class="text-center information" id="i5" type="text" size="5" disabled>
-                                    </div>
-                                </div>
-                                <div class="row text-center mt-2">
-                                    <label class="bg-primary">SETUP</label>
                                 </div>
                                 <div class="row">
-                                    <div class="col-8 form-text-label">
-                                        <div class="row mt-1">
-                                            <div class="col-5 text-center">
-                                                <label class="text-primary" for="speedx">Speed x:</label>
-                                            </div>
-                                            <div class="col-7" >
-                                                <input class="text-center" id="speedx" type="number" min="1" max="100" value="50"> %
-                                            </div>
-                                        </div>
-                                        <div class="row mt-1">
-                                            <div class="col-5 text-center">
-                                                <label class="text-warning" for="speedy">Speed y:</label>
-                                            </div>
-                                            <div class="col-7" >
-                                                <input class="text-center" id="speedy" type="number" min="1" max="100" value="50"> %
-                                            </div>
-                                        </div>
-                                        <div class="row mt-1">
-                                            <div class="col-5 text-center">
-                                                <label class="text-danger" for="speedz">Speed z:</label>
-                                            </div>
-                                            <div class="col-7" >
-                                                <input class="text-center" id="speedz" type="number" min="1" max="100" value="50"> %
-                                            </div>
-                                        </div>
+                                    <div class="square counter">
+                                        <span id="counter_1">1</span>
                                     </div>
-                                    <div class="col-4">
-                                    </br>
-                                        <button type="button" class="btn btn-secondary bt_setup" title="button setup">SETUP</button>
+                                    <div class="square counter">
+                                        <span id="counter_2">2</span>
+                                    </div>
+                                    <div class="square counter">
+                                        <span id="counter_3">3</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="circle counter" id="status_1">
+                                        <span>full</span>
+                                    </div>
+                                    <div class="circle counter" id="status_2">
+                                        <span>full</span>
+                                    </div>
+                                    <div class="circle counter" id="status_3">
+                                        <span>full</span>
                                     </div>
                                 </div>
                                 <div class="row text-center mt-2">
                                     <label class="bg-primary">PANEL</label>
                                 </div>
                                 <div id="gd_dk">
-                                    <div class="row" id="led">
+                                    <div class="row mt-1">
+                                    <div class="col-10" id="led">
                                             <div class="circle" id="led_1">
-                                                <span>power</span>
+                                                <span>off</span>
                                             </div>
                                             <div class="circle" id="led_2">
                                                 <span>on</span>
                                             </div>
                                             <div class="circle" id="led_3">
-                                                <span>off</span>
+                                                <span>trip</span>
                                             </div>
+                                    </div>
+                                    </div>  
                                     </div>
                                     <div class="d-block btn-group mx-auto" id="switch_mode">
                                         <div class="text-center">
-                                          <input type="radio" id="mode1" name="mode" value= 1 checked>
-                                          <label for="mode1">M</label>
-                                          <input type="radio" id="mode2" name="mode" value= 2>
-                                          <label for="mode2">S-A</label>
-                                          <input type="radio" id="mode3" name="mode" value= 3>
-                                          <label for="mode3">A</label>
+                                          <input type="radio" id="mode1" name="mode" value= 0 checked>
+                                          <label for="mode1">S-A</label>
+                                          <input type="radio" id="mode2" name="mode" value= 1>
+                                          <label for="mode2">A</label>
                                         </div>
                                     </div>
                                     <div class="text-center" >
                                         <input class="text-center" id="mode" type="text" size="12" disabled placeholder="MANUAL">
-                                    </div>
-                                    <div class="mx-auto btn_group text-center" id="mode_m">
-                                        <div class="mx-auto btn_group text-center">
-                                            <button type="button" class="btn btn-secondary bt_dc_in" title="DC IN">DC IN</button> 
-                                            <button type="button" class="btn btn-secondary buttonx" title="X+">X+</button>
-                                            <button type="button" class="btn btn-secondary buttony" title="Y+">Y+</button>
-                                            <button type="button" class="btn btn-secondary buttonz" title="Z+">Z+</button>
-                                        </div>
-                                        <div class="mx-auto  btn_group text-center">
-                                            <button type="button" class="btn btn-secondary bt_dc_out" title="DC OUT">DC OUT</button> 
-                                            <button type="button" class="btn btn-secondary bt_x-" title="X-">X-</button>
-                                            <button type="button" class="btn btn-secondary bt_y-" title="Y-">Y-</button>
-                                            <button type="button" class="btn btn-secondary bt_z-" title="Z-">Z-</button>
-                                        </div>
                                     </div>
                                     <div class="mx-auto btn_group text-center" id="mode_sa">
                                         <div class="mx-auto btn_group text-center">
@@ -433,7 +409,7 @@
                                             <button type="button" class="btn btn-secondary bt_export" title="button export">EXPORT</button>
                                         </div>
                                         <div class="mx-auto  btn_group text-center">
-                                            <button type="button" class="btn btn-secondary bt_start" title="button start">START</button> 
+                                            <button type="button" class="btn btn-secondary bt_run" title="button run">RUN</button>
                                             <button type="button" class="btn btn-secondary bt_stop" title="button stop">STOP</button>
                                             <button type="button" class="btn btn-secondary bt_e_stop" title="button e-stop">E-STOP</button>
                                         </div>
@@ -459,12 +435,14 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div id="gd_dk_1">
+
+                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
                 <div id="table">
-                    <div class="text-center bg-light" >TABLE</div>
                     <h6 class="text-center text-danger">BẢNG THỐNG KÊ XUẤT NHẬP KHO</h6>
                     <table class="table table-striped">
                         <thead class="table-dark">

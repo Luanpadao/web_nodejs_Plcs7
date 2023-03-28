@@ -107,17 +107,8 @@ var sw_im_ex 	= 'sw_im_ex';   //tag bool
 var bt_run 		= 'bt_run';     //tag bool
 var bt_reset    = 'bt_reset';   //tag bool
 var bt_e_stop 	= 'bt_e_stop';  //tag bool
-var bt_start 	= 'bt_start';   //tag bool
 var bt_stop 	= 'bt_stop';    //tag bool
 var bt_setup 	= 'bt_setup';   //tag bool
-var bt_xcong 	= 'bt_xcong';   //tag bool
-var bt_xtru 	= 'bt_xtru';    //tag bool
-var bt_ycong 	= 'bt_ycong';   //tag bool
-var bt_ytru 	= 'bt_ytru';    //tag bool
-var bt_zcong 	= 'bt_zcong';   //tag bool
-var bt_ztru 	= 'bt_ztru';    //tag bool
-var bt_dc_in 	= 'bt_dc_in';   //tag bool
-var bt_dc_out	= 'bt_dc_out';    //tag bool
 var speed_x     = 'speed_x';    //tag integer
 var speed_y     = 'speed_y';    //tag integer
 var speed_z     = 'speed_z';    //tag integer
@@ -151,6 +142,8 @@ var qr_code     = 'qr_code';     //tag_string_10
 var processed   = 'processed';   //tag bool 
 var sql_insert_Trigger = 'sql_insert_Trigger'; //tag bool
 var counter = 'counter';         //tag array
+var processed_1 = 'processed_1'; //tag bool
+
  
 // Đọc dữ liệu
 const TagList = tagBuilder
@@ -159,17 +152,8 @@ const TagList = tagBuilder
 .read(bt_run) 
 .read(bt_reset)
 .read(bt_e_stop)
-.read(bt_start)
 .read(bt_stop)
 .read(bt_setup)
-.read(bt_xcong)
-.read(bt_xtru)
-.read(bt_ycong)
-.read(bt_ytru)
-.read(bt_zcong)
-.read(bt_ztru)
-.read(bt_dc_in)
-.read(bt_dc_out)
 .read(speed_x)
 .read(speed_y)
 .read(speed_z)
@@ -202,7 +186,8 @@ const TagList = tagBuilder
 .read(qr_code)
 .read(processed)
 .read(sql_insert_Trigger)
-.read(counter) 
+.read(counter)
+.read(processed_1) 
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -211,50 +196,42 @@ function fn_tag(){
     io.sockets.emit("bt_run", tagArr[2]);
     io.sockets.emit("bt_reset", tagArr[3]);  
     io.sockets.emit("bt_e_stop", tagArr[4]);
-    io.sockets.emit("bt_start", tagArr[5]);
-    io.sockets.emit("bt_stop", tagArr[6]);  
-    io.sockets.emit("bt_setup", tagArr[7]);
-    io.sockets.emit("bt_xcong", tagArr[8]);
-    io.sockets.emit("bt_xtru", tagArr[9]);  
-    io.sockets.emit("bt_xcong", tagArr[10]);
-    io.sockets.emit("bt_xtru", tagArr[11]); 
-    io.sockets.emit("bt_xcong", tagArr[12]);
-    io.sockets.emit("bt_xtru", tagArr[13]); 
-    io.sockets.emit("bt_dc_in", tagArr[14]);
-    io.sockets.emit("bt_dc_out", tagArr[15]); 
-    io.sockets.emit("speed_x", tagArr[16]);
-    io.sockets.emit("speed_y", tagArr[17]);
-    io.sockets.emit("speed_z", tagArr[18]);
-    io.sockets.emit("pos_x", tagArr[19]);
-    io.sockets.emit("pos_y", tagArr[20]);
-    io.sockets.emit("pos_z", tagArr[21]);
-    io.sockets.emit("pos_1", tagArr[22]);
-    io.sockets.emit("pos_2", tagArr[23]);
-    io.sockets.emit("pos_3", tagArr[24]);
-    io.sockets.emit("pos_4", tagArr[25]);
-    io.sockets.emit("pos_5", tagArr[26]);
-    io.sockets.emit("pos_6", tagArr[27]);
-    io.sockets.emit("pos_7", tagArr[28]);
-    io.sockets.emit("pos_8", tagArr[29]);
-    io.sockets.emit("pos_9", tagArr[30]);
-    io.sockets.emit("pos_10", tagArr[31]);
-    io.sockets.emit("pos_11", tagArr[32]);
-    io.sockets.emit("pos_12", tagArr[33]);
-    io.sockets.emit("pos_13", tagArr[34]);
-    io.sockets.emit("pos_14", tagArr[35]);
-    io.sockets.emit("pos_15", tagArr[36]);
-    io.sockets.emit("pos_16", tagArr[37]);
-    io.sockets.emit("pos_17", tagArr[38]);
-    io.sockets.emit("pos_18", tagArr[39]);
-    io.sockets.emit("ss_i1", tagArr[40]);
-    io.sockets.emit("ss_i2", tagArr[41]);
-    io.sockets.emit("ss_o", tagArr[42]);
-    io.sockets.emit("dc_i", tagArr[43]);
-    io.sockets.emit("dc_o", tagArr[44]);
-    io.sockets.emit("qr_code", tagArr[45]);
-    io.sockets.emit("processed", tagArr[46]);
-    io.sockets.emit("sql_insert_Trigger", tagArr[47]);
-    io.sockets.emit("counter", tagArr[48]);
+    io.sockets.emit("bt_stop", tagArr[5]);  
+    io.sockets.emit("bt_setup", tagArr[6]);
+    io.sockets.emit("speed_x", tagArr[7]);
+    io.sockets.emit("speed_y", tagArr[8]);
+    io.sockets.emit("speed_z", tagArr[9]);
+    io.sockets.emit("pos_x", tagArr[10]);
+    io.sockets.emit("pos_y", tagArr[11]);
+    io.sockets.emit("pos_z", tagArr[12]);
+    io.sockets.emit("pos_1", tagArr[13]);
+    io.sockets.emit("pos_2", tagArr[14]);
+    io.sockets.emit("pos_3", tagArr[15]);
+    io.sockets.emit("pos_4", tagArr[16]);
+    io.sockets.emit("pos_5", tagArr[17]);
+    io.sockets.emit("pos_6", tagArr[18]);
+    io.sockets.emit("pos_7", tagArr[19]);
+    io.sockets.emit("pos_8", tagArr[20]);
+    io.sockets.emit("pos_9", tagArr[21]);
+    io.sockets.emit("pos_10", tagArr[22]);
+    io.sockets.emit("pos_11", tagArr[23]);
+    io.sockets.emit("pos_12", tagArr[24]);
+    io.sockets.emit("pos_13", tagArr[25]);
+    io.sockets.emit("pos_14", tagArr[26]);
+    io.sockets.emit("pos_15", tagArr[27]);
+    io.sockets.emit("pos_16", tagArr[28]);
+    io.sockets.emit("pos_17", tagArr[29]);
+    io.sockets.emit("pos_18", tagArr[30]);
+    io.sockets.emit("ss_i1", tagArr[31]);
+    io.sockets.emit("ss_i2", tagArr[32]);
+    io.sockets.emit("ss_o", tagArr[33]);
+    io.sockets.emit("dc_i", tagArr[34]);
+    io.sockets.emit("dc_o", tagArr[35]);
+    io.sockets.emit("qr_code", tagArr[36]);
+    io.sockets.emit("processed", tagArr[37]);
+    io.sockets.emit("sql_insert_Trigger", tagArr[38]);
+    io.sockets.emit("counter", tagArr[39]);
+    io.sockets.emit("processed_1", tagArr[40]);
 }
 // ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
@@ -272,43 +249,11 @@ io.on("connection", function(socket){
   socket.on("cmd_bt_run", function(data){
 		fn_Data_Write(bt_run,data);
 	});
-  socket.on("cmd_bt_start", function(data){
-		fn_Data_Write(bt_start,data);
-	});
   socket.on("cmd_bt_stop", function(data){
 		fn_Data_Write(bt_stop,data);
 	});
   socket.on("cmd_bt_e_stop", function(data){
 		fn_Data_Write(bt_e_stop,data);
-	});
-  socket.on("cmd_bt_setup", function(data){
-		fn_Data_Write(speed_x,data[0]);
-        fn_Data_Write(speed_y,data[1]);
-		fn_Data_Write(speed_z,data[2]);
-	});
-  socket.on("cmd_bt_x+", function(data){
-		fn_Data_Write(bt_xcong,data);
-	});
-  socket.on("cmd_bt_x-", function(data){
-		fn_Data_Write(bt_xtru,data);
-	});
-  socket.on("cmd_bt_y+", function(data){
-		fn_Data_Write(bt_ycong,data);
-	});
-  socket.on("cmd_bt_y-", function(data){
-		fn_Data_Write(bt_ytru,data);
-	});
-  socket.on("cmd_bt_z+", function(data){
-		fn_Data_Write(bt_zcong,data);
-	});
-  socket.on("cmd_bt_z-", function(data){
-		fn_Data_Write(bt_ztru,data);
-	});
-  socket.on("cmd_bt_dc_in", function(data){
-		fn_Data_Write(bt_dc_in,data);
-	});
-  socket.on("cmd_bt_dc_out", function(data){
-		fn_Data_Write(bt_dc_out,data);
 	});
   socket.on("cmd_processed", function(data){
 		fn_Data_Write(processed,data);
