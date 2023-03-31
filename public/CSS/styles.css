@@ -231,6 +231,9 @@ background-color: #2196F3;
     .object .row-5{
         top: 84%;
     }
+    #panel{
+        min-height: 722px;
+    }
 }
 /*------------------------ Màn hình 110% --------------------------*/
 @media (max-width: 1400px){

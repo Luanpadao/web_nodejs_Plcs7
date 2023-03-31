@@ -143,6 +143,7 @@ var processed   = 'processed';   //tag bool
 var sql_insert_Trigger = 'sql_insert_Trigger'; //tag bool
 var counter = 'counter';         //tag array
 var processed_1 = 'processed_1'; //tag bool
+var pos = 'pos'; //tag interger
 
  
 // Đọc dữ liệu
@@ -187,7 +188,8 @@ const TagList = tagBuilder
 .read(processed)
 .read(sql_insert_Trigger)
 .read(counter)
-.read(processed_1) 
+.read(processed_1)
+.read(pos) 
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -232,6 +234,7 @@ function fn_tag(){
     io.sockets.emit("sql_insert_Trigger", tagArr[38]);
     io.sockets.emit("counter", tagArr[39]);
     io.sockets.emit("processed_1", tagArr[40]);
+    io.sockets.emit("pos", tagArr[41]);
 }
 // ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
@@ -281,5 +284,8 @@ io.on("connection", function(socket){
     Type_table = "'" + data[3] + "',";
     Position_table = "'" + data[0] + "',";
     ImportExport_table = "'" + data[4] + "'";
+  });
+  socket.on("cmd_pos",function(data){
+    fn_Data_Write(pos,data);
   });
 });

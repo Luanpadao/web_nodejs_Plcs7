@@ -189,6 +189,16 @@ $(document).ready(function(){
     //////////////////////////////////////////////////////bt_run
     $(".bt_run").mousedown(function()
     {
+        if(sw == 0 & sw2 == 1)
+        {
+            document.getElementById('gd_dk_1').classList.add('d-none');
+            document.getElementById('gd_dk_3').classList.remove('d-none');
+        }
+        else if(sw == 1 & sw2 == 1)
+        {
+            document.getElementById('gd_dk_1').classList.add('d-none');
+            document.getElementById('gd_dk_4').classList.remove('d-none');
+        }
         $(this).css("background-color","green");
         socket.emit('cmd_bt_run', true);
     });
@@ -227,18 +237,28 @@ $(document).ready(function(){
         $(this).css("background-color","#6c757d");
     });
     //////////////////////////////////////////////////////bt_select
-    $("#bt_select").click(function()
+    $(".bt_select").click(function()
     {
-        if(($('#pos').val() != "") & ($('#pos').val() > 0) & ($('#pos').val() < 19) &($('#n'+$('#pos').val()).hasClass('d-none')))
+        if(($('#pos').val() != "") & ($('#pos').val() > 0) & ($('#pos').val() < 19))
         {
-            var pos = $('#pos').val();
-            $("#i3").val(pos);
+            if ($('#n'+$('#pos').val()).hasClass('d-none'))
+            {
+                if(($('#i4').val() == "A" & $('#pos').val() <= 6) || ($('#i4').val() == "B" & $('#pos').val() <= 12 & $('#pos').val() > 6) || ($('#i4').val() == "C" & $('#pos').val() <= 18 & $('#pos').val() > 12))
+                {
+                    var pos = $('#pos').val();
+                    $("#i3").val(pos);
+                    socket.emit('cmd_pos', pos);
+                    document.getElementById('gd_dk_1').classList.remove('d-none');
+                    document.getElementById('gd_dk_2').classList.add('d-none');
+                }
+                else
+                alert("Sai vị trí, vui lòng nhập lại!");
+            }
+            else
+                alert("Ô kho đã có hàng, vui lòng nhập lại!");
         }
         else
-        {
-            alert("không hợp lệ, vui lòng nhập lại");
-            $('#myModal').modal('show');
-        }
+            alert("Ô kho không tồn tại, vui lòng nhập lại!");
     });
 });
 ////////////// YÊU CẦU DỮ LIỆU TỪ SERVER- REQUEST DATA //////////////
@@ -341,9 +361,10 @@ function fn_table_01(data){
                     $("#i4").val(data[i].Type);
                     if(sw == 0)
                     {
-                        $("#i3").val("");
-                        $('#myModal').modal('show');
                         $('#pos').val("");
+;                        $("#i3").val("");
+                        document.getElementById('gd_dk_1').classList.add('d-none');
+                        document.getElementById('gd_dk_2').classList.remove('d-none');
                     }
                     else if(sw == 1)
                         $("#i3").val(data[i].ID);
