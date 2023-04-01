@@ -186,15 +186,6 @@ background-color: #2196F3;
     align-items: center;
     margin: auto;
 }
-#led_1{
-    background-color: rgb(190, 86, 86);
-}
-#led_2{
-    background-color: rgb(93, 183, 93);
-}
-#led_3{
-    background-color: rgb(239, 239, 90);
-}
 #myModal {
     position: fixed;
     margin: 10px,100px;
@@ -217,19 +208,19 @@ background-color: #2196F3;
         height: 60px;
     }
     .object .row-1{
-        top: 18%;
+        top: 19.5%;
     }
     .object .row-2{
-        top: 29.5%;
+        top: 30.4%;
     }
     .object .row-3{
-        top: 41%;
+        top: 41.3%;
     }
     .object .row-4{
-        top: 70%;
+        top: 69%;
     }
     .object .row-5{
-        top: 84%;
+        top: 82%;
     }
     #panel{
         min-height: 722px;

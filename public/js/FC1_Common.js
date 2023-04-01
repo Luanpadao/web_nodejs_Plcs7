@@ -12,17 +12,18 @@ var Position_table = 0;
 var pl_done = false;
 var lock_1 = 0;
 var lock_2 = 0;
+var l2 = false;
+var check_empty = false;
 $(document).ready(function(){
     $("#introduce").show();
     $("#control").hide();
     $("#member").hide();
     $("#intructor").hide();
-    $("#mode_sa").show();
-    $("#mode_a").hide();
+    $(".mode_sa").css("background-color", "blue");
     $(".bt_import").css("background-color", "blue");
-    fn_IOFieldDataShow('pos_x','px',0);
-    fn_IOFieldDataShow('pos_y','py',0);
-    fn_IOFieldDataShow('pos_z','pz',0);
+    fn_IOFieldDataShow('pos_x','px',1);
+    fn_IOFieldDataShow('pos_y','py',1);
+    fn_IOFieldDataShow('pos_z','pz',1);
     fn_SymbolStatus('ss_i1','sstc','ss_i1');
     fn_SymbolStatus('ss_i2','sstc','ss_i2');
     fn_SymbolStatus('ss_o','sstc','ss_o');
@@ -46,9 +47,10 @@ $(document).ready(function(){
     fn_SymbolStatus('n16','','pos_16');
     fn_SymbolStatus('n17','','pos_17');
     fn_SymbolStatus('n18','','pos_18');
+    fn_SymbolStatus('led_2','','running');
     fn_IOFieldDataShow('qr_code','i1',0);
     fn_IOFieldDataShow('processed','',0);
-    fn_IOFieldDataShow('counter','',0);            
+    fn_IOFieldDataShow('counter','',0);
     //////////////////////////////////////////////////////bt_introduce_chuyen trang
     $("#bt_introduce").click(function()
     {
@@ -139,36 +141,57 @@ $(document).ready(function(){
         $('#bt_intructor').addClass('active');
     });
     //////////////////////////////////////////////////////switch_Mode
-    $("input[name='mode']").click(function(){
-        sw = $(this).val();
-        if(sw==0){
-            $("#mode_sa").show();
-            $("#mode_a").hide();
+    $(".mode_sa").click(function()
+    {
+        if(l2 == false)
+        {
+            $(".mode_sa").css("background-color", "blue");
+            $(".mode_a").css("background-color", "#6c757d");
+            sw = 0;
             mode.placeholder = "SEMI AUTO";
-            socket.emit('cmd_sw_mode',0);
+            socket.emit('cmd_sw_mode',false);
         }
-        else if(sw==1){
-            $("#mode_sa").hide();
-            $("#mode_a").show();
+        else
+            alert("Robot đang hoạt động, không đổi được chế độ!");
+    });
+    $(".mode_a").click(function()
+    {
+        if(l2 == false)
+        {
+            $(".mode_sa").css("background-color", "#6c757d");
+            $(".mode_a").css("background-color", "blue");
+            sw = 1;
             mode.placeholder = "AUTO";
-            socket.emit('cmd_sw_mode',1);
+            socket.emit('cmd_sw_mode',true);
         }
+        else
+            alert("Robot đang hoạt động, không đổi được chế độ!");
     });
     //////////////////////////////////////////////////////bt_import
     $(".bt_import").click(function()
     {
-        $(".bt_import").css("background-color", "blue");
-        $(".bt_export").css("background-color", "#6c757d");
-        sw2 = 0;
-        socket.emit('cmd_sw_im_ex', false);
+        if(l2 == false)
+        {
+            $(".bt_import").css("background-color", "blue");
+            $(".bt_export").css("background-color", "#6c757d");
+            sw2 = 0;
+            socket.emit('cmd_sw_im_ex', false);
+        }
+        else
+            alert("Robot đang hoạt động, không đổi được chế độ!");
     });
     //////////////////////////////////////////////////////bt_export
     $(".bt_export").click(function()
     {
-        $(".bt_import").css("background-color", "#6c757d");
-        $(".bt_export").css("background-color", "blue");
-        sw2 = 1; 
-        socket.emit('cmd_sw_im_ex', true);
+        if(l2 == false)
+        {
+            $(".bt_import").css("background-color", "#6c757d");
+            $(".bt_export").css("background-color", "blue");
+            sw2 = 1; 
+            socket.emit('cmd_sw_im_ex', true);
+        }
+        else
+            alert("Robot đang hoạt động, không đổi được chế độ!");
     });
     //////////////////////////////////////////////////////bt_stop
     $(".bt_stop").mousedown(function()
@@ -243,7 +266,9 @@ $(document).ready(function(){
         {
             if ($('#n'+$('#pos').val()).hasClass('d-none'))
             {
-                if(($('#i4').val() == "A" & $('#pos').val() <= 6) || ($('#i4').val() == "B" & $('#pos').val() <= 12 & $('#pos').val() > 6) || ($('#i4').val() == "C" & $('#pos').val() <= 18 & $('#pos').val() > 12))
+                if(($('#i4').val() == "A" & ((1 <= $('#pos').val() & $('#pos').val() <= 3) || (10 <= $('#pos').val() & $('#pos').val() <= 12))) 
+                || ($('#i4').val() == "B" & ((4 <= $('#pos').val() & $('#pos').val() <= 6) || (13 <= $('#pos').val() & $('#pos').val() <= 15))) 
+                || ($('#i4').val() == "C" & ((7 <= $('#pos').val() & $('#pos').val() <= 9) || (16 <= $('#pos').val() & $('#pos').val() <= 18))))
                 {
                     var pos = $('#pos').val();
                     $("#i3").val(pos);
@@ -280,17 +305,17 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             document.getElementById("counter_2").innerHTML = counter[1];
             document.getElementById("counter_3").innerHTML = counter[2];
             if(counter[0] == 6)
-                $('#status_1').css("background-color","green");
+                $('#status_A').css("background-color","green");
             else
-                $('#status_1').css("background-color","#fff");
+                $('#status_A').css("background-color","#fff");
             if(counter[1] == 6)
-                $('#status_2').css("background-color","green");
+                $('#status_B').css("background-color","green");
             else
-                $('#status_2').css("background-color","#fff");
+                $('#status_B').css("background-color","#fff");
             if(counter[2] == 6)
-                $('#status_3').css("background-color","green");
+                $('#status_C').css("background-color","green");
             else
-                $('#status_3').css("background-color","#fff");
+                $('#status_C').css("background-color","#fff");
 
         }
         else if(tag.substr(0,2) == "po")
@@ -330,6 +355,24 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
                 document.getElementById(ObjectID).classList.remove('d-none');
         });
     }
+    else if(ObjectID == "led_2")
+    {
+        socket.on(Tag, function(data){
+            if (data == false)
+            {
+                $("#led_2").css("background-color","#6c757d");
+                $("#led_1").css("background-color","red");
+                l2 = false;
+            }
+            else if (data == true)
+            {
+                $("#led_2").css("background-color","green");
+                $("#led_1").css("background-color","#6c757d");
+                l2 = true;
+            }
+
+        });
+    }
     else
     {
         var imglink_0 = "images/Symbol/" + SymName + "_0.png"; // Trạng thái tag = false
@@ -352,35 +395,52 @@ function fn_Table01_SQL_Show(){
 // Hiển thị dữ liệu ra bảng pre_data
 function fn_table_01(data){
     if(data){
+        check_empty = false;
         var len = data.length;
         if(len > 0){
             for(var i=0;i<len;i++){
-                if((data[i].QRCode == temp) & $('#n'+(i+1)).hasClass('d-none') ){
+                console.log("status_"+ data[i].Type);
+                if(data[i].QRCode == temp)
+                {
                     $("#i1").val(data[i].QRCode);
                     $("#i2").val(data[i].Name);
                     $("#i4").val(data[i].Type);
-                    if(sw == 0)
+                    if($('#n'+(i+1)).hasClass('d-none'))
                     {
-                        $('#pos').val("");
-;                        $("#i3").val("");
-                        document.getElementById('gd_dk_1').classList.add('d-none');
-                        document.getElementById('gd_dk_2').classList.remove('d-none');
+                        //Xác định nhập kho tự động hoặc bán tự động
+                        if(sw == 0) // bán tự động
+                        {
+                            $('#pos').val("");
+                            $("#i3").val("");
+                            document.getElementById('gd_dk_1').classList.add('d-none');
+                            document.getElementById('gd_dk_2').classList.remove('d-none');
+                        }
+                        else if(sw == 1)  //Tự động
+                        {
+                            $("#i3").val(data[i].ID);
+                            var pos = $('#i3').val();
+                            socket.emit('cmd_pos', pos);
+                        }
+                        var tempArr=[];
+                        tempArr[0] = data[i].ID;
+                        tempArr[1] = data[i].QRCode;
+                        tempArr[2] = data[i].Name;
+                        tempArr[3] = data[i].Type;
+                        if(sw2 == 1)
+                            tempArr[4] = "Export";
+                        else
+                            tempArr[4] = "Import";
+                        socket.emit("msg_send_data_SQL",tempArr);
+                        check_empty = true;
+                        break;
                     }
-                    else if(sw == 1)
-                        $("#i3").val(data[i].ID);
-                    var tempArr=[];
-                    tempArr[0] = data[i].ID;
-                    tempArr[1] = data[i].QRCode;
-                    tempArr[2] = data[i].Name;
-                    tempArr[3] = data[i].Type;
-                    if(sw2 == 1)
-                        tempArr[4] = "Export";
-                    else
-                        tempArr[4] = "Import";
-                    socket.emit("msg_send_data_SQL",tempArr);
-                    break;
                 }
             }
+        }
+        if(check_empty == false)
+        {
+            alert('Đầy hàng rồi, vui lòng xuất kho!');
+            console.log('alo');
         }
     }   
 }

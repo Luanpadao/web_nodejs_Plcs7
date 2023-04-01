@@ -354,13 +354,13 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="circle counter" id="status_1">
+                                    <div class="circle counter" id="status_A">
                                         <span>full</span>
                                     </div>
-                                    <div class="circle counter" id="status_2">
+                                    <div class="circle counter" id="status_B">
                                         <span>full</span>
                                     </div>
-                                    <div class="circle counter" id="status_3">
+                                    <div class="circle counter" id="status_C">
                                         <span>full</span>
                                     </div>
                                 </div>
@@ -374,7 +374,7 @@
                                                     <div class="circle" id="led_1">
                                                         <span>off</span>
                                                     </div>
-                                                    <div class="circle" id="led_2">
+                                                    <div class="circle led_23" id="led_2">
                                                         <span>on</span>
                                                     </div>
                                                     <div class="circle" id="led_3">
@@ -382,28 +382,14 @@
                                                     </div>
                                             </div>
                                         </div>  
-                                        <div class="d-block btn-group mx-auto" id="switch_mode">
-                                            <div class="text-center">
-                                              <input type="radio" id="mode1" name="mode" value= 0 checked>
-                                              <label for="mode1">S-A</label>
-                                              <input type="radio" id="mode2" name="mode" value= 1>
-                                              <label for="mode2">A</label>
-                                            </div>
+                                        <div class="mx-auto btn_group text-center">
+                                            <button type="button" class="btn btn-secondary mode_sa" title="SEMI AUTO">S-A</button> 
+                                            <button type="button" class="btn btn-secondary mode_a" title="AUTO">A</button>
                                         </div>
                                         <div class="text-center" >
                                             <input class="text-center" id="mode" type="text" size="12" disabled placeholder="SEMI AUTO">
                                         </div>
-                                        <div class="mx-auto btn_group text-center" id="mode_sa">
-                                            <div class="mx-auto btn_group text-center">
-                                                <button type="button" class="btn btn-secondary bt_import" title="button import">IMPORT</button> 
-                                                <button type="button" class="btn btn-secondary bt_export" title="button export">EXPORT</button>
-                                            </div>
-                                            <div class="mx-auto  btn_group text-center">
-                                                <button type="button" class="btn btn-secondary bt_run" title="button run">RUN</button>
-                                                <button type="button" class="btn btn-secondary bt_e_stop" title="button e-stop" >E-STOP</button>
-                                            </div>
-                                        </div>
-                                        <div class="mx-auto  btn_group text-center" id="mode_a">
+                                        <div class="mx-auto btn_group text-center">
                                             <div class="mx-auto btn_group text-center">
                                                 <button type="button" class="btn btn-secondary bt_import" title="button import">IMPORT</button> 
                                                 <button type="button" class="btn btn-secondary bt_export" title="button export">EXPORT</button>
@@ -411,7 +397,7 @@
                                             <div class="mx-auto  btn_group text-center">
                                                 <button type="button" class="btn btn-secondary bt_run" title="button run">RUN</button>
                                                 <button type="button" class="btn btn-secondary bt_stop" title="button stop">STOP</button>
-                                                <button type="button" class="btn btn-secondary bt_e_stop" title="button e-stop">E-STOP</button>
+                                                <button type="button" class="btn btn-secondary bt_e_stop" title="button e-stop" >E-STOP</button>
                                             </div>
                                         </div>
                                     </div>
