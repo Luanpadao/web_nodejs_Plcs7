@@ -54,6 +54,7 @@ $(document).ready(function(){
     fn_IOFieldDataShow('processed','',0);
     fn_IOFieldDataShow('counter','',0);
     fn_IOFieldDataShow('finished','',0);
+    fn_Table02_SQL_show();
     //////////////////////////////////////////////////////bt_introduce_chuyen trang
     $("#bt_introduce").click(function()
     {
@@ -455,9 +456,10 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
 // Yêu cầu dữ liệu bảng pre_data
 function fn_Table01_SQL_Show(){
     socket.emit("msg_SQL_Show_01", "true");
-    console.log('here');
+}
+function fn_Table02_SQL_show()
+{
     socket.on('SQL_Show_01',function(data){
-        console.log('alo1');
         if(sw2 == 0)
             fn_table_01(data);
         if(sw2 == 1)
@@ -551,7 +553,7 @@ function fn_table_02(data){
             }
             if(y == 0)
             {
-                // alert('Hoàn thành xuất kho loại A!');
+                alert('Hoàn thành xuất kho loại ' + type);
             }
         }
     }   
