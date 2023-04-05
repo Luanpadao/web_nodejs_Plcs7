@@ -280,13 +280,22 @@ $(document).ready(function(){
                     document.getElementById('gd_dk_2').classList.add('d-none');
                 }
                 else
-                alert("Sai vị trí, vui lòng nhập lại!");
+                {
+                    alert("Sai vị trí, vui lòng nhập lại!");
+                    $('#pos_im').val("");
+                }
             }
             else
+            {
                 alert("Ô kho đã có hàng, vui lòng nhập lại!");
+                $('#pos_im').val("");
+            }
         }
         else
+        {
             alert("Ô kho không tồn tại, vui lòng nhập lại!");
+            $('#pos_im').val("");
+        }
     });
     //////////////////////////////////////////////////////bt_select_ex
     $(".bt_select_ex").click(function()
@@ -446,7 +455,9 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
 // Yêu cầu dữ liệu bảng pre_data
 function fn_Table01_SQL_Show(){
     socket.emit("msg_SQL_Show_01", "true");
+    console.log('here');
     socket.on('SQL_Show_01',function(data){
+        console.log('alo1');
         if(sw2 == 0)
             fn_table_01(data);
         if(sw2 == 1)
@@ -470,7 +481,7 @@ function fn_table_01(data){
                         //Xác định nhập kho tự động hoặc bán tự động
                         if(sw == 0) // bán tự động
                         {
-                            $('#pos').val("");
+                            $('#pos_im').val("");
                             $("#i3").val("");
                             document.getElementById('gd_dk_1').classList.add('d-none');
                             document.getElementById('gd_dk_2').classList.remove('d-none');
@@ -507,6 +518,7 @@ function fn_table_01(data){
 function fn_table_02(data){
     if(data){
         var len = data.length;
+        var y = 0;
         if(len > 0){
             for(var i=0;i<len;i++){
                 if(sw == 0)
@@ -523,7 +535,6 @@ function fn_table_02(data){
                 {
                     if(type == data[i].Type)
                     {
-                        // var y = 0;
                         if(!($('#n'+data[i].ID).hasClass('d-none')))
                         {
                             var pos = data[i].ID;
@@ -532,13 +543,15 @@ function fn_table_02(data){
                             $("#i2").val(data[i].Name);
                             $("#i3").val(data[i].ID);
                             $("#i4").val(data[i].Type);
-                            // y = 1;
+                            y = 1;
                             break;
                         }
-                        // if(y == 0)
-                        //     alert('Hoàn thành xuất kho loại A!');
                     }
                 }
+            }
+            if(y == 0)
+            {
+                // alert('Hoàn thành xuất kho loại A!');
             }
         }
     }   

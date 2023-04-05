@@ -266,6 +266,7 @@ io.on("connection", function(socket){
           } else {
               const objectifyRawPacket = row => ({...row});
               const convertedResponse = results.map(objectifyRawPacket);
+              console.log('alo');
               socket.emit('SQL_Show_01', convertedResponse);
           } 
       });
