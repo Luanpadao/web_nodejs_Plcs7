@@ -481,14 +481,14 @@ function fn_table_01(data){
                     if($('#n'+(i+1)).hasClass('d-none'))
                     {
                         //Xác định nhập kho tự động hoặc bán tự động
-                        if(sw == 0) // bán tự động
+                        if(sw == 0 & sw2 == 0) // bán tự động
                         {
                             $('#pos_im').val("");
                             $("#i3").val("");
                             document.getElementById('gd_dk_1').classList.add('d-none');
                             document.getElementById('gd_dk_2').classList.remove('d-none');
                         }
-                        else if(sw == 1)  //Tự động
+                        else if(sw == 1 & sw2 == 0)  //Tự động
                         {
                             $("#i3").val(data[i].ID);
                             var pos = $('#i3').val();
