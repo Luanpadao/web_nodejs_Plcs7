@@ -142,6 +142,7 @@ var counter = 'counter';         //tag array
 var processed_1 = 'processed_1'; //tag bool
 var pos = 'pos'; //tag interger
 var running = 'running'; //tag bool
+var finished = 'finished'; //tag bool
 
  
 // Đọc dữ liệu
@@ -184,7 +185,8 @@ const TagList = tagBuilder
 .read(counter)
 .read(processed_1)
 .read(pos) 
-.read(running) 
+.read(running)
+.read(finished)  
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -227,6 +229,7 @@ function fn_tag(){
     io.sockets.emit("processed_1", tagArr[36]);
     io.sockets.emit("pos", tagArr[37]);
     io.sockets.emit("running", tagArr[38]);
+    io.sockets.emit("finished", tagArr[39]);
 }
 // ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){

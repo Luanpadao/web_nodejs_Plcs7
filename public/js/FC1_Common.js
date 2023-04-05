@@ -14,6 +14,8 @@ var lock_1 = 0;
 var lock_2 = 0;
 var l2 = false;
 var check_empty = false;
+var type = '';
+var finish_done = false;
 $(document).ready(function(){
     $("#introduce").show();
     $("#control").hide();
@@ -51,6 +53,7 @@ $(document).ready(function(){
     fn_IOFieldDataShow('qr_code','i1',0);
     fn_IOFieldDataShow('processed','',0);
     fn_IOFieldDataShow('counter','',0);
+    fn_IOFieldDataShow('finished','',0);
     //////////////////////////////////////////////////////bt_introduce_chuyen trang
     $("#bt_introduce").click(function()
     {
@@ -259,18 +262,18 @@ $(document).ready(function(){
     {
         $(this).css("background-color","#6c757d");
     });
-    //////////////////////////////////////////////////////bt_select
-    $(".bt_select").click(function()
+    //////////////////////////////////////////////////////bt_select_im
+    $(".bt_select_im").click(function()
     {
-        if(($('#pos').val() != "") & ($('#pos').val() > 0) & ($('#pos').val() < 19))
+        if(($('#pos_im').val() != "") & ($('#pos_im').val() > 0) & ($('#pos_im').val() < 19))
         {
-            if ($('#n'+$('#pos').val()).hasClass('d-none'))
+            if ($('#n'+$('#pos_im').val()).hasClass('d-none'))
             {
-                if(($('#i4').val() == "A" & ((1 <= $('#pos').val() & $('#pos').val() <= 3) || (10 <= $('#pos').val() & $('#pos').val() <= 12))) 
-                || ($('#i4').val() == "B" & ((4 <= $('#pos').val() & $('#pos').val() <= 6) || (13 <= $('#pos').val() & $('#pos').val() <= 15))) 
-                || ($('#i4').val() == "C" & ((7 <= $('#pos').val() & $('#pos').val() <= 9) || (16 <= $('#pos').val() & $('#pos').val() <= 18))))
+                if(($('#i4').val() == "A" & ((1 <= $('#pos_im').val() & $('#pos_im').val() <= 3) || (10 <= $('#pos_im').val() & $('#pos_im').val() <= 12))) 
+                || ($('#i4').val() == "B" & ((4 <= $('#pos_im').val() & $('#pos_im').val() <= 6) || (13 <= $('#pos_im').val() & $('#pos_im').val() <= 15))) 
+                || ($('#i4').val() == "C" & ((7 <= $('#pos_im').val() & $('#pos_im').val() <= 9) || (16 <= $('#pos_im').val() & $('#pos_im').val() <= 18))))
                 {
-                    var pos = $('#pos').val();
+                    var pos = $('#pos_im').val();
                     $("#i3").val(pos);
                     socket.emit('cmd_pos', pos);
                     document.getElementById('gd_dk_1').classList.remove('d-none');
@@ -285,6 +288,48 @@ $(document).ready(function(){
         else
             alert("Ô kho không tồn tại, vui lòng nhập lại!");
     });
+    //////////////////////////////////////////////////////bt_select_ex
+    $(".bt_select_ex").click(function()
+    {
+        if ($('#n'+$('#pos_ex').val()).hasClass('d-none'))
+        {
+            $('#pos_ex').val("");
+            alert("Ô hàng trống, vui lòng nhập lại!");
+        }
+        else
+        {
+            var pos = $('#pos_ex').val();
+            temp = pos;
+            socket.emit('cmd_pos', pos);
+            document.getElementById('gd_dk_1').classList.remove('d-none');
+            document.getElementById('gd_dk_3').classList.add('d-none');
+            fn_Table01_SQL_Show()
+        }
+    });
+    //////////////////////////////////////////////////////bt_typeA
+    $(".bt_typeA").click(function()
+    {
+        type = 'A';
+        fn_Table01_SQL_Show();
+        document.getElementById('gd_dk_1').classList.remove('d-none');
+        document.getElementById('gd_dk_4').classList.add('d-none');
+    });
+    //////////////////////////////////////////////////////bt_typeB
+    $(".bt_typeB").click(function()
+    {
+        type = 'B';
+        fn_Table01_SQL_Show();
+        document.getElementById('gd_dk_1').classList.remove('d-none');
+        document.getElementById('gd_dk_4').classList.add('d-none');
+    });
+    //////////////////////////////////////////////////////bt_typeC
+    $(".bt_typeC").click(function()
+    {
+        type = 'C';
+        fn_Table01_SQL_Show();
+        document.getElementById('gd_dk_1').classList.remove('d-none');
+        document.getElementById('gd_dk_4').classList.add('d-none');
+    });
 });
 ////////////// YÊU CẦU DỮ LIỆU TỪ SERVER- REQUEST DATA //////////////
 var myVar = setInterval(myTimer, 100);
@@ -296,6 +341,19 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
     socket.on(tag,function(data){
         if(tag == 'qr_code')
             temp = data;
+        else if(tag == 'finished')
+        {
+            if(data == true & finish_done != data)
+            {
+                $("#i1").val("");
+                $("#i2").val("");
+                $("#i3").val("");
+                $("#i4").val("");
+                if(sw == 1 & sw2 == 1 & type != "")
+                    fn_Table01_SQL_Show();
+            }
+            finish_done = data;
+        }    
         else if(tag == 'counter')
         {
             counter[0] = parseInt(data[1]);
@@ -389,17 +447,19 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
 function fn_Table01_SQL_Show(){
     socket.emit("msg_SQL_Show_01", "true");
     socket.on('SQL_Show_01',function(data){
-        fn_table_01(data);
+        if(sw2 == 0)
+            fn_table_01(data);
+        if(sw2 == 1)
+            fn_table_02(data);
     }); 
 }
-// Hiển thị dữ liệu ra bảng pre_data
+// Hiển thị dữ liệu từ bảng pre_data khi nhập
 function fn_table_01(data){
     if(data){
         check_empty = false;
         var len = data.length;
         if(len > 0){
             for(var i=0;i<len;i++){
-                console.log("status_"+ data[i].Type);
                 if(data[i].QRCode == temp)
                 {
                     $("#i1").val(data[i].QRCode);
@@ -440,7 +500,46 @@ function fn_table_01(data){
         if(check_empty == false)
         {
             alert('Đầy hàng rồi, vui lòng xuất kho!');
-            console.log('alo');
+        }
+    }   
+}
+// Hiển thị dữ liệu từ bảng pre_data khi xuất
+function fn_table_02(data){
+    if(data){
+        var len = data.length;
+        if(len > 0){
+            for(var i=0;i<len;i++){
+                if(sw == 0)
+                {
+                    if(data[i].ID == Number(temp))
+                    {
+                        $("#i1").val(data[i].QRCode);
+                        $("#i2").val(data[i].Name);
+                        $("#i3").val(data[i].ID);
+                        $("#i4").val(data[i].Type);
+                    }
+                }
+                else
+                {
+                    if(type == data[i].Type)
+                    {
+                        // var y = 0;
+                        if(!($('#n'+data[i].ID).hasClass('d-none')))
+                        {
+                            var pos = data[i].ID;
+                            socket.emit('cmd_pos', pos);
+                            $("#i1").val(data[i].QRCode);
+                            $("#i2").val(data[i].Name);
+                            $("#i3").val(data[i].ID);
+                            $("#i4").val(data[i].Type);
+                            // y = 1;
+                            break;
+                        }
+                        // if(y == 0)
+                        //     alert('Hoàn thành xuất kho loại A!');
+                    }
+                }
+            }
         }
     }   
 }
