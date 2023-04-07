@@ -7,9 +7,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-        <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- <script src="https://code.jquery.com/jquery-3.6.1.js"></script> -->
         <script src = "socket.io/socket.io.js"></script>
+        <script src="js/jquery-3.6.4.min.js"></script>
+        <script src="js/FileSaver.min.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script> -->
         <script>
             var socket = io("localhost:3000") // IP tĩnh (hoặc IP động, localhost)
         </script>
@@ -20,14 +22,14 @@
     <!--Phần thân của website-->
     <body>
         <header class="text-center">
-            <a href="#"><img src="images/LOGO_IUH.PNG" title="Trường Đại học Công nghiệp Thành phố Hồ Chí Minh"
+            <a href="https://feet.iuh.edu.vn"><img src="images/LOGO_IUH.PNG" title="Trường Đại học Công nghiệp Thành phố Hồ Chí Minh"
                 class="img-fluid m-0" alt=""></a>
             <div class="text-center fw-bold text-danger">
                 ĐỀ TÀI: THIẾT KẾ HỆ THỐNG LƯU KHO TỰ ĐỘNG VÀ GIÁM SÁT BẰNG MÃ QR
             </div>
             <nav class="navbar navbar-expand-md bg-light p-0" id="navbar">
                 <div class="container-fluid" id="slider">
-                    <a class="navbar-brand" href="home.ejs">
+                    <a class="navbar-brand" href="http://localhost:3000">
                         <img src="images/logo_HALA.png" title="logo_HALA" height="60px" alt="Logo">
                         HALA
                     </a>
@@ -262,8 +264,8 @@
                                 <img class="row-5" id="ss_o" style="width: 1.5%;">
                                 <img class="row-5" id="dc_i"  style="width: 11%;">
                                 <img class="row-5" id="dc_o"  style="width: 11%;">
-                                <img class="row-4" id="mt_i" src="images/Symbol/mt_1.png"style="width: 7%;">
-                                <img class="row-4"id="mt_o" src="images/Symbol/mt_1.png"style="width: 7%;">
+                                <img class="row-4" id="mt_i" src="images/Symbol/mt_1.png"style="width: 5%;">
+                                <img class="row-4"id="mt_o" src="images/Symbol/mt_1.png"style="width: 5%;">
                             </div>
                         </div>
                         <div class="col-4 " id="panel" >
@@ -275,29 +277,32 @@
                                     <label class="form-text">ROBOT ĐANG DI CHUYỂN</label>
                                 </div>
                                 <div class="row form-text-label text-center" id="position">
-                                    <div class="col">
+                                    <div class="col-4">
                                         <div class="text-primary">
                                             x-scale
                                         </div>
                                         <div>
                                             <label class="text-bg-primary" id="px">300</label>
                                         </div>
+                                        <div><input type="range" id="px_range" name="px_range" min="0" max="300"></div>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-4">
                                         <div class="text-warning">
                                             y-scale
                                         </div>
                                         <div>
                                             <label class="text-bg-warning" id="py">100</label>
                                         </div>
+                                        <div><input type="range" id="py_range" name="py_range" min="0" max="10"></div>
                                     </div>
-                                    <div class="col">
+                                    <div class="col-4">
                                         <div class="text-danger">
                                             z-scale
                                         </div>
                                         <div>
                                             <label class="text-bg-danger" id="pz">-100</label>
                                         </div>
+                                        <div><input type="range" id="pz_range" name="pz_range" min="0" max="300"></div>
                                     </div>
                                 </div>
                                 <div class="row text-center mt-2">
@@ -368,7 +373,7 @@
                                     <label class="bg-primary">PANEL</label>
                                 </div>
                                 <div id="gd_dk">
-                                    <div id="gd_dk_1">
+                                    <div id="gd_dk_1" class="d-none">
                                         <div class="row mt-1">
                                             <div class="col-10" id="led">
                                                     <div class="circle" id="led_1">
@@ -427,51 +432,43 @@
                                             <button type="button" class="btn btn-secondary bt_typeC">C</button>
                                         </div>
                                     </div>
+                                    <div id="gd_dk_5" class="text-center">
+                                        <label for="pos" class="mt-2">THÔNG BÁO:</label>
+                                        <div >
+                                            Vui lòng nhấn ON tại tủ điện để cho phép điều khiển!
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
                 <div id="table">
-                    <h6 class="text-center text-danger">BẢNG THỐNG KÊ XUẤT NHẬP KHO</h6>
-                    <table class="table table-striped">
-                        <thead class="table-dark">
-                          <tr>
-                            <th>Vị trí</th>
-                            <th>Mã QR code</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Loại sản phẩm</th>
-                            <th>Xuất/Nhập</th>
-                            <th>Ngày</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>12345-a</td>
-                            <td>bút bi</td>
-                            <td>loại 1</td>
-                            <td>Nhập</td>
-                            <td>27/02/2023</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>12345-b</td>
-                            <td>bút bi</td>
-                            <td>Loại 1</td>
-                            <td>Nhập</td>
-                            <td>27/02/2023</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>12345-c</td>
-                            <td>bút bi</td>
-                            <td>Loại 1</td>
-                            <td>Nhập</td>
-                            <td>27/02/2023</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                    <div id="search">
+                        <!--Date time piker-->
+                        <label id="lb_Search_Start">Từ:</label>
+                        <input id="dtpk_Search_Start" type="datetime-local">
+                        <label id="lb_Search_End">Đến:</label>
+                        <input id="dtpk_Search_End" type="datetime-local">
+                        <!--Nút tìm kiếm-->
+                        <button id="btt_Search" class="btn btn-secondary" onclick="fn_SQL_By_Time();"></i> TÌM KIẾM</button>   
+                        <button id="btt_Excel" class="btn btn-secondary" onclick="fn_excel();"></i> BÁO CÁO</button> 
+                    </div>
+                    <div id="table_show_SQL">
+                        <h6 class="text-center text-danger mt-2">BẢNG THỐNG KÊ XUẤT NHẬP KHO</h6>
+                        <table class="table table-striped" id="table_data">
+                            <thead class="table-dark">
+                              <tr>
+                                <th>Vị trí</th>
+                                <th>Mã QR code</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Loại sản phẩm</th>
+                                <th>Xuất/Nhập</th>
+                                <th>Ngày</th>
+                              </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

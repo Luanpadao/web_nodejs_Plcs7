@@ -4,6 +4,7 @@ var sw1 = false;
 var sw2 = 0;
 var counter = [];
 var temp = "";
+var tempArr=[];
 var temp_1 = 0;
 var QRCode_table = "";
 var Name_table = "";
@@ -13,9 +14,11 @@ var pl_done = false;
 var lock_1 = 0;
 var lock_2 = 0;
 var l2 = false;
+var l3 = false;
 var check_empty = false;
 var type = '';
 var finish_done = false;
+var enable_done = false;
 $(document).ready(function(){
     $("#introduce").show();
     $("#control").hide();
@@ -50,11 +53,16 @@ $(document).ready(function(){
     fn_SymbolStatus('n17','','pos_17');
     fn_SymbolStatus('n18','','pos_18');
     fn_SymbolStatus('led_2','','running');
+    fn_SymbolStatus('led_3','','err');
     fn_IOFieldDataShow('qr_code','i1',0);
     fn_IOFieldDataShow('processed','',0);
     fn_IOFieldDataShow('counter','',0);
     fn_IOFieldDataShow('finished','',0);
-    fn_Table02_SQL_show();
+    fn_IOFieldDataShow('enable','',0);
+    fn_Table_SQL_show_pre_data();
+    fn_Table_SQL_show_data();
+    fn_Show_SQL_By_Time();
+    fn_excel_01();
     //////////////////////////////////////////////////////bt_introduce_chuyen trang
     $("#bt_introduce").click(function()
     {
@@ -127,6 +135,7 @@ $(document).ready(function(){
         $('#scada').hide();
         $("#table").show();
         $('#introduce').hide();
+        fn_Table01_SQL_Show_data();
     });
     //////////////////////////////////////////////////////bt_member_chuyen trang
     $("#bt_member").click(function()
@@ -220,6 +229,7 @@ $(document).ready(function(){
         {
             document.getElementById('gd_dk_1').classList.add('d-none');
             document.getElementById('gd_dk_3').classList.remove('d-none');
+            $('#pos_ex').val("");
         }
         else if(sw == 1 & sw2 == 1)
         {
@@ -277,6 +287,7 @@ $(document).ready(function(){
                     var pos = $('#pos_im').val();
                     $("#i3").val(pos);
                     socket.emit('cmd_pos', pos);
+                    tempArr[0] = pos;
                     document.getElementById('gd_dk_1').classList.remove('d-none');
                     document.getElementById('gd_dk_2').classList.add('d-none');
                 }
@@ -359,11 +370,27 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
                 $("#i2").val("");
                 $("#i3").val("");
                 $("#i4").val("");
+                console.log(tempArr);
+                socket.emit("msg_send_data_SQL",tempArr);
                 if(sw == 1 & sw2 == 1 & type != "")
                     fn_Table01_SQL_Show();
             }
             finish_done = data;
-        }    
+        }
+        else if(tag == 'enable')
+        {
+            if(data == true & enable_done != data)
+            {
+                document.getElementById('gd_dk_1').classList.remove('d-none');
+                document.getElementById('gd_dk_5').classList.add('d-none');
+            }
+            else if(data == false & enable_done == data)
+            {
+                document.getElementById('gd_dk_1').classList.add('d-none');
+                document.getElementById('gd_dk_5').classList.remove('d-none');
+            }
+            enable_done = data;
+        }
         else if(tag == 'counter')
         {
             counter[0] = parseInt(data[1]);
@@ -393,6 +420,7 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
                 document.getElementById(IOField).innerHTML = data;
             else
                 document.getElementById(IOField).innerHTML = data.toFixed(tofix);
+            $('#p'+tag.substr(4,1)+'_range').val(data);
         }
         else if(tag == 'processed')
         {
@@ -429,7 +457,8 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
             if (data == false)
             {
                 $("#led_2").css("background-color","#6c757d");
-                $("#led_1").css("background-color","red");
+                if(l3 == false)
+                    $("#led_1").css("background-color","red");
                 l2 = false;
             }
             else if (data == true)
@@ -441,25 +470,56 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
 
         });
     }
+    else if(ObjectID == "led_3")
+    {
+        socket.on(Tag, function(data){
+            if (data == false)
+            {
+                $("#led_3").css("background-color","#6c757d");
+                $("#led_1").css("background-color","red");
+                document.querySelector(".bt_run").disabled = false;
+                document.querySelector(".bt_stop").disabled = false;
+                document.querySelector(".bt_e_stop").disabled = false;
+            }
+            else if (data == true)
+            {
+                $("#led_3").css("background-color","yellow");
+                $("#led_1").css("background-color","#6c757d");
+                document.querySelector(".bt_run").disabled = true;
+                document.querySelector(".bt_stop").disabled = true;
+                document.querySelector(".bt_e_stop").disabled = true;
+                l3 = true;
+            }
+
+        });
+    }
     else
     {
         var imglink_0 = "images/Symbol/" + SymName + "_0.png"; // Trạng thái tag = false
         var imglink_1 = "images/Symbol/" + SymName + "_1.png"; // Trạng thái tag = true
         socket.on(Tag, function(data){
             if (data == false)
+            {
                 document.getElementById(ObjectID).src = imglink_0;
+                if(Tag == 'dc_i' | Tag =='dc_o')
+                    document.getElementById('mt'+ObjectID.substr(2,2)).classList.add('d-none');
+            }
             else if (data == true)
+            {
                 document.getElementById(ObjectID).src = imglink_1;
+                if(Tag =='dc_i' | Tag =='dc_o')
+                    document.getElementById('mt'+ObjectID.substr(2,2)).classList.remove('d-none');
+            }
         });
     }
 }
 // Yêu cầu dữ liệu bảng pre_data
 function fn_Table01_SQL_Show(){
-    socket.emit("msg_SQL_Show_01", "true");
+    socket.emit("msg_SQL_Show", "pre_data");
 }
-function fn_Table02_SQL_show()
+function fn_Table_SQL_show_pre_data()
 {
-    socket.on('SQL_Show_01',function(data){
+    socket.on('SQL_Show_pre_data',function(data){
         if(sw2 == 0)
             fn_table_01(data);
         if(sw2 == 1)
@@ -478,6 +538,9 @@ function fn_table_01(data){
                     $("#i1").val(data[i].QRCode);
                     $("#i2").val(data[i].Name);
                     $("#i4").val(data[i].Type);
+                    tempArr[1] = data[i].QRCode;
+                    tempArr[2] = data[i].Name;
+                    tempArr[3] = data[i].Type;
                     if($('#n'+(i+1)).hasClass('d-none'))
                     {
                         //Xác định nhập kho tự động hoặc bán tự động
@@ -493,26 +556,21 @@ function fn_table_01(data){
                             $("#i3").val(data[i].ID);
                             var pos = $('#i3').val();
                             socket.emit('cmd_pos', pos);
+                            tempArr[0] = data[i].ID;
                         }
-                        var tempArr=[];
-                        tempArr[0] = data[i].ID;
-                        tempArr[1] = data[i].QRCode;
-                        tempArr[2] = data[i].Name;
-                        tempArr[3] = data[i].Type;
-                        if(sw2 == 1)
-                            tempArr[4] = "Export";
-                        else
-                            tempArr[4] = "Import";
-                        socket.emit("msg_send_data_SQL",tempArr);
+                        // if(sw2 == 1)
+                        //     tempArr[4] = "Export";
+                        // else
+                        tempArr[4] = "Import";
                         check_empty = true;
                         break;
                     }
                 }
             }
-        }
-        if(check_empty == false)
-        {
-            alert('Đầy hàng rồi, vui lòng xuất kho!');
+            if(check_empty == false)
+            {
+                alert('Đầy hàng rồi, vui lòng xuất kho loại '+ $("#i4").val());
+            }
         }
     }   
 }
@@ -521,6 +579,7 @@ function fn_table_02(data){
     if(data){
         var len = data.length;
         var y = 0;
+        var t = 0;
         if(len > 0){
             for(var i=0;i<len;i++){
                 if(sw == 0)
@@ -531,6 +590,9 @@ function fn_table_02(data){
                         $("#i2").val(data[i].Name);
                         $("#i3").val(data[i].ID);
                         $("#i4").val(data[i].Type);
+                        t = i;
+                        y = 1;
+                        break;
                     }
                 }
                 else
@@ -545,16 +607,84 @@ function fn_table_02(data){
                             $("#i2").val(data[i].Name);
                             $("#i3").val(data[i].ID);
                             $("#i4").val(data[i].Type);
+                            t = i;
                             y = 1;
                             break;
                         }
                     }
                 }
             }
+            tempArr[0] = data[t].ID;
+            tempArr[1] = data[t].QRCode;
+            tempArr[2] = data[t].Name;
+            tempArr[3] = data[t].Type;
+            tempArr[4] = "Export";
             if(y == 0)
             {
                 alert('Hoàn thành xuất kho loại ' + type);
             }
         }
     }   
+}
+// Yêu cầu dữ liệu bảng data
+function fn_Table01_SQL_Show_data(){
+    socket.emit("msg_SQL_Show", "data");
+}
+function fn_Table_SQL_show_data()
+{
+    socket.on('SQL_Show_data',function(data){
+        fn_table_data(data);
+    }); 
+}
+function fn_table_data(data){
+    if(data){
+        $("#table_data tbody").empty();
+        var len = data.length;
+        var txt = "<tbody>";
+        if(len > 0){
+            for(var i=0;i<len;i++){
+                    txt += "<tr><td>"+data[i].Position
+                        +"</td><td>"+data[i].QR_Code
+                        +"</td><td>"+data[i].Name
+                        +"</td><td>"+data[i].Type
+                        +"</td><td>"+data[i].Import_Export
+                        +"</td><td>"+data[i].date_time
+                        +"</td></tr>";
+                    }
+            if(txt != ""){
+            txt +="</tbody>"; 
+            $("#table_data").append(txt);
+            }
+        }
+    }   
+}
+// Tìm kiếm SQL theo khoảng thời gian
+function fn_SQL_By_Time()
+{
+    var val = [document.getElementById('dtpk_Search_Start').value,
+               document.getElementById('dtpk_Search_End').value];
+    socket.emit('msg_SQL_ByTime', val);
+}
+function fn_Show_SQL_By_Time()
+{
+    socket.on('SQL_ByTime', function(data){
+        fn_table_data(data); // Show sdata
+    });
+}
+// Hàm chức năng xuất dữ liệu Excel
+function fn_excel(){
+    var linktext = "";
+    var bookname = "";
+    socket.emit("msg_Excel_Report", true);
+}
+function fn_excel_01(){
+    socket.on('send_Excel_Report',function(data){
+        linktext = data[0];
+        bookname = data[1];
+        // Delay save as
+        var delayInMilliseconds = 1000; //Delay 1 second
+        setTimeout(function() {
+            saveAs(linktext, bookname);
+        }, delayInMilliseconds);          
+    }); 
 }

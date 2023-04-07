@@ -103,7 +103,20 @@ ul li:hover .dropdown-menu{
     left: 75%;
 }
 .object #mt_i{
-    left: 18%;
+    position: relative;
+    animation: mymove_i 1s infinite;
+}
+@keyframes mymove_i {
+    from {left: 10%;}
+    to {left: 30%;}
+}
+.object #mt_o{
+    position: relative;
+    animation: mymove_o 1s infinite;
+}
+@keyframes mymove_o {
+    from {left: 65%;}
+    to {left: 86%;}
 }
 .object #mt_o{
     left: 76%;
@@ -138,6 +151,69 @@ background-color: #2196F3;
 }
 #control{
     background-color:rgb(191, 255, 255);
+}
+/* Thanh slider x */
+#px_range {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background-color: #ddd;
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
+/* Nút trượt trên thanh slider x */
+#px_range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+    border-radius: 50%;
+    cursor: pointer;
+}
+/* Thanh slider y */
+#py_range {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background-color: #ddd;
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
+/* Nút trượt trên thanh slider y */
+#py_range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: orange;
+    border-radius: 50%;
+    cursor: pointer;
+}
+/* Thanh slider z */
+#pz_range {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background-color: #ddd;
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
+/* Nút trượt trên thanh slider z */
+#pz_range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    cursor: pointer;
 }
 #panel{
     border: 4px solid rgb(185, 42, 175);
@@ -217,10 +293,19 @@ background-color: #2196F3;
         top: 41.3%;
     }
     .object .row-4{
-        top: 69%;
+        top: 71%;
     }
     .object .row-5{
         top: 82%;
+    }
+    #px_range{
+        width: 100px;
+    }
+    #py_range{
+        width: 100px;
+    }
+    #pz_range{
+        width: 100px;
     }
     #panel{
         min-height: 722px;
@@ -263,6 +348,15 @@ background-color: #2196F3;
         width: 45px;
         height: 45px;
     }
+    #px_range{
+        width: 90px;
+    }
+    #py_range{
+        width: 90px;
+    }
+    #pz_range{
+        width: 90px;
+    }
     #panel{
         min-height: 760px;
     }
@@ -301,6 +395,15 @@ background-color: #2196F3;
     .circle {
         width: 40px;
         height: 40px;
+    }
+    #px_range{
+        width: 70px;
+    }
+    #py_range{
+        width: 70px;
+    }
+    #pz_range{
+        width: 70px;
     }
     #panel{
         min-height: 710px;
@@ -373,4 +476,10 @@ background-color: #2196F3;
 /*------------------------ Màn hình 250% --------------------------*/
 @media (max-width: 576px){
     
+}
+/*//////////////Hiển thị dữ liệu bảng 1 - Start/////////////////*/
+#table_show_SQL{
+    /* position: absolute;  */
+    width: 100%; height: 680px;
+    overflow-y: scroll;
 }
