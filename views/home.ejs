@@ -10,7 +10,7 @@
         <!-- <script src="https://code.jquery.com/jquery-3.6.1.js"></script> -->
         <script src = "socket.io/socket.io.js"></script>
         <script src="js/jquery-3.6.4.min.js"></script>
-        <script src="js/FileSaver.min.js"></script>
+        <script src="js/FileSaver.js"></script>
         <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script> -->
         <script>
             var socket = io("localhost:3000") // IP tĩnh (hoặc IP động, localhost)
@@ -459,12 +459,12 @@
                         <table class="table table-striped" id="table_data">
                             <thead class="table-dark">
                               <tr>
-                                <th>Vị trí</th>
+                                <th>Thời gian</th>
                                 <th>Mã QR code</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Loại sản phẩm</th>
-                                <th>Xuất/Nhập</th>
-                                <th>Ngày</th>
+                                <th>Vị trí</th>
+                                <th>Trạng thái</th>
                               </tr>
                             </thead>
                         </table>

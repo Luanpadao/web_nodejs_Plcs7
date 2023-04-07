@@ -274,7 +274,10 @@ io.on("connection", function(socket){
               if(data == "pre_data")
                 socket.emit('SQL_Show_pre_data', convertedResponse);
               else if (data == "data")
+              {
                 socket.emit('SQL_Show_data', convertedResponse);
+                SQL_Excel = convertedResponse; // Xuất báo cáo Excel
+              }
           } 
       });
   });
@@ -365,23 +368,24 @@ function fn_excelExport(){
       filename: 'public/images/Logo.png',
       extension: 'png',
     });
-  worksheet.addImage(imageId1, 'A1:A3');
+  worksheet.addImage(imageId1, 'A1:B4');
   // Thông tin công ty
-  worksheet.getCell('B1').value = 'Trường Đại học Công nghiệp Thành phố Hồ Chí Minh';
-  worksheet.getCell('B1').style = { font:{bold: true,size: 14},alignment: {vertical: 'middle'}} ;
-  worksheet.getCell('B2').value = 'Địa chỉ: 12 Nguyễn Văn Bảo, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh';
-  worksheet.getCell('B3').value = 'Điện thoại: (028) 38940390 Fax: (028) 38946268';
+  worksheet.getCell('C1').value = 'Trường Đại học Công nghiệp Thành phố Hồ Chí Minh';
+  worksheet.getCell('C1').style = { font:{bold: true,size: 14},alignment: {vertical: 'middle'}} ;
+  worksheet.getCell('C2').value = 'Địa chỉ: 12 Nguyễn Văn Bảo, Phường 4, Gò Vấp, Thành phố Hồ Chí Minh';
+  worksheet.getCell('C3').value = 'Điện thoại: (028) 38940390 Fax: (028) 38946268';
+  worksheet.getCell('C4').value = 'Website: www.iuh.edu.vn';
   // Tên báo cáo
-  worksheet.getCell('A5').value = 'BÁO CÁO SẢN XUẤT';
-  worksheet.mergeCells('A5:F5');
-  worksheet.getCell('A5').style = { font:{name: 'Times New Roman', bold: true,size: 16},alignment: {horizontal:'center',vertical: 'middle'}} ;
+  worksheet.getCell('A6').value = 'BÁO CÁO SẢN XUẤT';
+  worksheet.mergeCells('A6:H6');
+  worksheet.getCell('A6').style = { font:{name: 'Times New Roman', bold: true,size: 16},alignment: {horizontal:'center',vertical: 'middle'}} ;
   // Ngày in biểu
-  worksheet.getCell('F6').value = "Ngày in biểu: " + dayName + date + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds;
-  worksheet.getCell('F6').style = { font:{bold: false, italic: true},alignment: {horizontal:'right',vertical: 'bottom',wrapText: false}} ;
+  worksheet.getCell('H7').value = "Ngày in biểu: " + dayName + date + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds;
+  worksheet.getCell('H7').style = { font:{bold: false, italic: true},alignment: {horizontal:'right',vertical: 'bottom',wrapText: false}} ;
    
   // Tên nhãn các cột
-  var rowpos = 7;
-  var collumName = ["STT", "Vị trí","Mã QR Code", "Tên sản phẩm", "Loại", "Ghi chú"]
+  var rowpos = 8;
+  var collumName = ["STT", "Ngày","Mã QR Code", "Tên sản phẩm", "Loại",  "Vị trí",  "Nhập/Xuất", "Ghi chú"]
   worksheet.spliceRows(rowpos, 1, collumName);
    
   // =====================XUẤT DỮ LIỆU EXCEL SQL=====================
@@ -393,10 +397,12 @@ function fn_excelExport(){
   // worksheet1 collum
   worksheet.columns = [
         {key: 'STT'},
-        {key: 'Position'},
+        {key: 'date_time'},
         {key: 'QR_Code'},
         {key: 'Name'},
         {key: 'Type'},
+        {key: 'Position'},
+        {key: 'Import_Export'},
       ]
   worksheet.addRow({
         STT: {
@@ -418,14 +424,14 @@ function fn_excelExport(){
 // Style cho hàng total (Tổng cộng)
 worksheet.getCell(`A${totalNumberOfRows+1}`).style = { font:{bold: true,size: 12},alignment: {horizontal:'center',}} ;
 // Tô màu cho hàng total (Tổng cộng)
-const total_row = ['A','B', 'C', 'D', 'E','F']
+const total_row = ['A','B', 'C', 'D', 'E','F','G','H']
 total_row.forEach((v) => {
     worksheet.getCell(`${v}${totalNumberOfRows+1}`).fill = {type: 'pattern',pattern:'solid',fgColor:{ argb:'f2ff00' }}
 }) 
 
   // =====================STYLE CHO CÁC CỘT/HÀNG=====================
   // Style các cột nhãn
-  const HeaderStyle = ['A','B', 'C', 'D', 'E','F']
+  const HeaderStyle = ['A','B', 'C', 'D', 'E','F','G','H']
   HeaderStyle.forEach((v) => {
       worksheet.getCell(`${v}${rowpos}`).style = { font:{bold: true},alignment: {horizontal:'center',vertical: 'middle',wrapText: true}} ;
       worksheet.getCell(`${v}${rowpos}`).border = {
@@ -440,9 +446,7 @@ total_row.forEach((v) => {
       column.width = 15;
   })
   // Set width header
-  worksheet.getColumn(1).width = 12;
   worksheet.getColumn(2).width = 20;
-  worksheet.getColumn(7).width = 30;
   worksheet.getColumn(8).width = 30;
    
   // ++++++++++++Style cho các hàng dữ liệu++++++++++++
@@ -451,7 +455,7 @@ total_row.forEach((v) => {
     var rowindex = rowNumber + datastartrow;
     const rowlength = datastartrow + SQL_Excel.length
     if(rowindex >= rowlength+1){rowindex = rowlength+1}
-    const insideColumns = ['A','B', 'C', 'D', 'E','F']
+    const insideColumns = ['A','B', 'C', 'D', 'E','F','G','H']
   // Tạo border
     insideColumns.forEach((v) => {
         // Border
@@ -468,23 +472,23 @@ total_row.forEach((v) => {
    
    
   // =====================THẾT KẾ FOOTER=====================
-  worksheet.getCell(`F${totalNumberOfRows+2}`).value = 'Ngày …………tháng ……………năm 20………';
-  worksheet.getCell(`F${totalNumberOfRows+2}`).style = { font:{bold: true, italic: false},alignment: {horizontal:'right',vertical: 'middle',wrapText: false}} ;
+  worksheet.getCell(`H${totalNumberOfRows+2}`).value = 'Ngày …………tháng ……………năm 20………';
+  worksheet.getCell(`H${totalNumberOfRows+2}`).style = { font:{bold: true, italic: false},alignment: {horizontal:'right',vertical: 'middle',wrapText: false}} ;
    
   worksheet.getCell(`B${totalNumberOfRows+3}`).value = 'Giám đốc';
   worksheet.getCell(`B${totalNumberOfRows+4}`).value = '(Ký, ghi rõ họ tên)';
   worksheet.getCell(`B${totalNumberOfRows+3}`).style = { font:{bold: true, italic: false},alignment: {horizontal:'center',vertical: 'bottom',wrapText: false}} ;
   worksheet.getCell(`B${totalNumberOfRows+4}`).style = { font:{bold: false, italic: true},alignment: {horizontal:'center',vertical: 'top',wrapText: false}} ;
    
-  worksheet.getCell(`D${totalNumberOfRows+3}`).value = 'Trưởng ca';
-  worksheet.getCell(`D${totalNumberOfRows+4}`).value = '(Ký, ghi rõ họ tên)';
-  worksheet.getCell(`D${totalNumberOfRows+3}`).style = { font:{bold: true, italic: false},alignment: {horizontal:'center',vertical: 'bottom',wrapText: false}} ;
-  worksheet.getCell(`D${totalNumberOfRows+4}`).style = { font:{bold: false, italic: true},alignment: {horizontal:'center',vertical: 'top',wrapText: false}} ;
+  worksheet.getCell(`E${totalNumberOfRows+3}`).value = 'Trưởng ca';
+  worksheet.getCell(`E${totalNumberOfRows+4}`).value = '(Ký, ghi rõ họ tên)';
+  worksheet.getCell(`E${totalNumberOfRows+3}`).style = { font:{bold: true, italic: false},alignment: {horizontal:'center',vertical: 'bottom',wrapText: false}} ;
+  worksheet.getCell(`E${totalNumberOfRows+4}`).style = { font:{bold: false, italic: true},alignment: {horizontal:'center',vertical: 'top',wrapText: false}} ;
    
-  worksheet.getCell(`F${totalNumberOfRows+3}`).value = 'Người in biểu';
-  worksheet.getCell(`F${totalNumberOfRows+4}`).value = '(Ký, ghi rõ họ tên)';
-  worksheet.getCell(`F${totalNumberOfRows+3}`).style = { font:{bold: true, italic: false},alignment: {horizontal:'center',vertical: 'bottom',wrapText: false}} ;
-  worksheet.getCell(`F${totalNumberOfRows+4}`).style = { font:{bold: false, italic: true},alignment: {horizontal:'center',vertical: 'top',wrapText: false}} ;
+  worksheet.getCell(`H${totalNumberOfRows+3}`).value = 'Người in biểu';
+  worksheet.getCell(`H${totalNumberOfRows+4}`).value = '(Ký, ghi rõ họ tên)';
+  worksheet.getCell(`H${totalNumberOfRows+3}`).style = { font:{bold: true, italic: false},alignment: {horizontal:'center',vertical: 'bottom',wrapText: false}} ;
+  worksheet.getCell(`H${totalNumberOfRows+4}`).style = { font:{bold: false, italic: true},alignment: {horizontal:'center',vertical: 'top',wrapText: false}} ;
    
   // =====================THỰC HIỆN XUẤT DỮ LIỆU EXCEL=====================
   // Export Link

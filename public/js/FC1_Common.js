@@ -370,7 +370,6 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
                 $("#i2").val("");
                 $("#i3").val("");
                 $("#i4").val("");
-                console.log(tempArr);
                 socket.emit("msg_send_data_SQL",tempArr);
                 if(sw == 1 & sw2 == 1 & type != "")
                     fn_Table01_SQL_Show();
@@ -561,7 +560,7 @@ function fn_table_01(data){
                         // if(sw2 == 1)
                         //     tempArr[4] = "Export";
                         // else
-                        tempArr[4] = "Import";
+                        tempArr[4] = "Nhập";
                         check_empty = true;
                         break;
                     }
@@ -618,7 +617,7 @@ function fn_table_02(data){
             tempArr[1] = data[t].QRCode;
             tempArr[2] = data[t].Name;
             tempArr[3] = data[t].Type;
-            tempArr[4] = "Export";
+            tempArr[4] = "Xuất";
             if(y == 0)
             {
                 alert('Hoàn thành xuất kho loại ' + type);
@@ -643,12 +642,12 @@ function fn_table_data(data){
         var txt = "<tbody>";
         if(len > 0){
             for(var i=0;i<len;i++){
-                    txt += "<tr><td>"+data[i].Position
+                    txt += "<tr><td>"+data[i].date_time
                         +"</td><td>"+data[i].QR_Code
                         +"</td><td>"+data[i].Name
                         +"</td><td>"+data[i].Type
+                        +"</td><td>"+data[i].Position
                         +"</td><td>"+data[i].Import_Export
-                        +"</td><td>"+data[i].date_time
                         +"</td></tr>";
                     }
             if(txt != ""){
