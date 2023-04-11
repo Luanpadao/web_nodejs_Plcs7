@@ -23,7 +23,7 @@ $(document).ready(function(){
     $("#introduce").show();
     $("#control").hide();
     $("#member").hide();
-    $("#intructor").hide();
+    $("#user").hide();
     $(".mode_sa").css("background-color", "blue");
     $(".bt_import").css("background-color", "blue");
     fn_IOFieldDataShow('pos_x','px',1);
@@ -69,38 +69,38 @@ $(document).ready(function(){
         $("#introduce").show();
         $("#control").hide();
         $("#member").hide();
-        $("#intructor").hide();
+        $("#user").hide();
         $("#banner").show();
         bt_introduce.classList.add('active');
         bt_control.classList.remove('active');
         bt_member.classList.remove('active');
-        bt_intructor.classList.remove('active');
+        bt_user.classList.remove('active');
     });
     //////////////////////////////////////////////////////bt_tongquan_chuyen trang
     $("#bt_tongquan").click(function(){
         $("#introduce").show();
         $("#control").hide();
         $("#member").hide();
-        $("#intructor").hide();
+        $("#user").hide();
         $("#banner").show();
         $("#content").css("background-color", "#fff");
         bt_introduce.classList.add('active');
         bt_control.classList.remove('active');
         bt_member.classList.remove('active');
-        bt_intructor.classList.remove('active');
+        bt_user.classList.remove('active');
     });
     //////////////////////////////////////////////////////bt_mohinh_chuyentrang
     $("#bt_mohinh").click(function(){
         $("#introduce").show();
         $("#control").hide();
         $("#member").hide();
-        $("#intructor").hide();
+        $("#user").hide();
         $("#banner").show();
         $("#content").css("background-color", "#fff");
         bt_introduce.classList.add('active');
         bt_control.classList.remove('active');
         bt_member.classList.remove('active');
-        bt_intructor.classList.remove('active');
+        bt_user.classList.remove('active');
     });
     //////////////////////////////////////////////////////bt_control_chuyen trang
     $("#bt_control").click(function()
@@ -108,33 +108,39 @@ $(document).ready(function(){
         $('#bt_introduce').removeClass('active');
         $('#bt_control').addClass('active');
         $('#bt_member').removeClass('active');
-        $('#bt_intructor').removeClass('active');
+        $('#bt_user').removeClass('active');
         $('#control').show();
         $('#scada').show();
         $("#table").hide();
         $('#introduce').hide();
+        $('#user').hide();
+        $('#member').hide();
     });
         //////////////////////////////////////////////////////bt_scada_chuyen trang
     $("#bt_scada").click(function(){
         $('#bt_introduce').removeClass('active');
         $('#bt_control').addClass('active');
         $('#bt_member').removeClass('active');
-        $('#bt_intructor').removeClass('active');
+        $('#bt_user').removeClass('active');
         $('#control').show();
         $('#scada').show();
         $("#table").hide();
         $('#introduce').hide();
+        $('#user').hide();
+        $('#member').hide();
     });
     //////////////////////////////////////////////////////bt_table_chuyen trang
     $("#bt_table").click(function(){
         $('#bt_introduce').removeClass('active');
         $('#bt_control').addClass('active');
         $('#bt_member').removeClass('active');
-        $('#bt_intructor').removeClass('active');
+        $('#bt_user').removeClass('active');
         $('#control').show();
         $('#scada').hide();
         $("#table").show();
         $('#introduce').hide();
+        $('#user').hide();
+        $('#member').hide();
         fn_Table01_SQL_Show_data();
     });
     //////////////////////////////////////////////////////bt_member_chuyen trang
@@ -143,15 +149,19 @@ $(document).ready(function(){
         $('#bt_introduce').removeClass('active');
         $('#bt_control').removeClass('active');
         $('#bt_member').addClass('active');
-        $('#bt_intructor').removeClass('active');
+        $('#bt_user').removeClass('active');
     });
-    //////////////////////////////////////////////////////bt_intructor_chuyen trang
-    $("#bt_intructor").click(function()
+    //////////////////////////////////////////////////////bt_user_chuyen trang
+    $("#bt_user").click(function()
     {
         $('#bt_introduce').removeClass('active');
         $('#bt_control').removeClass('active');
         $('#bt_member').removeClass('active');
-        $('#bt_intructor').addClass('active');
+        $('#bt_user').addClass('active');
+        $('#control').hide();
+        $('#introduce').hide();
+        $('#user').show();
+        $('#member').hide();
     });
     //////////////////////////////////////////////////////switch_Mode
     $(".mode_sa").click(function()
@@ -662,7 +672,10 @@ function fn_SQL_By_Time()
 {
     var val = [document.getElementById('dtpk_Search_Start').value,
                document.getElementById('dtpk_Search_End').value];
-    socket.emit('msg_SQL_ByTime', val);
+    if(val[0] == "" | val[1] == "")
+        alert("Vui lòng điền đủ thông tin thời gian!");
+    else
+        socket.emit('msg_SQL_ByTime', val);
 }
 function fn_Show_SQL_By_Time()
 {

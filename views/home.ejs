@@ -16,6 +16,7 @@
             var socket = io("localhost:3000") // IP tĩnh (hoặc IP động, localhost)
         </script>
         <script src = "js/FC1_Common.js"></script>
+        <script src = "js/FC2_UserManagement.js"></script>
         <link rel="stylesheet" href="CSS/styles.css">
         <title>Scada hệ thống giám sát trên internet</title>       
     </head>
@@ -64,7 +65,7 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="nav-item"><a class="nav-link" id="bt_intructor" href="#intructor"> INTRUCTOR</a></li>
+                            <li class="nav-item"><a class="nav-link" id="bt_user" href="#user"> USER</a></li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" id="bt_member" href="#member" role="button"
                                 aria-expanded="false">
@@ -451,13 +452,16 @@
                         <label id="lb_Search_End">Đến:</label>
                         <input id="dtpk_Search_End" type="datetime-local">
                         <!--Nút tìm kiếm-->
-                        <button id="btt_Search" class="btn btn-secondary" onclick="fn_SQL_By_Time();"></i> TÌM KIẾM</button>   
-                        <button id="btt_Excel" class="btn btn-secondary" onclick="fn_excel();"></i> BÁO CÁO</button> 
+                        <button id="btt_Search" class="text-bg-primary mt-2" onclick="fn_SQL_By_Time();"></i> TÌM KIẾM</button>   
+                        <button id="btt_Excel" class="text-bg-primary mt-2" onclick="fn_excel();"></i> EXCEL</button> 
                     </div>
                     <div id="table_show_SQL">
-                        <h6 class="text-center text-danger mt-2">BẢNG THỐNG KÊ XUẤT NHẬP KHO</h6>
+                        <!-- <h6 class="text-center text-danger mt-2 sticky-top">BẢNG THỐNG KÊ XUẤT NHẬP KHO</h6> -->
                         <table class="table table-striped" id="table_data">
-                            <thead class="table-dark">
+                            <thead class="table-dark sticky-top">
+                                <tr>
+                                    <th colspan="6" id="caption_table">BẢNG THỐNG KÊ XUẤT NHẬP KHO</th>
+                                </tr>
                               <tr>
                                 <th>Thời gian</th>
                                 <th>Mã QR code</th>
@@ -471,6 +475,75 @@
                     </div>
                 </div>
             </div>
+            <div class="text-center" id="user">
+                <table class="mt-2">
+                    <tr>
+                        <th colspan="2">THÔNG TIN TÀI KHOẢN</th>
+                    </tr>
+                    <tr>
+                        <td>Họ và tên:</td>
+                        <td>
+                            <input class="text-center" type="text" size="50" disabled value="Nguyễn Thành Luân">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>MSSV:</td>
+                        <td>
+                            <input class="text-center" type="text" size="50" disabled value="19486251">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ngày sinh:</td>
+                        <td>
+                            <input class="text-center" type="text" size="50" disabled value="20/01/2001">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Giới tính:</td>
+                        <td>
+                            <input type="checkbox" disabled checked>Nam
+                            <input type="checkbox" disabled>Nữ
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Quê quán:</td>
+                        <td>
+                            <input class="text-center" type="text" size="50" disabled value="xóm 3, Bình An I, Phước Thành, Tuy Phước, Bình Định">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td>
+                            <input class="text-center" type="text" size="50" disabled value="thanhluannguyen200101@gmail.com">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tên tài khoản:</td>
+                        <td>
+                            <input class="text-center" type="text" size="50" disabled value="Luanpadao">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Mật khẩu:</td>
+                        <td>
+                            <input class="text-center" type="password" size="50" disabled value="123456">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Quyền truy cập:</td>
+                        <td>
+                            <input type="checkbox" disabled checked>Toàn quyền
+                            <input type="checkbox" disabled>Điều khiển
+                            <input type="checkbox" disabled>Báo cáo
+                        </td>
+                    </tr>
+                </table>
+                <button class="m-2 text-bg-primary" type="button">Chỉnh sửa</button>
+                <button class="m-2 text-bg-danger" type="button">Đăng xuất</button>
+            </div>
         </div>
+        <footer class="bg-dark">
+            <p class="text-center">Author: Nguyễn Thành Luân <br>Address: 19/1, Lê Lợi, phường 4, Gò Vấp, Thành phố Hồ Chí Minh<br>Email:thanhluannguyen200101@gmail.com</p>
+        </footer>
     </body>
 </html>

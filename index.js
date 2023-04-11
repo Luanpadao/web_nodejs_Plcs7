@@ -105,7 +105,6 @@ var SQL_Excel = [];  // Dữ liệu Excel
 var sw_mode 	= 'sw_mode';    //tag integer
 var sw_im_ex 	= 'sw_im_ex';   //tag bool
 var bt_run 		= 'bt_run';     //tag bool
-var bt_reset    = 'bt_reset';   //tag bool
 var bt_e_stop 	= 'bt_e_stop';  //tag bool
 var bt_stop 	= 'bt_stop';    //tag bool
 var bt_setup 	= 'bt_setup';   //tag bool
@@ -138,13 +137,13 @@ var dc_o        = 'dc_o';        //tag bool
 var qr_code     = 'qr_code';     //tag_string_10
 var processed   = 'processed';   //tag bool 
 var sql_insert_Trigger = 'sql_insert_Trigger'; //tag bool
-var counter = 'counter';         //tag array
+var counter     = 'counter';         //tag array
 var processed_1 = 'processed_1'; //tag bool
-var pos = 'pos'; //tag interger
-var running = 'running'; //tag bool
-var finished = 'finished'; //tag bool
-var enable = 'enable'; // tag bool
-var err = 'err'; // tag bool
+var pos         = 'pos'; //tag interger
+var running     = 'running'; //tag bool
+var finished    = 'finished'; //tag bool
+var enable      = 'enable'; // tag bool
+var err         = 'err'; // tag bool
 // Đọc dữ liệu
 const TagList = tagBuilder
 .read(sw_mode) 

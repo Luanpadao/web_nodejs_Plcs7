@@ -262,11 +262,29 @@ background-color: #2196F3;
     align-items: center;
     margin: auto;
 }
-#myModal {
-    position: fixed;
-    margin: 10px,100px;
+/*//////////////Hiển thị dữ liệu bảng 1 - Start/////////////////*/
+#table_show_SQL{
+    /* position: absolute;  */
+    width: 100%; height: 680px;
+    overflow-y: scroll;
+}
+#table_data thead{
+    z-index: 1;
+}
+#caption_table{
+    background-color: rgb(191, 255, 255);
+    text-align: center;
+    color: red;
+    font-size: 25px;
+}
+#user table , #user th, #user td{
+    border: 2px solid black;
+    margin: auto;
   }
-  
+footer{
+    color: #fff;
+    opacity: 0.8;
+}
 /*------------------------ Màn hình 100% --------------------------*/
 @media (max-width: 1600px){
     #control {
@@ -476,10 +494,4 @@ background-color: #2196F3;
 /*------------------------ Màn hình 250% --------------------------*/
 @media (max-width: 576px){
     
-}
-/*//////////////Hiển thị dữ liệu bảng 1 - Start/////////////////*/
-#table_show_SQL{
-    /* position: absolute;  */
-    width: 100%; height: 680px;
-    overflow-y: scroll;
 }
