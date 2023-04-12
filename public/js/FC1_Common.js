@@ -485,7 +485,6 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
             if (data == false)
             {
                 $("#led_3").css("background-color","#6c757d");
-                $("#led_1").css("background-color","red");
                 document.querySelector(".bt_run").disabled = false;
                 document.querySelector(".bt_stop").disabled = false;
                 document.querySelector(".bt_e_stop").disabled = false;

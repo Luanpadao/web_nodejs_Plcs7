@@ -181,7 +181,7 @@
                 officia? Architecto, molestias. Molestiae qui excepturi quasi similique vero, quis, error, expedita
                 culpa
                 aliquid deserunt blanditiis tempore impedit.</p>
-                </div>
+                <!-- </div> -->
             </div>
             <div class="container" id="control">
                 <div id="scada">
@@ -283,7 +283,7 @@
                                             x-scale
                                         </div>
                                         <div>
-                                            <label class="text-bg-primary" id="px">300</label>
+                                            <label class="text-bg-primary" id="px"></label>
                                         </div>
                                         <div><input type="range" id="px_range" name="px_range" min="0" max="300"></div>
                                     </div>
@@ -292,16 +292,16 @@
                                             y-scale
                                         </div>
                                         <div>
-                                            <label class="text-bg-warning" id="py">100</label>
+                                            <label class="text-bg-warning" id="py"></label>
                                         </div>
-                                        <div><input type="range" id="py_range" name="py_range" min="0" max="10"></div>
+                                        <div><input type="range" id="py_range" name="py_range" min="-3.5" max="3.5"></div>
                                     </div>
                                     <div class="col-4">
                                         <div class="text-danger">
                                             z-scale
                                         </div>
                                         <div>
-                                            <label class="text-bg-danger" id="pz">-100</label>
+                                            <label class="text-bg-danger" id="pz"></label>
                                         </div>
                                         <div><input type="range" id="pz_range" name="pz_range" min="0" max="300"></div>
                                     </div>
@@ -475,8 +475,8 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center" id="user">
-                <table class="mt-2">
+            <div class="text-center" id="user" style="height: 570px;">
+                <table class="mt-5">
                     <tr>
                         <th colspan="2">THÔNG TIN TÀI KHOẢN</th>
                     </tr>
@@ -540,6 +540,30 @@
                 </table>
                 <button class="m-2 text-bg-primary" type="button">Chỉnh sửa</button>
                 <button class="m-2 text-bg-danger" type="button">Đăng xuất</button>
+            </div>
+            <!-- ////////////// CHƯƠNG TRÌNH ĐĂNG NHẬP HỆ THỐNG //////////////  -->
+            <!-- Trigger the modal with a button -->
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+
+            <!-- Modal -->
+            <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+
+            </div>
             </div>
         </div>
         <footer class="bg-dark">
