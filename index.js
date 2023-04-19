@@ -144,6 +144,9 @@ var running     = 'running'; //tag bool
 var finished    = 'finished'; //tag bool
 var enable      = 'enable'; // tag bool
 var err         = 'err'; // tag bool
+var status_robot = 'status_robot'; // tag interger
+var user = 'user'; // tag interger
+var access_user = 'access_user'; // tag string
 // Đọc dữ liệu
 const TagList = tagBuilder
 .read(sw_mode) 
@@ -188,6 +191,9 @@ const TagList = tagBuilder
 .read(finished)
 .read(enable)
 .read(err)
+.read(status_robot)
+.read(user)
+.read(access_user)
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -233,6 +239,9 @@ function fn_tag(){
     io.sockets.emit("finished", tagArr[39]);
     io.sockets.emit("enable", tagArr[40]);
     io.sockets.emit("err", tagArr[41]);
+    io.sockets.emit("status_robot", tagArr[42]);
+    io.sockets.emit("user", tagArr[43]);
+    io.sockets.emit("access_user", tagArr[44]);
 }
 // ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
@@ -276,6 +285,10 @@ io.on("connection", function(socket){
               {
                 socket.emit('SQL_Show_data', convertedResponse);
                 SQL_Excel = convertedResponse; // Xuất báo cáo Excel
+              }
+              else if (data == "user_data")
+              {
+                socket.emit('SQL_Show_user_data',convertedResponse);
               }
           } 
       });
@@ -323,6 +336,30 @@ io.on("connection", function(socket){
       const [SaveAslink1, Bookname] = fn_excelExport();
       var data = [SaveAslink1, Bookname];
       socket.emit('send_Excel_Report', data);
+  });
+  socket.on("SQL_edit_data_user",function(data){
+    var sqltable_Name = "user_data";
+    var query = "UPDATE " + sqltable_Name + " set user = '" +data[6]
+                                          +"', mssv ='" +data[1]
+                                          +"', pass ='" +data[7]
+                                          +"', name ='"+data[0]
+                                          +"', Date_Of_Birth ='"+data[2]
+                                          +"', sex ='"+data[3]
+                                          +"', address ='"+data[4]
+                                          +"', email ='"+data[5]
+                                          +"', access ='"+data[8]
+                                          +"' where stt='"+data[9]+"'"; 
+    sqlcon.query(query, function(err, results, fields) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("SQL - Ghi dữ liệu thành công");
+        } 
+    });
+  });
+  socket.on("cmd_user",function(data){
+    fn_Data_Write(access_user,data[0]);
+    fn_Data_Write(user,data[1]);
   });
 });
 // /////////////////////////////// BÁO CÁO EXCEL ///////////////////////////////

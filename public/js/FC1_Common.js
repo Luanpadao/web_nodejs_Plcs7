@@ -19,6 +19,7 @@ var check_empty = false;
 var type = '';
 var finish_done = false;
 var enable_done = false;
+var access_user;
 $(document).ready(function(){
     $("#introduce").show();
     $("#control").hide();
@@ -59,10 +60,12 @@ $(document).ready(function(){
     fn_IOFieldDataShow('counter','',0);
     fn_IOFieldDataShow('finished','',0);
     fn_IOFieldDataShow('enable','',0);
+    fn_IOFieldDataShow('status_robot','status_robot',0);
     fn_Table_SQL_show_pre_data();
     fn_Table_SQL_show_data();
     fn_Show_SQL_By_Time();
     fn_excel_01();
+    fn_check_access_user();
     //////////////////////////////////////////////////////bt_introduce_chuyen trang
     $("#bt_introduce").click(function()
     {
@@ -106,50 +109,124 @@ $(document).ready(function(){
     $("#bt_control").click(function()
     {
         $('#bt_introduce').removeClass('active');
-        $('#bt_control').addClass('active');
         $('#bt_member').removeClass('active');
-        $('#bt_user').removeClass('active');
-        $('#control').show();
-        $('#scada').show();
-        $("#table").hide();
+        if(document.getElementById("access_user_admin").checked 
+                                    | access_user == "Toan quyen" 
+                                    | document.getElementById("access_user_control").checked
+                                    | access_user == "Dieu khien" )
+        {
+            $('#scada').show();
+            $("#table").hide();
+            $('#control').show();
+            $('#bt_control').addClass('active');
+            $('#bt_user').removeClass('active');
+            $('#user').hide();
+        }
+        else if(document.getElementById("access_user_report").checked | access_user == "Bao cao" )
+        {
+            $('#scada').hide();
+            $("#table").show();
+            $('#control').show();
+            $('#bt_control').addClass('active');
+            $('#bt_user').removeClass('active');
+            $('#user').hide();
+            fn_Table01_SQL_Show_data();
+        }
+        else
+        {
+            setTimeout(function() {
+                alert('Vui lòng đăng nhập để được giám sát!');
+            }, 500);
+            $('#bt_control').removeClass('active');
+            $('#bt_user').addClass('active');
+            $('#user').show();
+            $('#control').hide();
+        }
         $('#introduce').hide();
-        $('#user').hide();
         $('#member').hide();
     });
         //////////////////////////////////////////////////////bt_scada_chuyen trang
     $("#bt_scada").click(function(){
         $('#bt_introduce').removeClass('active');
-        $('#bt_control').addClass('active');
         $('#bt_member').removeClass('active');
-        $('#bt_user').removeClass('active');
-        $('#control').show();
-        $('#scada').show();
-        $("#table").hide();
         $('#introduce').hide();
-        $('#user').hide();
         $('#member').hide();
+        if(document.getElementById("access_user_admin").checked
+         | access_user == "Toan quyen"
+         | document.getElementById("access_user_control").checked
+         | access_user == "Dien khien" )
+        {
+            $('#bt_control').addClass('active');
+            $('#bt_user').removeClass('active');
+            $('#control').show();
+            $('#scada').show();
+            $("#table").hide();
+            $('#user').hide();
+        }
+        else if(document.getElementById("access_user_report").checked | access_user == "Bao cao")
+        {
+            setTimeout(function() {
+                alert("Bạn chỉ được truy cập ở nội dung báo cáo!");
+            }, 500);
+            $('#bt_control').addClass('active');
+            $('#bt_user').removeClass('active');
+            $('#control').show();
+            $('#scada').hide();
+            $("#table").show();
+            $('#user').hide();
+        }
+        else
+        {
+            $('#bt_control').removeClass('active');
+            $('#bt_user').addClass('active');
+            setTimeout(function() {
+                alert('Vui lòng đăng nhập để được giám sát!');
+            }, 500);
+            $('#user').show();
+            $('#control').hide();
+        }
     });
     //////////////////////////////////////////////////////bt_table_chuyen trang
     $("#bt_table").click(function(){
         $('#bt_introduce').removeClass('active');
-        $('#bt_control').addClass('active');
         $('#bt_member').removeClass('active');
-        $('#bt_user').removeClass('active');
-        $('#control').show();
-        $('#scada').hide();
-        $("#table").show();
         $('#introduce').hide();
-        $('#user').hide();
         $('#member').hide();
         fn_Table01_SQL_Show_data();
-    });
-    //////////////////////////////////////////////////////bt_member_chuyen trang
-    $("#bt_member").click(function()
-    {
-        $('#bt_introduce').removeClass('active');
-        $('#bt_control').removeClass('active');
-        $('#bt_member').addClass('active');
-        $('#bt_user').removeClass('active');
+        if(document.getElementById("access_user_control").checked | access_user == "Dieu khien")
+        {
+            setTimeout(function() {
+                alert('Bạn chỉ được truy cập ở phần điều khiển!');
+            }, 500);
+            $('#bt_control').addClass('active');
+            $('#bt_user').removeClass('active');
+            $('#control').show();
+            $('#scada').show();
+            $("#table").hide();
+            $('#user').hide();
+        }
+        else if(document.getElementById("access_user_admin").checked
+                | access_user == "Toan quyen" 
+                | document.getElementById("access_user_report").checked
+                | access_user == "Bao cao")
+        {
+            $('#bt_control').addClass('active');
+            $('#bt_user').removeClass('active');
+            $('#control').show();
+            $('#scada').hide();
+            $("#table").show();
+            $('#user').hide();
+        }
+        else
+        {
+            $('#bt_control').removeClass('active');
+            $('#bt_user').addClass('active');
+            setTimeout(function() {
+                alert('Vui lòng đăng nhập để được giám sát!');
+            }, 500);
+            $('#user').show();
+            $('#control').hide();
+        }
     });
     //////////////////////////////////////////////////////bt_user_chuyen trang
     $("#bt_user").click(function()
@@ -162,6 +239,90 @@ $(document).ready(function(){
         $('#introduce').hide();
         $('#user').show();
         $('#member').hide();
+    });
+    //////////////////////////////////////////////////////bt_member_chuyen trang
+    $("#bt_member").click(function()
+    {
+        $('#bt_introduce').removeClass('active');
+        $('#bt_control').removeClass('active');
+        $('#bt_member').addClass('active');
+        $('#bt_user').removeClass('active');
+        $("#introduce").hide();
+        $("#control").hide();
+        $("#member").hide();
+        $("#user").hide();
+        $("#banner").hide();
+        $("#member").show();
+    });
+    //////////////////////////////////////////////////////bt_member_1 chuyen trang
+    $("#bt_member1").click(function()
+    {
+        $('#bt_introduce').removeClass('active');
+        $('#bt_control').removeClass('active');
+        $('#bt_member').addClass('active');
+        $('#bt_user').removeClass('active');
+        $("#introduce").hide();
+        $("#control").hide();
+        $("#member").hide();
+        $("#user").hide();
+        $("#banner").hide();
+        $("#member").show();
+    });
+    //////////////////////////////////////////////////////bt_member_2 chuyen trang
+    $("#bt_member2").click(function()
+    {
+        $('#bt_introduce').removeClass('active');
+        $('#bt_control').removeClass('active');
+        $('#bt_member').addClass('active');
+        $('#bt_user').removeClass('active');
+        $("#introduce").hide();
+        $("#control").hide();
+        $("#member").hide();
+        $("#user").hide();
+        $("#banner").hide();
+        $("#member").show();
+    });
+    //////////////////////////////////////////////////////bt_member_3 chuyen trang
+    $("#bt_member3").click(function()
+    {
+        $('#bt_introduce').removeClass('active');
+        $('#bt_control').removeClass('active');
+        $('#bt_member').addClass('active');
+        $('#bt_user').removeClass('active');
+        $("#introduce").hide();
+        $("#control").hide();
+        $("#member").hide();
+        $("#user").hide();
+        $("#banner").hide();
+        $("#member").show();
+    });
+    //////////////////////////////////////////////////////bt_member_4 chuyen trang
+    $("#bt_member4").click(function()
+    {
+        $('#bt_introduce').removeClass('active');
+        $('#bt_control').removeClass('active');
+        $('#bt_member').addClass('active');
+        $('#bt_user').removeClass('active');
+        $("#introduce").hide();
+        $("#control").hide();
+        $("#member").hide();
+        $("#user").hide();
+        $("#banner").hide();
+        $("#member").show();
+    });
+    //////////////////////////////////////////////////////bt_member_5 chuyen trang
+    $("#bt_member5").click(function()
+    {
+        $('#bt_introduce').removeClass('active');
+        $('#bt_control').removeClass('active');
+        $('#bt_member').addClass('active');
+        $('#bt_user').removeClass('active');
+        $("#introduce").hide();
+        $("#control").hide();
+        $("#member").hide();
+        $("#user").hide();
+        $("#banner").hide();
+        $("#member").show();
     });
     //////////////////////////////////////////////////////switch_Mode
     $(".mode_sa").click(function()
@@ -421,6 +582,22 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             else
                 $('#status_C').css("background-color","#fff");
 
+        }
+        else if(tag == "status_robot"){
+            if(data == 0)
+            document.getElementById(IOField).innerHTML = "ROBOT ĐANG Ở VỊ TRÍ HOME";
+            else if(data == 1)
+            document.getElementById(IOField).innerHTML = "ROBOT ĐANG NHẬN HÀNG Ở BĂNG TẢI NHẬP";
+            else if(data == 2)
+            document.getElementById(IOField).innerHTML = "ROBOT ĐANG DI CHUYỂN";
+            else if(data == 3)
+            document.getElementById(IOField).innerHTML = "ROBOT ĐANG GỬI HÀNG VÀO KHO "+$('#i3').val();
+            else if(data == 4)
+            document.getElementById(IOField).innerHTML = "ROBOT ĐANG VỀ VỊ TRÍ HOME";
+            else if(data == 5)
+            document.getElementById(IOField).innerHTML = "ROBOT ĐANG LẤY HÀNG Ở KHO "+$('#i3').val();
+            else if(data == 6)
+            document.getElementById(IOField).innerHTML = "ROBOT ĐANG ĐƯA HÀNG RA BĂNG TẢI XUẤT";
         }
         else if(tag.substr(0,2) == "po")
         {
@@ -698,4 +875,9 @@ function fn_excel_01(){
             saveAs(linktext, bookname);
         }, delayInMilliseconds);          
     }); 
+}
+function fn_check_access_user(){
+    socket.on('access_user', function(data){
+        access_user = data;
+    });
 }

@@ -7,11 +7,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-        <!-- <script src="https://code.jquery.com/jquery-3.6.1.js"></script> -->
+        <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
         <script src = "socket.io/socket.io.js"></script>
-        <script src="js/jquery-3.6.4.min.js"></script>
+        <!-- <script src="js/jquery-3.6.4.min.js"></script> -->
         <script src="js/FileSaver.js"></script>
-        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
         <script>
             var socket = io("localhost:3000") // IP tĩnh (hoặc IP động, localhost)
         </script>
@@ -72,15 +72,16 @@
                                 MEMBER
                                 </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" id="bt_member1" href="#member1">Bạch Hoàng Ân</a></li>
+                                <li><a class="dropdown-item" id="bt_member1" href="#member1">Ths.Hà Chí Kiên</a></li>
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item" id="bt_member2" href="#member2">Trần Tiến Anh</a></li>
+                                <li><a class="dropdown-item" id="bt_member2" href="#member2">Bạch Hoàng Ân</a></li>
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item" id="bt_member3" href="#member3">Nguyễn Phan Châu Huân</a>
-                                </li>
+                                <li><a class="dropdown-item" id="bt_member3" href="#member3">Trần Tiến Anh</a></li>
                                 <hr class="dropdown-divider">
-                                <li><a class="dropdown-item" id="bt_member4" href="#member4">Nguyễn Thành Luân</a></li>
-                                <li>
+                                <li><a class="dropdown-item" id="bt_member4" href="#member4">Nguyễn Phan Châu Huân</a></li>
+                                <hr class="dropdown-divider">
+                                <li><a class="dropdown-item" id="bt_member5" href="#member5">Nguyễn Thành Luân</a></li>
+                                <li>   
                                 </li>
                             </ul>
                             </li>
@@ -275,7 +276,7 @@
                                     <label class="bg-primary">POSITION</label>
                                 </div>
                                 <div class="row text-center">
-                                    <label class="form-text">ROBOT ĐANG DI CHUYỂN</label>
+                                    <label id="status_robot" class="form-text">ROBOT ĐANG DI CHUYỂN</label>
                                 </div>
                                 <div class="row form-text-label text-center" id="position">
                                     <div class="col-4">
@@ -483,87 +484,190 @@
                     <tr>
                         <td>Họ và tên:</td>
                         <td>
-                            <input class="text-center" type="text" size="50" disabled value="Nguyễn Thành Luân">
+                            <input id="ten_user" class="text-center" type="text" size="50" disabled>
                         </td>
                     </tr>
                     <tr>
                         <td>MSSV:</td>
                         <td>
-                            <input class="text-center" type="text" size="50" disabled value="19486251">
+                            <input id="mssv_user" class="text-center" type="text" size="50" disabled >
                         </td>
                     </tr>
                     <tr>
                         <td>Ngày sinh:</td>
                         <td>
-                            <input class="text-center" type="text" size="50" disabled value="20/01/2001">
+                            <input id="ns_user" class="text-center" type="text" size="50" disabled >
                         </td>
                     </tr>
                     <tr>
                         <td>Giới tính:</td>
                         <td>
-                            <input type="checkbox" disabled checked>Nam
-                            <input type="checkbox" disabled>Nữ
+                            <input id="sex_user_nam" type="radio" name="sex_user" value="1" disabled >
+                            <label for="sex_user_nam">Nam</label>
+                            <input id="sex_user_nu" type="radio" name="sex_user" value="2" disabled >
+                            <label for="sex_user_nu">Nữ</label>
                         </td>
                     </tr>
                     <tr>
                         <td>Quê quán:</td>
                         <td>
-                            <input class="text-center" type="text" size="50" disabled value="xóm 3, Bình An I, Phước Thành, Tuy Phước, Bình Định">
+                            <input id="qq_user" class="text-center" type="text" size="50" disabled >
                         </td>
                     </tr>
                     <tr>
                         <td>Email:</td>
                         <td>
-                            <input class="text-center" type="text" size="50" disabled value="thanhluannguyen200101@gmail.com">
+                            <input id="email_user" class="text-center" type="text" size="50" disabled>
                         </td>
                     </tr>
                     <tr>
                         <td>Tên tài khoản:</td>
                         <td>
-                            <input class="text-center" type="text" size="50" disabled value="Luanpadao">
+                            <input id="user_user" class="text-center" type="text" size="50" disabled>
                         </td>
                     </tr>
                     <tr>
                         <td>Mật khẩu:</td>
                         <td>
-                            <input class="text-center" type="password" size="50" disabled value="123456">
+                            <input id="pass_user" class="text-center" type="password" size="50" disabled>
+                        </td>
+                    </tr>
+                    <tr id="confirm_pass" class="d-none">
+                        <td>Xác nhận Mật khẩu:</td>
+                        <td>
+                            <input id="pass_2_user" class="text-center" type="password" size="50" disabled>
                         </td>
                     </tr>
                     <tr>
                         <td>Quyền truy cập:</td>
                         <td>
-                            <input type="checkbox" disabled checked>Toàn quyền
-                            <input type="checkbox" disabled>Điều khiển
-                            <input type="checkbox" disabled>Báo cáo
+                            <input id="access_user_admin" type="radio" name="access_user" value="1" disabled >
+                            <label for="access_user_admin">Toàn quyền</label>
+                            <input id="access_user_control" type="radio" name="access_user" value="2" disabled >
+                            <label for="access_user_control">Điều khiển</label>
+                            <input id="access_user_report" type="radio" name="access_user" value="3" disabled >
+                            <label for="access_user_report">Điều khiển</label>
                         </td>
                     </tr>
                 </table>
-                <button class="m-2 text-bg-primary" type="button">Chỉnh sửa</button>
-                <button class="m-2 text-bg-danger" type="button">Đăng xuất</button>
+                <button id="bt_edit"  class="m-2 text-bg-primary d-none" type="button" onclick="fn_edit()">Chỉnh sửa</button>
+                <button id="bt_save"  class="m-2 text-bg-danger d-none" type="button" onclick="fn_save()">Lưu</button>
+                <button id="bt_cancle"  class="m-2 text-bg-danger d-none" type="button" onclick="fn_cancle()">Hủy</button>
+                <button id="bt_logout" class="m-2 text-bg-danger d-none" type="button" onclick="logout()">Đăng xuất</button>
+                <button id="bt_login" class="m-2 text-bg-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal" onclick="fn_bt_login()">Đăng nhập</button>
+                <ul id="next_page" class="pagination justify-content-center d-none">
+                    <li id="user_pre" class="page-item "><a class="page-link" onclick="fn_user_pre()">Previous</a></li>
+                    <li id="user_1"  class="page-item "><a class="page-link" onclick="fn_user_number(1)">1</a></li>
+                    <li id="user_2"  class="page-item "><a class="page-link" onclick="fn_user_number(2)">2</a></li>
+                    <li id="user_3"  class="page-item "><a class="page-link" onclick="fn_user_number(3)">3</a></li>
+                    <li id="user_4"  class="page-item "><a class="page-link" onclick="fn_user_number(4)">4</a></li>
+                    <li id="user_next" class="page-item "><a class="page-link" onclick="fn_user_next()">Next</a></li>
+                </ul>
             </div>
+
             <!-- ////////////// CHƯƠNG TRÌNH ĐĂNG NHẬP HỆ THỐNG //////////////  -->
-            <!-- Trigger the modal with a button -->
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
-
             <!-- Modal -->
-            <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Modal Header</h4>
+            <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div style="float: right;">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="text-center">
+                                <img id = "img_avatar" src="images/user.png" alt="Avatar" class="avatar" style="width: 40%;">
+                            </div>
+                                <div class="mb-1 mt-1">
+                                    <label for="inputuser">User:</label>
+                                    <input type="text" class="form-control" id="inputuser" placeholder="Enter user" name="inputuser">
+                                </div>
+                                <div class="mb-1">
+                                    <label for="inputpass">Password:</label>
+                                    <input type="password" class="form-control" id="inputpass" placeholder="Enter password" name="inputpass">
+                                </div>
+                                <div class="form-check mb-1">
+                                    <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" name="remember"> Remember me
+                                    </label>
+                                </div>
+                                <button class="text-bg-primary mb-1" style="width: 100% !important;" onclick="login()">Login</button>
+                            <button type="button" class="text-bg-danger" style="float: right;" data-bs-dismiss="modal">Cancle</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <p>Some text in the modal.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-                </div>
-
             </div>
+            <div id="member" class="">
+                <div id="member1" class=" flip-card container-fluid mt-3">
+                    <div class="flip-card-inner">
+                      <div class="flip-card-front">
+                        <img src="images/user.png" alt="Avatar" style="width:300px;height:300px;">
+                        <h7>GVHD: ThS.Hà Chí Kiên</h7> 
+                      </div>
+                      <div class="flip-card-back">
+                        <h4>ThS.Hà Chí Kiên</h4> 
+                        <p>Architect & Engineer</p> 
+                        <p>We love that guy</p>
+                      </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div id="member2" class=" flip-card container-fluid">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <img src="images/user.png" alt="Avatar" style="width:300px;height:300px;">
+                            <h7>Bạch Hoàng Ân</h7> 
+                          </div>
+                          <div class="flip-card-back">
+                            <h4>Bạch Hoàng Ân</h4> 
+                            <p>Architect & Engineer</p> 
+                            <p>We love that guy</p>
+                          </div>
+                        </div>
+                    </div>
+                    <div id="member3" class=" flip-card container-fluid">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <img src="images/user.png" alt="Avatar" style="width:300px;height:300px;">
+                            <h7>Trần Tiến Anh</h7> 
+                          </div>
+                          <div class="flip-card-back">
+                            <h4>Trần Tiến Anh</h4> 
+                            <p>Architect & Engineer</p> 
+                            <p>We love that guy</p>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5 mb-5">
+                    <div id="member4" class=" flip-card container-fluid">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <img src="images/user.png" alt="Avatar" style="width:300px;height:300px;">
+                            <h7>Nguyễn Phan Châu Huân</h7> 
+                          </div>
+                          <div class="flip-card-back">
+                            <h4>Nguyễn Phan Châu Huân</h4> 
+                            <p>Architect & Engineer</p> 
+                            <p>We love that guy</p>
+                          </div>
+                        </div>
+                    </div>
+                    <div id="member5" class=" flip-card container-fluid">
+                        <div class="flip-card-inner">
+                          <div class="flip-card-front">
+                            <img src="images/user.png" alt="Avatar" style="width:300px;height:300px;">
+                            <h7>Nguyễn Thành Luân</h7> 
+                          </div>
+                          <div class="flip-card-back">
+                            <h5>Nguyễn Thành Luân</h5>
+                            <p>MSSV: 19486251</p>
+                            <p>20/01/2001</p>   
+                            <p>Architect & Engineer</p> 
+                            <p>We love that guy</p>
+                          </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <footer class="bg-dark">
