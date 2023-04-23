@@ -1,5 +1,6 @@
 // /////////////////////////THIẾT LẬP KẾT NỐI WEB/////////////////////////
 var express = require("express");
+const session = require('express-session');
 var app = express();
 app.use(express.static("public"));
 app.set("view engine", "ejs");
@@ -9,8 +10,22 @@ var io = require("socket.io")(server);
 server.listen(3000);
 // Home calling
 app.get("/", function(req, res){
-    res.render("home")
+  // const ip_host_local = req.ip;
+  res.render("home");
 });
+//////////////////////////////////////////////////////////////////// chỉnh sửa
+app.use(session({
+  secret: 'mySecretKey', // chuỗi bí mật dùng để mã hóa session
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // khi true, cookie chỉ được gửi qua HTTPS
+}));
+// Lấy IP để gán sang file home.ejs
+// app.get("/ip_host",function(req,res){
+//   const ip = req.ip;
+//   console.log(`Địa chỉ IP của client là: ${ip}`);
+//   res.send('Địa chỉ ip của bạn là: '+ip);
+// });
 //////////////////////CẤU HÌNH KẾT NỐI KEPWARE////////////////////
 const {TagBuilder, IotGateway} = require('kepserverex-js');
 const tagBuilder = new TagBuilder({ namespace: 'Channel1.Device1' });
@@ -356,10 +371,6 @@ io.on("connection", function(socket){
             console.log("SQL - Ghi dữ liệu thành công");
         } 
     });
-  });
-  socket.on("cmd_user",function(data){
-    fn_Data_Write(access_user,data[0]);
-    fn_Data_Write(user,data[1]);
   });
 });
 // /////////////////////////////// BÁO CÁO EXCEL ///////////////////////////////

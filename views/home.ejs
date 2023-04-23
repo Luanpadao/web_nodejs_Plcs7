@@ -13,7 +13,10 @@
         <script src="js/FileSaver.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            var socket = io("localhost:3000") // IP tĩnh (hoặc IP động, localhost)
+            //IP tĩnh (hoặc IP động, localhost)
+            // var socket = io("http://luannguyen.ddns.net:3000")
+            var socket = io("localhost:3000")
+            // var socket = io("http://192.168.1.17:3000")
         </script>
         <script src = "js/FC1_Common.js"></script>
         <script src = "js/FC2_UserManagement.js"></script>
@@ -25,36 +28,35 @@
         <header class="text-center">
             <a href="https://feet.iuh.edu.vn"><img src="images/LOGO_IUH.PNG" title="Trường Đại học Công nghiệp Thành phố Hồ Chí Minh"
                 class="img-fluid m-0" alt=""></a>
-            <div class="text-center fw-bold text-danger">
+            <div id="title_web" class="text-center fw-bold text-danger">
                 ĐỀ TÀI: THIẾT KẾ HỆ THỐNG LƯU KHO TỰ ĐỘNG VÀ GIÁM SÁT BẰNG MÃ QR
             </div>
             <nav class="navbar navbar-expand-md bg-light p-0" id="navbar">
                 <div class="container-fluid" id="slider">
                     <a class="navbar-brand" href="http://localhost:3000">
-                        <img src="images/logo_HALA.png" title="logo_HALA" height="60px" alt="Logo">
+                        <img id="logo_HALA" src="images/logo_HALA.png" title="logo_HALA" height="60px" alt="Logo">
                         HALA
                     </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarResponsive">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarResponsive">
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown ">
-                                <a class="nav-link dropdown-toggle active" id="bt_introduce" href="#introduce" role="button"
+                                <a class="nav-link dropdown-toggle active" id="bt_introduce" role="button"
                                     aria-expanded="false">
                                     INTRODUCE
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" id="bt_tongquan" href="#TongQuan">TỔNG QUAN</a></li>
+                                    <li><a class="dropdown-item" id="bt_tongquan" href="#TongQuan" >TỔNG QUAN</a></li>
                                     <hr class="dropdown-divider">
-                                    <li><a class="dropdown-item" id="bt_mohinh" href="#MoHinh">MÔ HÌNH</a></li>
+                                    <li><a class="dropdown-item" id="bt_mohinh" href="#MoHinh" >MÔ HÌNH</a></li>
                                     <li>
                                     </li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="bt_control" href="#control">
+                                <a class="nav-link dropdown-toggle" id="bt_control" role="button">
                                     CONTROL
                                 </a>
                                 <ul class="dropdown-menu">
@@ -67,8 +69,7 @@
                             </li>
                             <li class="nav-item"><a class="nav-link" id="bt_user" href="#user"> USER</a></li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" id="bt_member" href="#member" role="button"
-                                aria-expanded="false">
+                                <a class="nav-link dropdown-toggle" id="bt_member" role="button" aria-expanded="false">
                                 MEMBER
                                 </a>
                             <ul class="dropdown-menu">
@@ -100,14 +101,14 @@
                           <button type="button" data-bs-target="#demo" data-bs-slide-to="2"></button>
                         </div>
                         <div class="carousel-inner">
-                          <div class="carousel-item active">
-                            <img src="images/background-plc.jpg" alt="photo_1" class="d-block">
+                          <div class="carousel-item active carouser_img">
+                            <img src="images/background-plc.jpg" style="width: 100%;" alt="photo_1" class="d-block">
                           </div>
-                          <div class="carousel-item">
-                            <img src="https://www.infoplc.net/media/k2/items/cache/384ad86f2bc78174ef5499506b7b7703_XL.jpg" alt="" class="d-block">
+                          <div class="carousel-item carouser_img">
+                            <img src="https://www.infoplc.net/media/k2/items/cache/384ad86f2bc78174ef5499506b7b7703_XL.jpg" style="width: 100%;" alt="" class="d-block">
                           </div>
-                          <div class="carousel-item">
-                            <img src="https://ctisupply.vn/wp-content/uploads/2020/03/step-7-basic-and-s7-1200.png" alt="" class="d-block">
+                          <div class="carousel-item carouser_img">
+                            <img src="https://ctisupply.vn/wp-content/uploads/2020/03/step-7-basic-and-s7-1200.png" style="width: 100%;" alt="" class="d-block">
                           </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
@@ -118,20 +119,52 @@
                         </button>
                       </div>
                 </div>
-                <h1 id="TongQuan"> <br>Tổng Quan:</h1>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Qui vel perspiciatis sapiente. Distinctio nulla
-                dolore qui nemo non consequatur ullam quo, asperiores aut repellat nostrum perspiciatis iure odio quos
-                necessitatibus similique, minima quibusdam nesciunt quis modi commodi hic sapiente aspernatur
-                voluptates?
-                Consectetur ab, quasi excepturi eum cum suscipit voluptate? Molestiae nostrum assumenda veritatis
-                dolore,
-                minima numquam itaque quibusdam voluptate commodi maiores nobis doloremque accusantium ducimus veniam ut
-                delectus amet, neque sunt et cumque, dolorum voluptatibus saepe eligendi! Nobis odit optio accusantium
-                in
-                officia? Architecto, molestias. Molestiae qui excepturi quasi similique vero, quis, error, expedita
-                culpa
-                aliquid deserunt blanditiis tempore impedit.</p>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Qui vel perspiciatis sapiente. Distinctio nulla
+                <div id="TongQuan">
+                    <h4  class="mt-2 text-bg-info text-center text_15" style="font-weight: bold;">Tổng Quan</h4>
+                    <h5  class="mt-2 text_14" style="font-weight: bold;">Hệ thống lưu kho là gì?:</h5>
+                    <p style=" text-align: justify;" class="text_13">
+                        Hệ thống lưu kho và truy xuất tự động (Automated Storage and Retrieval Systems) 
+                        hay còn được hiểu là kệ kho chứa hàng AS-RS bao gồm 1 hệ thống khung giàn (Racking) 
+                        kết hợp với 1 hệ thống máy trục (Crane) tự động để nhập xuất hàng.
+                        Hệ thống này sẽ bao gồm phần cứng và phần mềm.
+                        Trong phần cứng sẽ bao gồm các hệ thống giá kệ cố định, các cơ cấu lấy cất hàng và các 
+                        băng tải giữ nhiệm vụ vận chuyển hàng vào/ra các cửa nhập/xuất của kho.
+                        Trong khi đó phần mềm sẽ giữ vai trò điều khiển giám sát và quản lý dữ liệu hàng hoá.<br>
+                    </p>
+                        <div class="text-center">
+                            <img class="img_contain" class="text-center" src="images/ASRS.png" alt=""><br>
+                            <span class="text-center text_13">Hệ thống lưu kho tự động AS-RS</span><br>
+                        </div>
+                        <dt class="text_13">Ưu điểm hệ thống lưu kho.</dt>
+                        <dd class="text_13">- Giảm số lượng nhân công.<br>
+                            - Quản lý số lượng hàng hóa trong kho dễ dàng.<br>
+                            - Tăng độ chính xác, năng suất và hiệu quả.<br>
+                            - Tối ưu không gian nhà kho.<br>
+                            - Đảm bảo an toàn lao động.<br>
+                        </dd>
+                        <dt class="text_13">Nhược điểm hệ thống lưu kho</dt>
+                        <dd class="text_13">- Chi phí đầu tư ban đầu có thể cao.
+                        </dd>
+                        <h5  class="mt-2 text_14" style="font-weight: bold;">Một số ứng dụng của hệ thống lưu kho?</h5>
+                </div>
+                <div id="MoHinh">
+                    <h4  class="mt-2 text-bg-info text-center text_15" style="font-weight: bold;">Sơ Đồ Khối</h4>
+                    <h5  class="mt-2 text_14" style="font-weight: bold;">Thành phần của một hệ thống lưu kho?</h5>
+                    <p style=" text-align: justify;" class="text_13">
+                        Cấu trúc cơ bản của một kho hàng tự động bao gồm nhiều dãy hàng,
+                        dọc theo mỗi dãy hàng có một hay nhiều máy xếp, dỡ tự động.
+                        Hai bên dãy hàng là các khoang chứa hàng. Đầu mỗi dãy hàng là trạm xếp dỡ.
+                        Các trạm xếp dỡ liên hệ với nhau theo hệ thống băng tải.
+                    </p>
+                    <dt class="text_13">Nhìn chung, hệ thống lưu kho tự động được cấu thành từ 4 phần:</dt>
+                    <dd class="text_13">- Hệ thống vận chuyển (robot vận chuyển hàng).<br>
+                        - Hệ thống phân loại (phân loại bằng mã QR). <br>
+                        - Hệ thống xuất nhập (2 băng tải xuất và nhập hàng).<br>
+                        - Hệ thống lưu giữ (kho, giá đặt hàng).<br>
+                    </dd>
+                </div>
+                
+                <p class="text_13">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Qui vel perspiciatis sapiente. Distinctio nulla
                 dolore qui nemo non consequatur ullam quo, asperiores aut repellat nostrum perspiciatis iure odio quos
                 necessitatibus similique, minima quibusdam nesciunt quis modi commodi hic sapiente aspernatur
                 voluptates?
@@ -144,33 +177,7 @@
                 culpa
                 aliquid deserunt blanditiis tempore impedit.</p>
 
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Qui vel perspiciatis sapiente. Distinctio nulla
-                dolore qui nemo non consequatur ullam quo, asperiores aut repellat nostrum perspiciatis iure odio quos
-                necessitatibus similique, minima quibusdam nesciunt quis modi commodi hic sapiente aspernatur
-                voluptates?
-                Consectetur ab, quasi excepturi eum cum suscipit voluptate? Molestiae nostrum assumenda veritatis
-                dolore,
-                minima numquam itaque quibusdam voluptate commodi maiores nobis doloremque accusantium ducimus veniam ut
-                delectus amet, neque sunt et cumque, dolorum voluptatibus saepe eligendi! Nobis odit optio accusantium
-                in
-                officia? Architecto, molestias. Molestiae qui excepturi quasi similique vero, quis, error, expedita
-                culpa
-                aliquid deserunt blanditiis tempore impedit.</p>
-                <h1 id="MoHinh">Mô Hình:</h1>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Qui vel perspiciatis sapiente. Distinctio nulla
-                dolore qui nemo non consequatur ullam quo, asperiores aut repellat nostrum perspiciatis iure odio quos
-                necessitatibus similique, minima quibusdam nesciunt quis modi commodi hic sapiente aspernatur
-                voluptates?
-                Consectetur ab, quasi excepturi eum cum suscipit voluptate? Molestiae nostrum assumenda veritatis
-                dolore,
-                minima numquam itaque quibusdam voluptate commodi maiores nobis doloremque accusantium ducimus veniam ut
-                delectus amet, neque sunt et cumque, dolorum voluptatibus saepe eligendi! Nobis odit optio accusantium
-                in
-                officia? Architecto, molestias. Molestiae qui excepturi quasi similique vero, quis, error, expedita
-                culpa
-                aliquid deserunt blanditiis tempore impedit.</p>
-
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Qui vel perspiciatis sapiente. Distinctio nulla
+                <p class="text_13">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Qui vel perspiciatis sapiente. Distinctio nulla
                 dolore qui nemo non consequatur ullam quo, asperiores aut repellat nostrum perspiciatis iure odio quos
                 necessitatibus similique, minima quibusdam nesciunt quis modi commodi hic sapiente aspernatur
                 voluptates?
@@ -188,7 +195,7 @@
                 <div id="scada">
                     <div class="row" id="bg_scada">
                         <div class="col-8">
-                            <div class="object">
+                            <div class="object d-none">
                                 <div class="rounded-circle bg-white border border-dark d-flex align-items-center justify-content-center row-3 col-1" >
                                     <span class="text-dark h4 m-0">1</span>
                                     <img class="d-none" id="n1" src="images/Symbol/box.png"style="width: 100%;">
@@ -269,6 +276,98 @@
                                 <img class="row-4" id="mt_i" src="images/Symbol/mt_1.png"style="width: 5%;">
                                 <img class="row-4"id="mt_o" src="images/Symbol/mt_1.png"style="width: 5%;">
                             </div>
+                            <div class="object_display2 ">
+                                <img class="row-1" id="stepz" src="images/Symbol/stepz_0.png" style="width: 8%;">
+                                <img class="row-2" id="ss_i1" src="images/Symbol/sstc_0.png" style="width: 1%;rotate: 180deg;">
+                                <img class="row-3" id="dc_i" src="images/Symbol/motor_0.png" style="width: 4%;">
+                                <img class="row-3" id="dc_o" src="images/Symbol/motor_0.png" style="width: 4%;">
+                                <img class="row-4" id="ss_i2" src="images/Symbol/sstc_0.png" style="width: 1%;">
+                                <img class="row-4" id="ss_o" src="images/Symbol/sstc_0.png" style="width: 1%;">
+                                <img class="row-5" id="stepx" src="images/Symbol/stepz_0.png" style="width: 8%;rotate: 180deg;">
+                                <div class="slider_s" style="top:39.6%; left:18.1%; rotate: 90deg;">
+                                    <div class="slider-thumb" >
+                                        <script>
+                                            const thumb = document.querySelector('.slider-thumb');
+                                            const slider = document.querySelector('.slider_s');
+                                            let isDragging = false;
+                                            let startPosition;
+                                            let startThumbPosition;
+                                            let dragDistance;
+
+                                            thumb.addEventListener('mousedown', startDragging);
+                                            document.addEventListener('mousemove', drag);
+                                            document.addEventListener('mouseup', stopDragging);
+
+                                            function startDragging(event) {
+                                            isDragging = true;
+                                            startPosition = event.clientY;
+                                            startThumbPosition = thumb.offsetTop;
+                                            thumb.classList.add('active');
+                                            }
+
+                                            function drag(event) {
+                                                if (!isDragging) return;
+                                                const delta = event.clientY - startPosition;
+                                                dragDistance = startThumbPosition + delta;
+                                                if (dragDistance < 0) {
+                                                    dragDistance = 0;
+                                                } 
+                                                else if (dragDistance > slider.offsetWidth - thumb.offsetWidth){
+                                                    dragDistance = slider.offsetWidth - thumb.offsetWidth;
+                                                }
+                                                    thumb.style.left = `${dragDistance}px`;
+                                            }
+
+                                            function stopDragging(event) {
+                                                isDragging = false;
+                                                thumb.classList.remove('active');
+                                            }
+                                        </script>
+                                        <div class="slider_child" style="rotate: 90deg;">
+                                            <div class="slider-thumb_child" >
+                                                <script>
+                                                    const thumb_child = document.querySelector('.slider-thumb_child');
+                                                    const slider_child = document.querySelector('.slider_child');
+                                                    let isDragging_child = false;
+                                                    let startPosition_child;
+                                                    let startThumbPosition_child;
+                                                    let dragDistance_child;
+        
+                                                    thumb_child.addEventListener('mousedown', startDragging);
+                                                    document.addEventListener('mousemove', drag);
+                                                    document.addEventListener('mouseup', stopDragging);
+        
+                                                    function startDragging(event) {
+                                                        isDragging_child = true;
+                                                        startPosition_child = event.clientX;
+                                                        startThumbPosition_child = thumb_child.offsetLeft;
+                                                        thumb_child.classList.add('active');
+                                                    }
+        
+                                                    function drag(event) {
+                                                        if (!isDragging_child) 
+                                                            return;
+                                                        const delta_child = event.clientX - startPosition_child;
+                                                        dragDistance_child = startThumbPosition_child + delta_child;
+                                                        if (dragDistance_child < 0) {
+                                                            dragDistance_child = 0;
+                                                        } 
+                                                        else if (dragDistance_child > slider_child.offsetWidth - thumb_child.offsetWidth){
+                                                            dragDistance_child = slider_child.offsetWidth - thumb_child.offsetWidth;
+                                                        }
+                                                        thumb_child.style.left = `${dragDistance_child}px`;
+                                                    }
+        
+                                                    function stopDragging(event) {
+                                                        isDragging_child = false;
+                                                        thumb_child.classList.remove('active');
+                                                    }
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-4 " id="panel" >
                             <form>
@@ -295,7 +394,7 @@
                                         <div>
                                             <label class="text-bg-warning" id="py"></label>
                                         </div>
-                                        <div><input type="range" id="py_range" name="py_range" min="-3.5" max="3.5"></div>
+                                        <div><input type="range" id="py_range" name="py_range" min="-3" max="3"></div>
                                     </div>
                                     <div class="col-4">
                                         <div class="text-danger">
@@ -461,7 +560,7 @@
                         <table class="table table-striped" id="table_data">
                             <thead class="table-dark sticky-top">
                                 <tr>
-                                    <th colspan="6" id="caption_table">BẢNG THỐNG KÊ XUẤT NHẬP KHO</th>
+                                    <th colspan="6" id="caption_table" class="text_25">BẢNG THỐNG KÊ XUẤT NHẬP KHO</th>
                                 </tr>
                               <tr>
                                 <th>Thời gian</th>
@@ -479,74 +578,74 @@
             <div class="text-center" id="user" style="height: 570px;">
                 <table class="mt-5">
                     <tr>
-                        <th colspan="2">THÔNG TIN TÀI KHOẢN</th>
+                        <th class="text_25" colspan="2">THÔNG TIN TÀI KHOẢN</th>
                     </tr>
                     <tr>
-                        <td>Họ và tên:</td>
+                        <td class="text_15">Họ và tên:</td>
                         <td>
-                            <input id="ten_user" class="text-center" type="text" size="50" disabled>
+                            <input id="ten_user" class="text-center input_table_user text_15" type="text" size="50" disabled>
                         </td>
                     </tr>
                     <tr>
-                        <td>MSSV:</td>
+                        <td class="text_15">MSSV:</td>
                         <td>
-                            <input id="mssv_user" class="text-center" type="text" size="50" disabled >
+                            <input id="mssv_user" class="text-center input_table_user text_15" type="text" size="50" disabled >
                         </td>
                     </tr>
                     <tr>
-                        <td>Ngày sinh:</td>
+                        <td class="text_15">Ngày sinh:</td>
                         <td>
-                            <input id="ns_user" class="text-center" type="text" size="50" disabled >
+                            <input id="ns_user" class="text-center input_table_user text_15" type="text" size="50" disabled >
                         </td>
                     </tr>
                     <tr>
-                        <td>Giới tính:</td>
+                        <td class="text_15">Giới tính:</td>
                         <td>
                             <input id="sex_user_nam" type="radio" name="sex_user" value="1" disabled >
-                            <label for="sex_user_nam">Nam</label>
+                            <label for="sex_user_nam" class="text_15">Nam</label>
                             <input id="sex_user_nu" type="radio" name="sex_user" value="2" disabled >
-                            <label for="sex_user_nu">Nữ</label>
+                            <label for="sex_user_nu" class="text_15">Nữ</label>
                         </td>
                     </tr>
                     <tr>
-                        <td>Quê quán:</td>
+                        <td class="text_15">Quê quán:</td>
                         <td>
-                            <input id="qq_user" class="text-center" type="text" size="50" disabled >
+                            <input id="qq_user" class="text-center input_table_user text_15" type="text" size="50" disabled >
                         </td>
                     </tr>
                     <tr>
-                        <td>Email:</td>
+                        <td class="text_15">Email:</td>
                         <td>
-                            <input id="email_user" class="text-center" type="text" size="50" disabled>
+                            <input id="email_user" class="text-center input_table_user text_15" type="text" size="50" disabled>
                         </td>
                     </tr>
                     <tr>
-                        <td>Tên tài khoản:</td>
+                        <td class="text_15">Tên tài khoản:</td>
                         <td>
-                            <input id="user_user" class="text-center" type="text" size="50" disabled>
+                            <input id="user_user" class="text-center input_table_user text_15" type="text" size="50" disabled>
                         </td>
                     </tr>
                     <tr>
-                        <td>Mật khẩu:</td>
+                        <td class="text_15">Mật khẩu:</td>
                         <td>
-                            <input id="pass_user" class="text-center" type="password" size="50" disabled>
+                            <input id="pass_user" class="text-center input_table_user text_15" type="password" size="50" disabled>
                         </td>
                     </tr>
                     <tr id="confirm_pass" class="d-none">
-                        <td>Xác nhận Mật khẩu:</td>
+                        <td class="text_15">Xác nhận Mật khẩu:</td>
                         <td>
-                            <input id="pass_2_user" class="text-center" type="password" size="50" disabled>
+                            <input id="pass_2_user" class="text-center input_table_user text_15" type="password" size="50" disabled>
                         </td>
                     </tr>
                     <tr>
-                        <td>Quyền truy cập:</td>
+                        <td class="text_15">Quyền truy cập:</td>
                         <td>
                             <input id="access_user_admin" type="radio" name="access_user" value="1" disabled >
-                            <label for="access_user_admin">Toàn quyền</label>
+                            <label for="access_user_admin" class="text_15">Toàn quyền</label>
                             <input id="access_user_control" type="radio" name="access_user" value="2" disabled >
-                            <label for="access_user_control">Điều khiển</label>
+                            <label for="access_user_control" class="text_15">Điều khiển</label>
                             <input id="access_user_report" type="radio" name="access_user" value="3" disabled >
-                            <label for="access_user_report">Điều khiển</label>
+                            <label for="access_user_report" class="text_15">Điều khiển</label>
                         </td>
                     </tr>
                 </table>
@@ -671,7 +770,7 @@
             </div>
         </div>
         <footer class="bg-dark">
-            <p class="text-center">Author: Nguyễn Thành Luân <br>Address: 19/1, Lê Lợi, phường 4, Gò Vấp, Thành phố Hồ Chí Minh<br>Email:thanhluannguyen200101@gmail.com</p>
+            <p class="text-center text_13">Author: Nguyễn Thành Luân <br>Address: 19/1, Lê Lợi, phường 4, Gò Vấp, Thành phố Hồ Chí Minh<br>Email:thanhluannguyen200101@gmail.com</p>
         </footer>
     </body>
 </html>

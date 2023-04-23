@@ -19,7 +19,6 @@ var check_empty = false;
 var type = '';
 var finish_done = false;
 var enable_done = false;
-var access_user;
 $(document).ready(function(){
     $("#introduce").show();
     $("#control").hide();
@@ -65,7 +64,7 @@ $(document).ready(function(){
     fn_Table_SQL_show_data();
     fn_Show_SQL_By_Time();
     fn_excel_01();
-    fn_check_access_user();
+    // fn_check_access_user();
     //////////////////////////////////////////////////////bt_introduce_chuyen trang
     $("#bt_introduce").click(function()
     {
@@ -81,6 +80,7 @@ $(document).ready(function(){
     });
     //////////////////////////////////////////////////////bt_tongquan_chuyen trang
     $("#bt_tongquan").click(function(){
+        document.getElementById('navbarResponsive').classList.remove('show');
         $("#introduce").show();
         $("#control").hide();
         $("#member").hide();
@@ -94,6 +94,7 @@ $(document).ready(function(){
     });
     //////////////////////////////////////////////////////bt_mohinh_chuyentrang
     $("#bt_mohinh").click(function(){
+        document.getElementById('navbarResponsive').classList.remove('show');
         $("#introduce").show();
         $("#control").hide();
         $("#member").hide();
@@ -111,9 +112,7 @@ $(document).ready(function(){
         $('#bt_introduce').removeClass('active');
         $('#bt_member').removeClass('active');
         if(document.getElementById("access_user_admin").checked 
-                                    | access_user == "Toan quyen" 
-                                    | document.getElementById("access_user_control").checked
-                                    | access_user == "Dieu khien" )
+                                    | document.getElementById("access_user_control").checked)
         {
             $('#scada').show();
             $("#table").hide();
@@ -122,7 +121,7 @@ $(document).ready(function(){
             $('#bt_user').removeClass('active');
             $('#user').hide();
         }
-        else if(document.getElementById("access_user_report").checked | access_user == "Bao cao" )
+        else if(document.getElementById("access_user_report").checked )
         {
             $('#scada').hide();
             $("#table").show();
@@ -144,17 +143,23 @@ $(document).ready(function(){
         }
         $('#introduce').hide();
         $('#member').hide();
+
+        //sd để edit
+        $('#scada').show();
+        $("#table").hide();
+        $('#control').show();
+        $('#user').hide();
+        // sd để edit//
     });
         //////////////////////////////////////////////////////bt_scada_chuyen trang
     $("#bt_scada").click(function(){
+        document.getElementById('navbarResponsive').classList.remove('show');
         $('#bt_introduce').removeClass('active');
         $('#bt_member').removeClass('active');
         $('#introduce').hide();
         $('#member').hide();
         if(document.getElementById("access_user_admin").checked
-         | access_user == "Toan quyen"
-         | document.getElementById("access_user_control").checked
-         | access_user == "Dien khien" )
+         | document.getElementById("access_user_control").checked)
         {
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
@@ -163,7 +168,7 @@ $(document).ready(function(){
             $("#table").hide();
             $('#user').hide();
         }
-        else if(document.getElementById("access_user_report").checked | access_user == "Bao cao")
+        else if(document.getElementById("access_user_report").checked )
         {
             setTimeout(function() {
                 alert("Bạn chỉ được truy cập ở nội dung báo cáo!");
@@ -188,12 +193,13 @@ $(document).ready(function(){
     });
     //////////////////////////////////////////////////////bt_table_chuyen trang
     $("#bt_table").click(function(){
+        document.getElementById('navbarResponsive').classList.remove('show');
         $('#bt_introduce').removeClass('active');
         $('#bt_member').removeClass('active');
         $('#introduce').hide();
         $('#member').hide();
         fn_Table01_SQL_Show_data();
-        if(document.getElementById("access_user_control").checked | access_user == "Dieu khien")
+        if(document.getElementById("access_user_control").checked )
         {
             setTimeout(function() {
                 alert('Bạn chỉ được truy cập ở phần điều khiển!');
@@ -206,9 +212,7 @@ $(document).ready(function(){
             $('#user').hide();
         }
         else if(document.getElementById("access_user_admin").checked
-                | access_user == "Toan quyen" 
-                | document.getElementById("access_user_report").checked
-                | access_user == "Bao cao")
+                | document.getElementById("access_user_report").checked)
         {
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
@@ -231,6 +235,7 @@ $(document).ready(function(){
     //////////////////////////////////////////////////////bt_user_chuyen trang
     $("#bt_user").click(function()
     {
+        document.getElementById('navbarResponsive').classList.remove('show');
         $('#bt_introduce').removeClass('active');
         $('#bt_control').removeClass('active');
         $('#bt_member').removeClass('active');
@@ -257,6 +262,7 @@ $(document).ready(function(){
     //////////////////////////////////////////////////////bt_member_1 chuyen trang
     $("#bt_member1").click(function()
     {
+        document.getElementById('navbarResponsive').classList.remove('show');
         $('#bt_introduce').removeClass('active');
         $('#bt_control').removeClass('active');
         $('#bt_member').addClass('active');
@@ -271,6 +277,7 @@ $(document).ready(function(){
     //////////////////////////////////////////////////////bt_member_2 chuyen trang
     $("#bt_member2").click(function()
     {
+        document.getElementById('navbarResponsive').classList.remove('show');
         $('#bt_introduce').removeClass('active');
         $('#bt_control').removeClass('active');
         $('#bt_member').addClass('active');
@@ -285,6 +292,7 @@ $(document).ready(function(){
     //////////////////////////////////////////////////////bt_member_3 chuyen trang
     $("#bt_member3").click(function()
     {
+        document.getElementById('navbarResponsive').classList.remove('show');
         $('#bt_introduce').removeClass('active');
         $('#bt_control').removeClass('active');
         $('#bt_member').addClass('active');
@@ -299,6 +307,7 @@ $(document).ready(function(){
     //////////////////////////////////////////////////////bt_member_4 chuyen trang
     $("#bt_member4").click(function()
     {
+        document.getElementById('navbarResponsive').classList.remove('show');
         $('#bt_introduce').removeClass('active');
         $('#bt_control').removeClass('active');
         $('#bt_member').addClass('active');
@@ -313,6 +322,7 @@ $(document).ready(function(){
     //////////////////////////////////////////////////////bt_member_5 chuyen trang
     $("#bt_member5").click(function()
     {
+        document.getElementById('navbarResponsive').classList.remove('show');
         $('#bt_introduce').removeClass('active');
         $('#bt_control').removeClass('active');
         $('#bt_member').addClass('active');
@@ -875,9 +885,4 @@ function fn_excel_01(){
             saveAs(linktext, bookname);
         }, delayInMilliseconds);          
     }); 
-}
-function fn_check_access_user(){
-    socket.on('access_user', function(data){
-        access_user = data;
-    });
 }
