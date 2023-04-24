@@ -19,7 +19,31 @@ var check_empty = false;
 var type = '';
 var finish_done = false;
 var enable_done = false;
+const minValue = 0;
+const maxValue = 300;
+var thumb;
+var slider;
+const minValue_child = -3;
+const maxValue_child = 3;
+var thumb_child;
+var slider_child;
+const minValue_1 = 0;
+const maxValue_1 = 300;
+var thumb_1;
+var slider_1;
+const minValue_1_child = -3;
+const maxValue_1_child = 3;
+var thumb_1_child;
+var slider_1_child;
 $(document).ready(function(){
+    thumb = document.querySelector('.slider-thumb');
+    slider = document.querySelector('.slider_s');
+    thumb_child = document.querySelector('.slider-thumb_child');
+    slider_child = document.querySelector('.slider_child');
+    thumb_1 = document.querySelector('.slider_1-thumb');
+    slider_1 = document.querySelector('.slider_1_s');
+    thumb_1_child = document.querySelector('.slider_1-thumb_child');
+    slider_1_child = document.querySelector('.slider_1_child');
     $("#introduce").show();
     $("#control").hide();
     $("#member").hide();
@@ -54,6 +78,24 @@ $(document).ready(function(){
     fn_SymbolStatus('n18','','pos_18');
     fn_SymbolStatus('led_2','','running');
     fn_SymbolStatus('led_3','','err');
+    fn_SymbolStatus('ss_i1_display2','sstc','ss_i1');
+    fn_SymbolStatus('ss_i2_display2','sstc','ss_i2');
+    fn_SymbolStatus('ss_o_display2','sstc','ss_o');
+    fn_SymbolStatus('dc_i_display2','motor','dc_i');
+    fn_SymbolStatus('dc_o_display2','motor','dc_o');
+    fn_SymbolStatus('stepx','step','ss_i1');
+    fn_SymbolStatus('stepz','step','ss_i1');
+    fn_SymbolStatus('led_dc_i','motor','dc_i');
+    fn_SymbolStatus('led_dc_o','motor','dc_o');
+    fn_SymbolStatus('led_ss_i1','sstc','ss_i1');
+    fn_SymbolStatus('led_ss_i2','sstc','ss_i2');
+    fn_SymbolStatus('led_ss_o','sstc','ss_o');
+    fn_SymbolStatus('led_ss_x','status','ss_i1');
+    fn_SymbolStatus('led_ss_y','status','ss_i1');
+    fn_SymbolStatus('led_ss_z','status','ss_i1');
+    fn_SymbolStatus('led_stepx','step','ss_i1');
+    fn_SymbolStatus('led_stepy','step','ss_i1');
+    fn_SymbolStatus('led_stepz','step','ss_i1');
     fn_IOFieldDataShow('qr_code','i1',0);
     fn_IOFieldDataShow('processed','',0);
     fn_IOFieldDataShow('counter','',0);
@@ -120,6 +162,9 @@ $(document).ready(function(){
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
             $('#user').hide();
+            $('#scada_display1').show();
+            $('#scada_display2').hide();
+
         }
         else if(document.getElementById("access_user_report").checked )
         {
@@ -145,13 +190,13 @@ $(document).ready(function(){
         $('#member').hide();
 
         //sd để edit
-        $('#scada').show();
-        $("#table").hide();
-        $('#control').show();
-        $('#user').hide();
+        // $('#scada').show();
+        // $("#table").hide();
+        // $('#control').show();
+        // $('#user').hide();
         // sd để edit//
     });
-        //////////////////////////////////////////////////////bt_scada_chuyen trang
+        //////////////////////////////////////////////////////bt_scada_1chuyen trang
     $("#bt_scada").click(function(){
         document.getElementById('navbarResponsive').classList.remove('show');
         $('#bt_introduce').removeClass('active');
@@ -165,6 +210,50 @@ $(document).ready(function(){
             $('#bt_user').removeClass('active');
             $('#control').show();
             $('#scada').show();
+            $('#scada_display1').show();
+            $('#scada_display2').hide();
+            $("#table").hide();
+            $('#user').hide();
+        }
+        else if(document.getElementById("access_user_report").checked )
+        {
+            setTimeout(function() {
+                alert("Bạn chỉ được truy cập ở nội dung báo cáo!");
+            }, 500);
+            $('#bt_control').addClass('active');
+            $('#bt_user').removeClass('active');
+            $('#control').show();
+            $('#scada').hide();
+            $("#table").show();
+            $('#user').hide();
+        }
+        else
+        {
+            $('#bt_control').removeClass('active');
+            $('#bt_user').addClass('active');
+            setTimeout(function() {
+                alert('Vui lòng đăng nhập để được giám sát!');
+            }, 500);
+            $('#user').show();
+            $('#control').hide();
+        }
+    });
+    //////////////////////////////////////////////////////bt_scada_2chuyen trang
+    $("#bt_scada_display_2").click(function(){
+        document.getElementById('navbarResponsive').classList.remove('show');
+        $('#bt_introduce').removeClass('active');
+        $('#bt_member').removeClass('active');
+        $('#introduce').hide();
+        $('#member').hide();
+        if(document.getElementById("access_user_admin").checked
+            | document.getElementById("access_user_control").checked)
+        {
+            $('#bt_control').addClass('active');
+            $('#bt_user').removeClass('active');
+            $('#control').show();
+            $('#scada').show();
+            $('#scada_display1').hide();
+            $('#scada_display2').show();
             $("#table").hide();
             $('#user').hide();
         }
@@ -617,6 +706,15 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             else
                 document.getElementById(IOField).innerHTML = data.toFixed(tofix);
             $('#p'+tag.substr(4,1)+'_range').val(data);
+            if(tag == "pos_x")
+                updateSlider(data);
+            else if(tag == "pos_y")
+            {
+                updateSlider_child(data);
+                updateSlider_1_child(data);
+            }
+            else if(tag == "pos_z")
+                updateSlider_1(data);
         }
         else if(tag == 'processed')
         {
@@ -696,14 +794,28 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
             if (data == false)
             {
                 document.getElementById(ObjectID).src = imglink_0;
-                if(Tag == 'dc_i' | Tag =='dc_o')
+                if(ObjectID == 'led_dc_i' | ObjectID == 'led_dc_o')
+                {
+
+                }
+                else
+                {
+                    if(Tag == 'dc_i' | Tag =='dc_o')
                     document.getElementById('mt'+ObjectID.substr(2,2)).classList.add('d-none');
+                }
             }
             else if (data == true)
             {
                 document.getElementById(ObjectID).src = imglink_1;
-                if(Tag =='dc_i' | Tag =='dc_o')
-                    document.getElementById('mt'+ObjectID.substr(2,2)).classList.remove('d-none');
+                if(ObjectID == 'led_dc_i' | ObjectID == 'led_dc_o')
+                {
+                    
+                }
+                else
+                {
+                    if(Tag =='dc_i' | Tag =='dc_o')
+                        document.getElementById('mt'+ObjectID.substr(2,2)).classList.remove('d-none');
+                }
             }
         });
     }
@@ -885,4 +997,47 @@ function fn_excel_01(){
             saveAs(linktext, bookname);
         }, delayInMilliseconds);          
     }); 
+}
+function updateSlider(data) {
+    var ratio;
+    if(data>=0)
+        ratio = (data - minValue) / (maxValue - minValue);
+    else
+        ratio = 0;
+    const thumbPosition = ratio * (slider.offsetWidth - thumb.offsetWidth);
+    thumb.style.left = `${thumbPosition}px`;
+    slider.setAttribute('value', data);
+}
+
+function updateSlider_child(data) {
+    var ratio_child;
+    if(data>=0)
+        ratio_child = (data - minValue_child) / (maxValue_child - minValue_child);
+    else
+        ratio_child = 0;
+    const thumbPosition_child = ratio_child * (slider_child.offsetWidth - thumb_child.offsetWidth);
+    thumb_child.style.left = `${thumbPosition_child}px`;
+    slider_child.setAttribute('value', data);
+}
+
+function updateSlider_1(data) {
+    var ratio_1;
+    if(data>=0)
+        ratio_1 = (data - minValue_1) / (maxValue_1 - minValue_1);
+    else
+        ratio_1 = 0;
+    const thumbPosition_1 = ratio_1 * (slider_1.offsetWidth - thumb_1.offsetWidth);
+    thumb_1.style.left = `${thumbPosition_1}px`;
+    slider_1.setAttribute('value', data);
+}
+
+function updateSlider_1_child(data) {
+    var ratio_1_child;
+    if(data>=0)
+        ratio_1_child = (data - minValue_1_child) / (maxValue_1_child - minValue_1_child);
+    else
+        ratio_1_child = 0;
+    const thumbPosition_1_child = ratio_1_child * (slider_1_child.offsetWidth - thumb_1_child.offsetWidth);
+    thumb_1_child.style.left = `${thumbPosition_1_child}px`;
+    slider_1_child.setAttribute('value', data);
 }

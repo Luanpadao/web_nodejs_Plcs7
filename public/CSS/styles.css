@@ -48,6 +48,7 @@ ul li:hover .dropdown-menu{
 .carousel-inner img {
     width: 100%;
     height: 100%;
+/* --------------------------------------------------CSS cho màn hình SCADA_1-------------------------------------------------------- */
 }.object{
     position: relative;
     min-height:26rem;
@@ -121,67 +122,61 @@ ul li:hover .dropdown-menu{
 .object #mt_o{
     left: 76%;
 }
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
+/* --------------------------------------------------CSS cho màn hình SCADA_2-------------------------------------------------------- */
 .object_display2{
     position: relative;
     min-height:26rem;
     width: 100%;
     height: 100%;
-    background-image: url(../images/backGround_display_2.png);
+    background-image: url(../images/backGround_display_2_edit.png);
     background-size:contain;
     background-repeat: no-repeat;
     background-position: center;
 }
 .object_display2 #stepz{
-    position:absolute;
-    left: 82.3%;
+    left: 81.5%;
 }
 .object_display2 .row-1{
-    top: 26%;
+    top: 29.5%;
 }
-.object_display2 #ss_i1{
-    position:absolute;
-    left: 11%;
+.object_display2 #ss_i1_display2{
+    left: 12%;
 }
 .object_display2 .row-2{
-    top: 48%;
+    top: 47%;
 }
-.object_display2 #dc_i{
-    position:absolute;
-    left: 6%;
+.object_display2 #dc_i_display2{
+    left: 8%;
 }
-.object_display2 #dc_o{
-    position:absolute;
+.object_display2 #dc_o_display2{
     left: 60.5%;
 }
 .object_display2 .row-3{
-    top: 48%;
+    top: 48.5%;
 }
-.object_display2 #ss_i2{
-    position:absolute;
-    left: 23%;
+.object_display2 #ss_i2_display2{
+    left: 24.5%;
 }
-.object_display2 #ss_o{
-    position:absolute;
-    left: 46%;
+.object_display2 #ss_o_display2{
+    left: 47%;
 }
 .object_display2 .row-4{
-    top: 60.5%;
+    top: 59%;
 }
 .object_display2 #stepx{
-    position:absolute;
-    left: 31.2%;
+    left: 33.7%;
 }
 .object_display2 .row-5{
-    top: 58.5%;
+    top: 59.5%;
 }
-
+/* --------------CSS cho scada robot--------------- */
 .slider_s {
     width: 34%;
     height: 10px;
     background-color:none;
     position: relative;
-  }
-
+}
 .slider-thumb {
 width: 40px;
 height: 80px;
@@ -196,8 +191,7 @@ cursor: grab;
     height: 80px;
     background-color:none;
     position: relative;
-  }
-
+}
 .slider-thumb_child {
 width: 70px;
 height: 25px;
@@ -207,8 +201,83 @@ top: 107px;
 left: 0px;
 cursor: grab;
 }
-
-
+.slider_1_s {
+    width: 22%;
+    height: 10px;
+    background-color:none;
+    position: relative;
+}
+.slider_1-thumb {
+width: 20px;
+height: 80px;
+background-color: blue;
+position: absolute;
+top: 22px;
+left: 0px;
+cursor: grab;
+}
+.slider_1_child {
+    width: 4%;
+    height: 80px;
+    background-color:none;
+    position: relative;
+}
+.slider_1-thumb_child {
+width: 80px;
+height: 10px;
+background-color: yellow;
+position: absolute;
+top: 60px;
+left: 0px;
+cursor: grab;
+}
+/* -------------------------------------------------- */
+.object_display2 #led_ss_i1{
+    left: 9%;
+}
+.object_display2 #led_dc_i{
+    left: 17%;
+}
+.object_display2 #led_ss_i2{
+    left: 28%;
+}
+.object_display2 #led_ss_o{
+    left: 48%;
+}
+.object_display2 #led_dc_o{
+    left: 57%;
+}
+.object_display2 .row-6{
+    top:68%;
+}
+.object_display2 .row-7{
+    top:67.5%;
+}
+.object_display2 #led_ss_x{
+    left: 7%;
+}
+.object_display2 #led_ss_y{
+    left: 17%;
+}
+.object_display2 #led_ss_z{
+    left: 27%;
+}
+.object_display2 .row-8{
+    top: 76.5%;
+}
+.object_display2 #led_stepx{
+    left: 45%;
+}
+.object_display2 #led_stepy{
+    left: 53%;
+}
+.object_display2 #led_stepz{
+    left: 60%;
+}
+.object_display2 .row-9{
+    top:76%;
+}
+/* ---------------------------------------------------------------------------------------------------------- --------------------*/
 #bg_scada{
     background-color:rgb(191, 255, 255);
 }

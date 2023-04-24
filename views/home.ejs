@@ -60,7 +60,9 @@
                                     CONTROL
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" id="bt_scada" href="#scada">SACADA</a></li>
+                                    <li><a class="dropdown-item" id="bt_scada" href="#scada">SACADA 1</a></li>
+                                    <hr class="dropdown-divider">
+                                    <li><a class="dropdown-item" id="bt_scada_display_2" href="#scada">SACADA 2</a></li>
                                     <hr class="dropdown-divider">
                                     <li><a class="dropdown-item" id="bt_table" href="#table">TABLE</a></li>
                                     <li>
@@ -195,7 +197,7 @@
                 <div id="scada">
                     <div class="row" id="bg_scada">
                         <div class="col-8">
-                            <div class="object d-none">
+                            <div id="scada_display1" class="object">
                                 <div class="rounded-circle bg-white border border-dark d-flex align-items-center justify-content-center row-3 col-1" >
                                     <span class="text-dark h4 m-0">1</span>
                                     <img class="d-none" id="n1" src="images/Symbol/box.png"style="width: 100%;">
@@ -276,97 +278,41 @@
                                 <img class="row-4" id="mt_i" src="images/Symbol/mt_1.png"style="width: 5%;">
                                 <img class="row-4"id="mt_o" src="images/Symbol/mt_1.png"style="width: 5%;">
                             </div>
-                            <div class="object_display2 ">
-                                <img class="row-1" id="stepz" src="images/Symbol/stepz_0.png" style="width: 8%;">
-                                <img class="row-2" id="ss_i1" src="images/Symbol/sstc_0.png" style="width: 1%;rotate: 180deg;">
-                                <img class="row-3" id="dc_i" src="images/Symbol/motor_0.png" style="width: 4%;">
-                                <img class="row-3" id="dc_o" src="images/Symbol/motor_0.png" style="width: 4%;">
-                                <img class="row-4" id="ss_i2" src="images/Symbol/sstc_0.png" style="width: 1%;">
-                                <img class="row-4" id="ss_o" src="images/Symbol/sstc_0.png" style="width: 1%;">
-                                <img class="row-5" id="stepx" src="images/Symbol/stepz_0.png" style="width: 8%;rotate: 180deg;">
-                                <div class="slider_s" style="top:39.6%; left:18.1%; rotate: 90deg;">
+                            <div id="scada_display2" class="object_display2 ">
+                                <img class="row-1" id="stepz" style="width: 5%; rotate: 90deg; position: absolute;">
+                                <img class="row-2" id="ss_i1_display2" style="width: 1%;rotate: 180deg;position: absolute;">
+                                <img class="row-3" id="dc_i_display2"  style="width: 4%;position: absolute; rotate: 90deg;">
+                                <img class="row-3" id="dc_o_display2"  style="width: 4%;position: absolute; rotate: 90deg;">
+                                <img class="row-4" id="ss_i2_display2"  style="width: 1%;position: absolute;">
+                                <img class="row-4" id="ss_o_display2"  style="width: 1%;position: absolute;">
+                                <img class="row-5" id="stepx" style="width: 5%;rotate: -90deg;position: absolute;">
+                                <div class="slider_s" style="top:39.6%; left:18.2%; rotate: 270deg;">
                                     <div class="slider-thumb" >
-                                        <script>
-                                            const thumb = document.querySelector('.slider-thumb');
-                                            const slider = document.querySelector('.slider_s');
-                                            let isDragging = false;
-                                            let startPosition;
-                                            let startThumbPosition;
-                                            let dragDistance;
-
-                                            thumb.addEventListener('mousedown', startDragging);
-                                            document.addEventListener('mousemove', drag);
-                                            document.addEventListener('mouseup', stopDragging);
-
-                                            function startDragging(event) {
-                                            isDragging = true;
-                                            startPosition = event.clientY;
-                                            startThumbPosition = thumb.offsetTop;
-                                            thumb.classList.add('active');
-                                            }
-
-                                            function drag(event) {
-                                                if (!isDragging) return;
-                                                const delta = event.clientY - startPosition;
-                                                dragDistance = startThumbPosition + delta;
-                                                if (dragDistance < 0) {
-                                                    dragDistance = 0;
-                                                } 
-                                                else if (dragDistance > slider.offsetWidth - thumb.offsetWidth){
-                                                    dragDistance = slider.offsetWidth - thumb.offsetWidth;
-                                                }
-                                                    thumb.style.left = `${dragDistance}px`;
-                                            }
-
-                                            function stopDragging(event) {
-                                                isDragging = false;
-                                                thumb.classList.remove('active');
-                                            }
-                                        </script>
                                         <div class="slider_child" style="rotate: 90deg;">
                                             <div class="slider-thumb_child" >
-                                                <script>
-                                                    const thumb_child = document.querySelector('.slider-thumb_child');
-                                                    const slider_child = document.querySelector('.slider_child');
-                                                    let isDragging_child = false;
-                                                    let startPosition_child;
-                                                    let startThumbPosition_child;
-                                                    let dragDistance_child;
-        
-                                                    thumb_child.addEventListener('mousedown', startDragging);
-                                                    document.addEventListener('mousemove', drag);
-                                                    document.addEventListener('mouseup', stopDragging);
-        
-                                                    function startDragging(event) {
-                                                        isDragging_child = true;
-                                                        startPosition_child = event.clientX;
-                                                        startThumbPosition_child = thumb_child.offsetLeft;
-                                                        thumb_child.classList.add('active');
-                                                    }
-        
-                                                    function drag(event) {
-                                                        if (!isDragging_child) 
-                                                            return;
-                                                        const delta_child = event.clientX - startPosition_child;
-                                                        dragDistance_child = startThumbPosition_child + delta_child;
-                                                        if (dragDistance_child < 0) {
-                                                            dragDistance_child = 0;
-                                                        } 
-                                                        else if (dragDistance_child > slider_child.offsetWidth - thumb_child.offsetWidth){
-                                                            dragDistance_child = slider_child.offsetWidth - thumb_child.offsetWidth;
-                                                        }
-                                                        thumb_child.style.left = `${dragDistance_child}px`;
-                                                    }
-        
-                                                    function stopDragging(event) {
-                                                        isDragging_child = false;
-                                                        thumb_child.classList.remove('active');
-                                                    }
-                                                </script>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="slider_1_s" style="top:46%; left:66%; rotate: 270deg;">
+                                    <div class="slider_1-thumb" >
+                                        <div class="slider_1_child" style="rotate: -90deg;">
+                                            <div class="slider_1-thumb_child" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img class="row-6" id="led_dc_i"  style="width: 3%; rotate: -90deg; position: absolute;">
+                                <img class="row-6" id="led_dc_o"  style="width: 3%; rotate: -90deg; position: absolute;">
+                                <img class="row-7" id="led_ss_i1"  style="width: 0.7%; position: absolute;">
+                                <img class="row-7" id="led_ss_i2"  style="width: 0.7%; position: absolute;">
+                                <img class="row-7" id="led_ss_o" style="width: 0.7%; position: absolute;">
+                                <img class="row-8" id="led_ss_x"  style="width: 3%; position: absolute;">
+                                <img class="row-8" id="led_ss_y"  style="width: 3%; position: absolute;">
+                                <img class="row-8" id="led_ss_z"  style="width: 3%; position: absolute;">
+                                <img class="row-9" id="led_stepx"  style="width: 4%; position: absolute; rotate: -90deg;">
+                                <img class="row-9" id="led_stepy"  style="width: 4%; position: absolute; rotate: -90deg;">
+                                <img class="row-9" id="led_stepz"  style="width: 4%; position: absolute; rotate: -90deg;">
                             </div>
                         </div>
                         <div class="col-4 " id="panel" >
