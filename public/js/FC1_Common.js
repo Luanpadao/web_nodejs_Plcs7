@@ -203,8 +203,8 @@ $(document).ready(function(){
         $("#table").hide();
         $('#control').show();
         $('#user').hide();
-        $('#scada_display1').show();
-        $('#scada_display2').hide();
+        $('#scada_display1').hide();
+        $('#scada_display2').show();
         // sd để edit//
     });
         //////////////////////////////////////////////////////bt_scada_1chuyen trang

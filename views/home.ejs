@@ -284,90 +284,90 @@
                                 <img class="row-4"id="mt_o" src="images/Symbol/mt_1.png"style="width: 5%;">
                             </div>
                             <div id="scada_display2" class="object_display2 ">
-                                <img class="row-1" id="stepz" style="width: 5%; rotate: 90deg; position: absolute;">
-                                <img class="row-2" id="ss_i1_display2" style="width: 1%;rotate: 180deg;position: absolute;">
-                                <img class="row-3" id="dc_i_display2"  style="width: 4%;position: absolute; rotate: 90deg;">
-                                <img class="row-3" id="dc_o_display2"  style="width: 4%;position: absolute; rotate: 90deg;">
+                                <img class="row-1" id="stepz" style="width: 5%; transform: rotate(90deg); position: absolute;">
+                                <img class="row-2" id="ss_i1_display2" style="width: 1%; transform:rotate(180deg);position: absolute;">
+                                <img class="row-3" id="dc_i_display2"  style="width: 4%;position: absolute; transform:rotate(90deg);">
+                                <img class="row-3" id="dc_o_display2"  style="width: 4%;position: absolute; transform:rotate(90deg);">
                                 <img class="row-4" id="ss_i2_display2"  style="width: 1%;position: absolute;">
                                 <img class="row-4" id="ss_o_display2"  style="width: 1%;position: absolute;">
-                                <img class="row-5" id="stepx" style="width: 5%;rotate: -90deg;position: absolute;">
-                                <div class="slider_s" style="top:37.2%; position: absolute; left:18.2%; rotate: 270deg;">
+                                <img class="row-5" id="stepx" style="width: 5%;transform:rotate(-90deg);position: absolute;">
+                                <div class="slider_s" style="position: absolute; transform:rotate(270deg);">
                                     <div class="slider-thumb" >
-                                        <div class="slider_child" style="rotate: 90deg;">
+                                        <div class="slider_child" style="transform:rotate(90deg);">
                                             <div class="slider-thumb_child" >
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="slider_1_s" style="top:47%; position: absolute; left:66%; rotate: 270deg;">
+                                <div class="slider_1_s" style="position: absolute; transform:rotate(270deg);">
                                     <div class="slider_1-thumb" >
-                                        <div class="slider_1_child" style="rotate: -90deg;">
+                                        <div class="slider_1_child" style="transform:rotate(-90deg);">
                                             <div class="slider_1-thumb_child" >
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <img class="row-6" id="led_dc_i"  style="width: 3%; rotate: -90deg; position: absolute;">
-                                <img class="row-6" id="led_dc_o"  style="width: 3%; rotate: -90deg; position: absolute;">
+                                <img class="row-6" id="led_dc_i"  style="width: 3%; transform:rotate(-90deg); position: absolute;">
+                                <img class="row-6" id="led_dc_o"  style="width: 3%; transform:rotate(-90deg); position: absolute;">
                                 <img class="row-7" id="led_ss_i1"  style="width: 0.7%; position: absolute;">
                                 <img class="row-7" id="led_ss_i2"  style="width: 0.7%; position: absolute;">
                                 <img class="row-7" id="led_ss_o" style="width: 0.7%; position: absolute;">
                                 <img class="row-8" id="led_ss_x"  style="width: 3%; position: absolute;">
                                 <img class="row-8" id="led_ss_y"  style="width: 3%; position: absolute;">
                                 <img class="row-8" id="led_ss_z"  style="width: 3%; position: absolute;">
-                                <img class="row-9" id="led_stepx"  style="width: 4%; position: absolute; rotate: -90deg;">
-                                <img class="row-9" id="led_stepy"  style="width: 4%; position: absolute; rotate: -90deg;">
-                                <img class="row-9" id="led_stepz"  style="width: 4%; position: absolute; rotate: -90deg;">
+                                <img class="row-9" id="led_stepx"  style="width: 4%; position: absolute; transform:rotate(-90deg);">
+                                <img class="row-9" id="led_stepy"  style="width: 4%; position: absolute; transform:rotate(-90deg);">
+                                <img class="row-9" id="led_stepz"  style="width: 4%; position: absolute; transform:rotate(-90deg);">
                             </div>
                         </div>
                         <div class="" id="panel" >
                             <form>
                                 <div class="row text-center" style="margin: 0;">
-                                    <label class="bg-primary">POSITION</label>
+                                    <label class="bg-primary panel_title">POSITION</label>
                                 </div>
                                 <div class="row text-center">
                                     <label id="status_robot" class="form-text">ROBOT ĐANG DI CHUYỂN</label>
                                 </div>
                                 <div class="row form-text-label text-center" id="position">
                                     <div class="col-4">
-                                        <div class="text-primary">
+                                        <div class="text-primary panel_content">
                                             x-scale
                                         </div>
                                         <div>
-                                            <label class="text-bg-primary" id="px"></label>
+                                            <label class="text-bg-primary panel_content" id="px"></label>
                                         </div>
                                         <div><input type="range" id="px_range" name="px_range" min="0" max="300"></div>
                                     </div>
                                     <div class="col-4">
-                                        <div class="text-warning">
+                                        <div class="text-warning panel_content">
                                             y-scale
                                         </div>
                                         <div>
-                                            <label class="text-bg-warning" id="py"></label>
+                                            <label class="text-bg-warning panel_content" id="py"></label>
                                         </div>
                                         <div><input type="range" id="py_range" name="py_range" min="-3" max="3"></div>
                                     </div>
                                     <div class="col-4">
-                                        <div class="text-danger">
+                                        <div class="text-danger panel_content">
                                             z-scale
                                         </div>
                                         <div>
-                                            <label class="text-bg-danger" id="pz"></label>
+                                            <label class="text-bg-danger panel_content" id="pz"></label>
                                         </div>
                                         <div><input type="range" id="pz_range" name="pz_range" min="0" max="300"></div>
                                     </div>
                                 </div>
                                 <div class="row text-center mt-2" style="margin: 0;">
-                                    <label class="bg-primary">INFORMATION</label>
+                                    <label class="bg-primary panel_title">INFORMATION</label>
                                 </div>
                                 <div class="row form-text-label mt-1">
-                                    <div class="col-2">
+                                    <div class="col-2 panel_content">
                                         <label>QRcode:</label>
                                     </div>
                                     <div class="col-4" >
                                         <input class="text-center information" id="i1" type="text" size="10" disabled>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-2 panel_content">
                                         <label>Type:</label>
                                     </div>
                                     <div class="col-4" >
@@ -375,13 +375,13 @@
                                     </div>
                                 </div>
                                 <div class="row mt-1">
-                                    <div class="col-2">
+                                    <div class="col-2 panel_content">
                                         <label>Name:</label>
                                     </div>
                                     <div class="col-4" >
                                         <input class="text-center information" id="i2" type="text" size="10" disabled>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-2 panel_content">
                                         <label>Pos:</label>
                                     </div>
                                     <div class="col-4" >
@@ -390,103 +390,103 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="square" id="type_1">
-                                        <span>A</span>
+                                        <span class="panel_content">A</span>
                                     </div>
                                     <div class="square" id="type_2">
-                                        <span>B</span>
+                                        <span class="panel_content">B</span>
                                     </div>
                                     <div class="square" id="type_3">
-                                        <span>C</span>
+                                        <span class="panel_content">C</span>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="square counter">
-                                        <span id="counter_1">1</span>
+                                        <span id="counter_1" class="panel_content">1</span>
                                     </div>
                                     <div class="square counter">
-                                        <span id="counter_2">2</span>
+                                        <span id="counter_2" class="panel_content">2</span>
                                     </div>
                                     <div class="square counter">
-                                        <span id="counter_3">3</span>
+                                        <span id="counter_3" class="panel_content">3</span>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="circle counter" id="status_A">
-                                        <span>full</span>
+                                        <span class="panel_content">full</span>
                                     </div>
                                     <div class="circle counter" id="status_B">
-                                        <span>full</span>
+                                        <span class="panel_content">full</span>
                                     </div>
                                     <div class="circle counter" id="status_C">
-                                        <span>full</span>
+                                        <span class="panel_content">full</span>
                                     </div>
                                 </div>
                                 <div class="row text-center mt-2" style="margin: 0;">
-                                    <label class="bg-primary">PANEL</label>
+                                    <label class="bg-primary panel_title">PANEL</label>
                                 </div>
                                 <div id="gd_dk">
                                     <div id="gd_dk_1" class="d-none">
                                         <div class="row mt-1">
                                             <div class="col-10" id="led">
-                                                    <div class="circle" id="led_1">
-                                                        <span>off</span>
+                                                    <div class="circle panel_content" id="led_1">
+                                                        <span>OFF</span>
                                                     </div>
-                                                    <div class="circle led_23" id="led_2">
-                                                        <span>on</span>
+                                                    <div class="circle led_23 panel_content" id="led_2">
+                                                        <span>ON</span>
                                                     </div>
-                                                    <div class="circle" id="led_3">
-                                                        <span>trip</span>
+                                                    <div class="circle panel_content" id="led_3">
+                                                        <span>TRIP</span>
                                                     </div>
                                             </div>
                                         </div>  
                                         <div class="mx-auto btn_group text-center">
-                                            <button type="button" class="btn btn-secondary mode_sa" title="SEMI AUTO">S-A</button> 
-                                            <button type="button" class="btn btn-secondary mode_a" title="AUTO">A</button>
+                                            <button type="button" class="btn btn-secondary mode_sa panel_content" title="SEMI AUTO">S-A</button> 
+                                            <button type="button" class="btn btn-secondary mode_a panel_content" title="AUTO">A</button>
                                         </div>
                                         <div class="text-center" >
-                                            <input class="text-center" id="mode" type="text" size="12" disabled placeholder="SEMI AUTO">
+                                            <input class="text-center panel_content" id="mode" type="text" size="12" disabled placeholder="SEMI AUTO">
                                         </div>
                                         <div class="mx-auto btn_group text-center">
                                             <div class="mx-auto btn_group text-center">
-                                                <button type="button" class="btn btn-secondary bt_import" title="button import">IMPORT</button> 
-                                                <button type="button" class="btn btn-secondary bt_export" title="button export">EXPORT</button>
+                                                <button type="button" class="btn btn-secondary bt_import panel_content" title="button import">IMPORT</button> 
+                                                <button type="button" class="btn btn-secondary bt_export panel_content" title="button export">EXPORT</button>
                                             </div>
                                             <div class="mx-auto  btn_group text-center">
-                                                <button type="button" class="btn btn-secondary bt_run" title="button run">RUN</button>
-                                                <button type="button" class="btn btn-secondary bt_stop" title="button stop">STOP</button>
-                                                <button type="button" class="btn btn-secondary bt_e_stop" title="button e-stop" >E-STOP</button>
+                                                <button type="button" class="btn btn-secondary bt_run panel_content" title="button run">RUN</button>
+                                                <button type="button" class="btn btn-secondary bt_stop panel_content" title="button stop">STOP</button>
+                                                <button type="button" class="btn btn-secondary bt_e_stop panel_content" title="button e-stop" >E-STOP</button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="gd_dk_2" class="text-center d-none">
+                                    <div id="gd_dk_2" class="text-center d-none panel_content">
                                         <label for="pos">Chọn vị trí nhập kho:</label>
                                         <div>
-                                            <input id="pos_im" type="number" min="1" max="18">
+                                            <input id="pos_im" class="panel_content" type="number" min="1" max="18">
                                         </div>
                                         <div>    
-                                            <button type="button" class="btn btn-secondary bt_select_im">SELECT</button>
+                                            <button type="button" class="btn btn-secondary bt_select_im panel_content">SELECT</button>
                                         </div>
                                     </div>
-                                    <div id="gd_dk_3" class="text-center d-none">
+                                    <div id="gd_dk_3" class="text-center d-none panel_content">
                                         <label for="pos">Chọn vị trí xuất kho:</label>
                                         <div>
-                                            <input id="pos_ex" type="number" min="1" max="18">
+                                            <input id="pos_ex" class="panel_content" type="number" min="1" max="18">
                                         </div>
                                         <div>    
-                                            <button type="button" class="btn btn-secondary bt_select_ex">SELECT</button>
+                                            <button type="button" class="btn btn-secondary bt_select_ex panel_content">SELECT</button>
                                         </div>
                                     </div>
-                                    <div id="gd_dk_4" class="text-center d-none">
+                                    <div id="gd_dk_4" class="text-center d-none panel_content">
                                         <label for="pos">Chọn loại hàng xuất kho:</label>
                                         <div class="mx-auto btn_group">
-                                            <button type="button" class="btn btn-secondary bt_typeA">A</button>
-                                            <button type="button" class="btn btn-secondary bt_typeB">B</button>
-                                            <button type="button" class="btn btn-secondary bt_typeC">C</button>
+                                            <button type="button" class="btn btn-secondary bt_typeA panel_content">A</button>
+                                            <button type="button" class="btn btn-secondary bt_typeB panel_content">B</button>
+                                            <button type="button" class="btn btn-secondary bt_typeC panel_content">C</button>
                                         </div>
                                     </div>
                                     <div id="gd_dk_5" class="text-center">
-                                        <label for="pos" class="mt-2">THÔNG BÁO:</label>
-                                        <div >
+                                        <label for="pos" class="mt-2 panel_content">THÔNG BÁO:</label>
+                                        <div class="panel_content" >
                                             Vui lòng nhấn ON tại tủ điện để cho phép điều khiển!
                                         </div>
                                     </div>

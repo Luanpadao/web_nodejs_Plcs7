@@ -527,6 +527,14 @@ footer{
     #pz_range{
         width: 100px;
     }
+    .slider_s{
+        left:18.2%;
+        top:37.2%;
+    }
+    .slider_1_s{
+        top:47%;
+        left:66%; 
+    }
 }
 /*------------------------ Màn hình 110% --------------------------*/
 @media (max-width: 1400px){
@@ -737,18 +745,137 @@ footer{
         height: 25px;
     }
     .object .row-1{
-        top: 36.5%;
+        top: 36.3%;
     }
     .object .row-2{
-        top: 38.5%;
+        top: 41.3%;
     }
     .object .row-3{
-        top: 45%;
+        top: 46%;
     }
     .object .row-4{
-        top: 61%;
+        top: 59%;
     }
     .object .row-5{
-        top: 69%;
+        top: 64.5%;
     }
+    /* PANEL */
+    .panel_title{
+        font-size: 15px;;
+    }
+    #status_robot{
+        font-size: 10px;
+    }
+    .panel_content{
+        font-size: 10px;
+    }
+    /* Thanh slider x */
+    #px_range {
+        height: 4px;
+    }
+    /* Nút trượt trên thanh slider x */
+    #px_range::-webkit-slider-thumb {
+        width: 11px;
+        height: 11px;
+    }
+    /* Thanh slider y */
+    #py_range {
+        height: 4px;
+    }
+    /* Nút trượt trên thanh slider y */
+    #py_range::-webkit-slider-thumb {
+        width: 11px;
+        height: 11px;
+    }
+    /* Thanh slider x */
+    #pz_range {
+        height: 4px;
+    }
+    /* Nút trượt trên thanh slider z */
+    #pz_range::-webkit-slider-thumb {
+        width: 11px;
+        height: 11px;
+    }
+    /* --------------------------------------------------CSS cho màn hình SCADA_2-------------------------------------------------------- */
+    .object_display2 #stepz{
+        left: 81.8%;
+    }
+    .object_display2 .row-1{
+        top: 41%;
+    }
+    .object_display2 .row-2{
+        top: 48.5%;
+    }
+    .object_display2 .row-3{
+        top: 49.5%;
+    }
+    .object_display2 .row-4{
+        top: 54.7%;
+    }
+    .object_display2 .row-5{
+        top: 54.2%;
+    }
+    /* --------------CSS cho scada robot--------------- */
+    .slider_s {
+        width: 34%;
+        height: 10px;
+    }
+    .slider-thumb {
+    width: 15px;
+    height: 35px;
+    top: -30px;
+    /* left: 0px; */
+    }
+    .slider_child {
+        width: 500%;
+        height: 80px;
+    }
+    .slider-thumb_child {
+    width: 30px;
+    height: 10px;
+    top: 65px;
+    left: 0px !important;
+    }
+    .slider_1_s {
+        width: 22%;
+        height: 10px;
+    }
+    .slider_1-thumb {
+    width: 8px;
+    height: 40px;
+    top: 22px;
+    left: 0px;
+    }
+    .slider_1_child {
+        width: 4%;
+        height: 80px;
+    }
+    .slider_1-thumb_child {
+    width: 40px;
+    height: 3px;
+    top: 47px;
+    left: 0px !important;
+    }
+    /* -------------------------------------------------- */
+    .object_display2 .row-6{
+        top:58%;
+    }
+    .object_display2 .row-7{
+        top:57.5%;
+    }
+    .object_display2 .row-8{
+        top: 61.5%;
+    }
+    .object_display2 .row-9{
+        top:61.5%;
+    }
+    .slider_s{
+        left:24%;
+        top:44.5%;
+    }
+    .slider_1_s{
+        top:48.3%;
+        left:62%; 
+    }
+    /* ------------------------------------------------------------------------------------------------------------------------------ */
 }
