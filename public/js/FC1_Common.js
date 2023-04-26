@@ -15,6 +15,7 @@ var lock_1 = 0;
 var lock_2 = 0;
 var l2 = false;
 var l3 = false;
+var scada_display = 0;
 var check_empty = false;
 var type = '';
 var finish_done = false;
@@ -90,12 +91,12 @@ $(document).ready(function(){
     fn_SymbolStatus('led_ss_i1','sstc','ss_i1');
     fn_SymbolStatus('led_ss_i2','sstc','ss_i2');
     fn_SymbolStatus('led_ss_o','sstc','ss_o');
-    fn_SymbolStatus('led_ss_x','status','ss_i1');
-    fn_SymbolStatus('led_ss_y','status','ss_i1');
-    fn_SymbolStatus('led_ss_z','status','ss_i1');
-    fn_SymbolStatus('led_stepx','step','ss_i1');
-    fn_SymbolStatus('led_stepy','step','ss_i1');
-    fn_SymbolStatus('led_stepz','step','ss_i1');
+    fn_SymbolStatus('led_ss_x','status','ss_x');
+    fn_SymbolStatus('led_ss_y','status','ss_y');
+    fn_SymbolStatus('led_ss_z','status','ss_z');
+    fn_SymbolStatus('led_stepx','step','step_x');
+    fn_SymbolStatus('led_stepy','step','step_y');
+    fn_SymbolStatus('led_stepz','step','step_z');
     fn_IOFieldDataShow('qr_code','i1',0);
     fn_IOFieldDataShow('processed','',0);
     fn_IOFieldDataShow('counter','',0);
@@ -162,8 +163,16 @@ $(document).ready(function(){
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
             $('#user').hide();
-            $('#scada_display1').show();
-            $('#scada_display2').hide();
+            if(scada_display == 0 | scada_display == 1)
+            {
+                $('#scada_display1').show();
+                $('#scada_display2').hide();
+            }
+            else
+            {
+                $('#scada_display1').hide();
+                $('#scada_display2').show();
+            }
 
         }
         else if(document.getElementById("access_user_report").checked )
@@ -190,10 +199,12 @@ $(document).ready(function(){
         $('#member').hide();
 
         //sd để edit
-        // $('#scada').show();
-        // $("#table").hide();
-        // $('#control').show();
-        // $('#user').hide();
+        $('#scada').show();
+        $("#table").hide();
+        $('#control').show();
+        $('#user').hide();
+        $('#scada_display1').show();
+        $('#scada_display2').hide();
         // sd để edit//
     });
         //////////////////////////////////////////////////////bt_scada_1chuyen trang
@@ -212,6 +223,7 @@ $(document).ready(function(){
             $('#scada').show();
             $('#scada_display1').show();
             $('#scada_display2').hide();
+            scada_display = 1;
             $("#table").hide();
             $('#user').hide();
         }
@@ -254,6 +266,7 @@ $(document).ready(function(){
             $('#scada').show();
             $('#scada_display1').hide();
             $('#scada_display2').show();
+            scada_display = 2;
             $("#table").hide();
             $('#user').hide();
         }

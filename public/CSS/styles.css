@@ -104,7 +104,7 @@ ul li:hover .dropdown-menu{
     left: 75%;
 }
 .object #mt_i{
-    position: relative;
+    position: absolute;
     animation: mymove_i 1s infinite;
 }
 @keyframes mymove_i {
@@ -112,7 +112,7 @@ ul li:hover .dropdown-menu{
     to {left: 30%;}
 }
 .object #mt_o{
-    position: relative;
+    position: absolute;
     animation: mymove_o 1s infinite;
 }
 @keyframes mymove_o {
@@ -162,7 +162,7 @@ ul li:hover .dropdown-menu{
     left: 47%;
 }
 .object_display2 .row-4{
-    top: 59%;
+    top: 60%;
 }
 .object_display2 #stepx{
     left: 33.7%;
@@ -248,10 +248,10 @@ cursor: grab;
     left: 57%;
 }
 .object_display2 .row-6{
-    top:68%;
+    top:69%;
 }
 .object_display2 .row-7{
-    top:67.5%;
+    top:68.5%;
 }
 .object_display2 #led_ss_x{
     left: 7%;
@@ -263,7 +263,7 @@ cursor: grab;
     left: 27%;
 }
 .object_display2 .row-8{
-    top: 76.5%;
+    top: 78.5%;
 }
 .object_display2 #led_stepx{
     left: 45%;
@@ -275,7 +275,7 @@ cursor: grab;
     left: 60%;
 }
 .object_display2 .row-9{
-    top:76%;
+    top:78.5%;
 }
 /* ---------------------------------------------------------------------------------------------------------- --------------------*/
 #bg_scada{
@@ -459,14 +459,29 @@ background-color: #2980b9;
 color: white;
 transform: rotateY(180deg);
 }
-
-
+#member img{
+    height: 300px;
+    width: 300px;
+}
 
 footer{
     color: #fff;
     opacity: 0.8;
 }
 /*------------------------ Màn hình 100% --------------------------*/
+#scada_display1{
+    max-width: 65%;
+    float: left;
+}
+#scada_display2{
+    max-width: 65%;
+    float: left;
+}
+#panel{
+    max-width: 35%;
+    min-height: 722px;
+    display: inline-flex;
+}
 @media (max-width: 1600px){
     #title_web{
         font-size: 25px;
@@ -489,19 +504,19 @@ footer{
         height: 60px;
     }
     .object .row-1{
-        top: 19.5%;
+        top: 16.5%;
     }
     .object .row-2{
-        top: 30.4%;
+        top: 28.5%;
     }
     .object .row-3{
-        top: 41.3%;
+        top: 40.5%;
     }
     .object .row-4{
         top: 71%;
     }
     .object .row-5{
-        top: 82%;
+        top: 85%;
     }
     #px_range{
         width: 100px;
@@ -511,9 +526,6 @@ footer{
     }
     #pz_range{
         width: 100px;
-    }
-    #panel{
-        min-height: 722px;
     }
 }
 /*------------------------ Màn hình 110% --------------------------*/
@@ -680,6 +692,18 @@ footer{
 }
 /*------------------------ Màn hình 400% --------------------------*/
 @media (max-width: 380px){
+    #scada_display1{
+        min-width: 100%;
+        display:inline;
+    }
+    #scada_display2{
+        min-width: 100%;
+    }
+    #panel{
+        min-width: 100%;
+        display:inline-block;
+        min-height: 500px;
+    }
     #title_web{
         font-size: 15px;
     }
@@ -703,5 +727,28 @@ footer{
     }
     .img_contain{
         max-width: 250px;
+    }
+    #member img{
+        height: 300px;
+        width: 300px;
+    }
+    .rounded-circle{
+        width: 25px;
+        height: 25px;
+    }
+    .object .row-1{
+        top: 36.5%;
+    }
+    .object .row-2{
+        top: 38.5%;
+    }
+    .object .row-3{
+        top: 45%;
+    }
+    .object .row-4{
+        top: 61%;
+    }
+    .object .row-5{
+        top: 69%;
     }
 }

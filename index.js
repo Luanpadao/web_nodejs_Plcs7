@@ -13,6 +13,12 @@ app.get("/", function(req, res){
   // const ip_host_local = req.ip;
   res.render("home");
 });
+io.on('connection', (socket) => {
+  socket.on('get_ip', () => {
+      const ip = socket.handshake.address;
+      socket.emit('ip', ip);
+  });
+});
 //////////////////////////////////////////////////////////////////// chỉnh sửa
 app.use(session({
   secret: 'mySecretKey', // chuỗi bí mật dùng để mã hóa session
@@ -21,7 +27,7 @@ app.use(session({
   cookie: { secure: false } // khi true, cookie chỉ được gửi qua HTTPS
 }));
 // Lấy IP để gán sang file home.ejs
-// app.get("/ip_host",function(req,res){
+// app.get("/ip",function(req,res){
 //   const ip = req.ip;
 //   console.log(`Địa chỉ IP của client là: ${ip}`);
 //   res.send('Địa chỉ ip của bạn là: '+ip);
@@ -162,6 +168,12 @@ var err         = 'err'; // tag bool
 var status_robot = 'status_robot'; // tag interger
 var user = 'user'; // tag interger
 var access_user = 'access_user'; // tag string
+var ss_x = 'ss_x';              //tag_bool
+var ss_y = 'ss_y';              //tag_bool
+var ss_z = 'ss_z';              //tag_bool
+var step_x = 'step_x';          //tag_bool
+var step_y = 'step_y';          //tag_bool
+var step_z = 'step_z';          //tag_bool
 // Đọc dữ liệu
 const TagList = tagBuilder
 .read(sw_mode) 
@@ -209,6 +221,12 @@ const TagList = tagBuilder
 .read(status_robot)
 .read(user)
 .read(access_user)
+.read(ss_x)
+.read(ss_y)
+.read(ss_z)
+.read(step_x)
+.read(step_y)
+.read(step_z)
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -257,6 +275,12 @@ function fn_tag(){
     io.sockets.emit("status_robot", tagArr[42]);
     io.sockets.emit("user", tagArr[43]);
     io.sockets.emit("access_user", tagArr[44]);
+    io.sockets.emit("ss_x",tagArr[45]);
+    io.sockets.emit("ss_y",tagArr[46]);
+    io.sockets.emit("ss_z",tagArr[47]);
+    io.sockets.emit("step_x",tagArr[48]);
+    io.sockets.emit("step_y",tagArr[49]);
+    io.sockets.emit("step_z",tagArr[50]);
 }
 // ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
