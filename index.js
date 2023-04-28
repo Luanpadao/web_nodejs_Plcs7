@@ -174,6 +174,7 @@ var ss_z = 'ss_z';              //tag_bool
 var step_x = 'step_x';          //tag_bool
 var step_y = 'step_y';          //tag_bool
 var step_z = 'step_z';          //tag_bool
+var qr_err = 'qr_err';          //tag_bool
 // Đọc dữ liệu
 const TagList = tagBuilder
 .read(sw_mode) 
@@ -227,6 +228,7 @@ const TagList = tagBuilder
 .read(step_x)
 .read(step_y)
 .read(step_z)
+.read(qr_err)
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -281,6 +283,7 @@ function fn_tag(){
     io.sockets.emit("step_x",tagArr[48]);
     io.sockets.emit("step_y",tagArr[49]);
     io.sockets.emit("step_z",tagArr[50]);
+    io.sockets.emit("qr_err",tagArr[51]);
 }
 // ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
@@ -307,6 +310,9 @@ io.on("connection", function(socket){
   socket.on("cmd_processed", function(data){
 		fn_Data_Write(processed,data);
 	});
+  socket.on("cmd_qr_err",function(data){
+    fn_Data_Write(qr_err,data);
+  });
   socket.on("msg_SQL_Show", function(data)
   {
       // var sqltable_Name = "pre_data";

@@ -878,9 +878,11 @@ function fn_Table_SQL_show_pre_data()
 function fn_table_01(data){
     if(data){
         check_empty = false;
+        var qr_status = false;
         var len = data.length;
         if(len > 0){
             for(var i=0;i<len;i++){
+                qr_status == false;
                 if(data[i].QRCode == temp)
                 {
                     $("#i1").val(data[i].QRCode);
@@ -889,6 +891,7 @@ function fn_table_01(data){
                     tempArr[1] = data[i].QRCode;
                     tempArr[2] = data[i].Name;
                     tempArr[3] = data[i].Type;
+                    qr_status = true;
                     if($('#n'+(i+1)).hasClass('d-none'))
                     {
                         //Xác định nhập kho tự động hoặc bán tự động
@@ -915,7 +918,21 @@ function fn_table_01(data){
                     }
                 }
             }
-            if(check_empty == false)
+            if(qr_status == false)
+            {
+                $("#i1").val(temp);
+                socket.emit('cmd_qr_err',true);
+                setTimeout(function() {
+                    socket.emit('cmd_qr_err',false);
+                }, 200);
+                setTimeout(function() {
+                    alert('Mã QR không phù hợp');
+                }, 500);
+                // $("#i2").val("Không phù hợp");
+                // $("#i3").val("Không phù hợp");
+                // $("#i4").val("Không phù hợp");
+            }
+            else if(check_empty == false)
             {
                 alert('Đầy hàng rồi, vui lòng xuất kho loại '+ $("#i4").val());
             }

@@ -433,3 +433,9 @@ function fn_user_pre(){
         user_present = 4;
     fn_user_number(user_present);
 }
+// document.addEventListener("keypress", function(event){
+//     if (event.keyCode === 13 & bootstrap.Modal.getInstance(document.getElementById("myModal")).show())
+//     {
+//         login();
+//     }
+// });
