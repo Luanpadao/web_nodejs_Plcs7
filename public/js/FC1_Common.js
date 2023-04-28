@@ -154,8 +154,7 @@ $(document).ready(function(){
     {
         $('#bt_introduce').removeClass('active');
         $('#bt_member').removeClass('active');
-        if(document.getElementById("access_user_admin").checked 
-                                    | document.getElementById("access_user_control").checked)
+        if(document.getElementById("access_user_control").checked )
         {
             $('#scada').show();
             $("#table").hide();
@@ -173,17 +172,30 @@ $(document).ready(function(){
                 $('#scada_display1').hide();
                 $('#scada_display2').show();
             }
+            $('#gd_dk_1').show();
 
         }
-        else if(document.getElementById("access_user_report").checked )
+        else if(document.getElementById("access_user_admin").checked
+                | document.getElementById("access_user_report").checked
+                | document.getElementById("access_user_viewer").checked)
         {
-            $('#scada').hide();
-            $("#table").show();
+            $('#scada').show();
+            $("#table").hide();
             $('#control').show();
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
             $('#user').hide();
-            fn_Table01_SQL_Show_data();
+            if(scada_display == 0 | scada_display == 1)
+            {
+                $('#scada_display1').show();
+                $('#scada_display2').hide();
+            }
+            else
+            {
+                $('#scada_display1').hide();
+                $('#scada_display2').show();
+            }
+            $('#gd_dk_1').hide();
         }
         else
         {
@@ -199,12 +211,12 @@ $(document).ready(function(){
         $('#member').hide();
 
         //sd để edit
-        $('#scada').show();
-        $("#table").hide();
-        $('#control').show();
-        $('#user').hide();
-        $('#scada_display1').hide();
-        $('#scada_display2').show();
+        // $('#scada').show();
+        // $("#table").hide();
+        // $('#control').show();
+        // $('#user').hide();
+        // $('#scada_display1').hide();
+        // $('#scada_display2').show();
         // sd để edit//
     });
         //////////////////////////////////////////////////////bt_scada_1chuyen trang
@@ -214,8 +226,7 @@ $(document).ready(function(){
         $('#bt_member').removeClass('active');
         $('#introduce').hide();
         $('#member').hide();
-        if(document.getElementById("access_user_admin").checked
-         | document.getElementById("access_user_control").checked)
+        if(document.getElementById("access_user_control").checked)
         {
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
@@ -226,18 +237,22 @@ $(document).ready(function(){
             scada_display = 1;
             $("#table").hide();
             $('#user').hide();
+            $('#gd_dk_1').show();
         }
-        else if(document.getElementById("access_user_report").checked )
+        else if(document.getElementById("access_user_report").checked
+            | document.getElementById("access_user_admin").checked
+            | document.getElementById("access_user_viewer").checked)
         {
-            setTimeout(function() {
-                alert("Bạn chỉ được truy cập ở nội dung báo cáo!");
-            }, 500);
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
             $('#control').show();
-            $('#scada').hide();
-            $("#table").show();
+            $('#scada').show();
+            $('#scada_display1').show();
+            $('#scada_display2').hide();
+            scada_display = 1;
+            $("#table").hide();
             $('#user').hide();
+            $('#gd_dk_1').hide();
         }
         else
         {
@@ -257,8 +272,7 @@ $(document).ready(function(){
         $('#bt_member').removeClass('active');
         $('#introduce').hide();
         $('#member').hide();
-        if(document.getElementById("access_user_admin").checked
-            | document.getElementById("access_user_control").checked)
+        if(document.getElementById("access_user_control").checked)
         {
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
@@ -269,18 +283,22 @@ $(document).ready(function(){
             scada_display = 2;
             $("#table").hide();
             $('#user').hide();
+            $('#gd_dk_1').show();
         }
-        else if(document.getElementById("access_user_report").checked )
+        else if(document.getElementById("access_user_report").checked
+            | document.getElementById("access_user_admin").checked
+            | document.getElementById("access_user_viewer").checked )
         {
-            setTimeout(function() {
-                alert("Bạn chỉ được truy cập ở nội dung báo cáo!");
-            }, 500);
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
             $('#control').show();
-            $('#scada').hide();
-            $("#table").show();
+            $('#scada').show();
+            $('#scada_display1').hide();
+            $('#scada_display2').show();
+            scada_display = 2;
+            $("#table").hide();
             $('#user').hide();
+            $('#gd_dk_1').hide();
         }
         else
         {
@@ -301,17 +319,20 @@ $(document).ready(function(){
         $('#introduce').hide();
         $('#member').hide();
         fn_Table01_SQL_Show_data();
-        if(document.getElementById("access_user_control").checked )
+        if(document.getElementById("access_user_control").checked
+            | document.getElementById("access_user_viewer").checked )
         {
-            setTimeout(function() {
-                alert('Bạn chỉ được truy cập ở phần điều khiển!');
-            }, 500);
+            // setTimeout(function() {
+            //     alert('Bạn chỉ được truy cập ở phần điều khiển!');
+            // }, 500);
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
             $('#control').show();
-            $('#scada').show();
-            $("#table").hide();
+            $('#scada').hide();
+            $("#table").show();
             $('#user').hide();
+            $('#btt_Excel').hide();
+
         }
         else if(document.getElementById("access_user_admin").checked
                 | document.getElementById("access_user_report").checked)
@@ -322,6 +343,7 @@ $(document).ready(function(){
             $('#scada').hide();
             $("#table").show();
             $('#user').hide();
+            $('#btt_Excel').show();
         }
         else
         {
@@ -717,7 +739,13 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             if(tofix == 0)
                 document.getElementById(IOField).innerHTML = data;
             else
+            {
+                if(tag == "pos_x")
+                {
+                    data = - data;
+                }
                 document.getElementById(IOField).innerHTML = data.toFixed(tofix);
+            }
             $('#p'+tag.substr(4,1)+'_range').val(data);
             if(tag == "pos_x")
                 updateSlider(data);

@@ -107,6 +107,7 @@ function fn_user_data(data){
                             document.getElementById("access_user_admin").checked = true;
                             document.getElementById("access_user_control").checked = false;
                             document.getElementById("access_user_report").checked = false;
+                            document.getElementById("access_user_viewer").checked = false;
                             document.getElementById('next_page').classList.remove('d-none');
                             document.getElementById('user_'+data[i].stt).classList.add('disabled');
                             admin = true;
@@ -116,12 +117,21 @@ function fn_user_data(data){
                             document.getElementById("access_user_admin").checked =false;
                             document.getElementById("access_user_control").checked = true;
                             document.getElementById("access_user_report").checked = false;
+                            document.getElementById("access_user_viewer").checked = false;
                         }
-                        else
+                        else if(data[i].access == 'Bao cao')
                         {
                             document.getElementById("access_user_admin").checked =false;
                             document.getElementById("access_user_control").checked = false;
                             document.getElementById("access_user_report").checked = true;
+                            document.getElementById("access_user_viewer").checked = false;
+                        }
+                        else if(data[i].access == 'Giam sat')
+                        {
+                            document.getElementById("access_user_admin").checked =false;
+                            document.getElementById("access_user_control").checked = false;
+                            document.getElementById("access_user_report").checked = false;
+                            document.getElementById("access_user_viewer").checked = true;
                         }
                         bootstrap.Modal.getInstance(document.getElementById("myModal")).hide();
                         document.getElementById('bt_login').classList.add('d-none');
@@ -224,18 +234,28 @@ function fn_user_data(data){
                             document.getElementById("access_user_admin").checked = true;
                             document.getElementById("access_user_control").checked = false;
                             document.getElementById("access_user_report").checked = false;
+                            document.getElementById("access_user_viewer").checked = false;
                         }
                         else if(data[i].access == 'Dieu khien')
                         {
                             document.getElementById("access_user_admin").checked =false;
                             document.getElementById("access_user_control").checked = true;
                             document.getElementById("access_user_report").checked = false;
+                            document.getElementById("access_user_viewer").checked = false;
                         }
-                        else
+                        else if(data[i].access = 'Bao cao')
                         {
                             document.getElementById("access_user_admin").checked =false;
                             document.getElementById("access_user_control").checked = false;
                             document.getElementById("access_user_report").checked = true;
+                            document.getElementById("access_user_viewer").checked = false;
+                        }
+                        else if(data[i].access = 'Giam sat')
+                        {
+                            document.getElementById("access_user_admin").checked =false;
+                            document.getElementById("access_user_control").checked = false;
+                            document.getElementById("access_user_report").checked = false;
+                            document.getElementById("access_user_viewer").checked = true;
                         }
                         document.getElementById('user_'+data[i].stt).classList.add('disabled');
                         check_wrong = false;
