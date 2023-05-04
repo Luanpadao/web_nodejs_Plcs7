@@ -160,7 +160,7 @@ var processed   = 'processed';   //tag bool
 var sql_insert_Trigger = 'sql_insert_Trigger'; //tag bool
 var counter     = 'counter';         //tag array
 var processed_1 = 'processed_1'; //tag bool
-var pos         = 'pos'; //tag interger
+var send_pos         = 'send_pos'; //tag interger
 var running     = 'running'; //tag bool
 var finished    = 'finished'; //tag bool
 var enable      = 'enable'; // tag bool
@@ -175,6 +175,7 @@ var step_x = 'step_x';          //tag_bool
 var step_y = 'step_y';          //tag_bool
 var step_z = 'step_z';          //tag_bool
 var qr_err = 'qr_err';          //tag_bool
+var pos_enable = 'pos_enable'   //tag_bool
 // Đọc dữ liệu
 const TagList = tagBuilder
 .read(sw_mode) 
@@ -214,7 +215,7 @@ const TagList = tagBuilder
 .read(sql_insert_Trigger)
 .read(counter)
 .read(processed_1)
-.read(pos) 
+.read(send_pos) 
 .read(running)
 .read(finished)
 .read(enable)
@@ -229,6 +230,7 @@ const TagList = tagBuilder
 .read(step_y)
 .read(step_z)
 .read(qr_err)
+.read(pos_enable)
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -269,7 +271,7 @@ function fn_tag(){
     io.sockets.emit("sql_insert_Trigger", tagArr[34]);
     io.sockets.emit("counter", tagArr[35]);
     io.sockets.emit("processed_1", tagArr[36]);
-    io.sockets.emit("pos", tagArr[37]);
+    io.sockets.emit("send_pos", tagArr[37]);
     io.sockets.emit("running", tagArr[38]);
     io.sockets.emit("finished", tagArr[39]);
     io.sockets.emit("enable", tagArr[40]);
@@ -284,6 +286,7 @@ function fn_tag(){
     io.sockets.emit("step_y",tagArr[49]);
     io.sockets.emit("step_z",tagArr[50]);
     io.sockets.emit("qr_err",tagArr[51]);
+    io.sockets.emit("pos_enable",tagArr[52]);
 }
 // ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
@@ -346,7 +349,10 @@ io.on("connection", function(socket){
     ImportExport_table = "'" + data[4] + "'";
   });
   socket.on("cmd_pos",function(data){
-    fn_Data_Write(pos,data);
+    fn_Data_Write(send_pos,data);
+  });
+  socket.on("cmd_pos_enable",function(data){
+    fn_Data_Write(pos_enable,data);
   });
   socket.on("msg_SQL_ByTime", function(data)
   {

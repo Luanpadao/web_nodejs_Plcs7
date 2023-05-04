@@ -36,6 +36,7 @@ const minValue_1_child = -3;
 const maxValue_1_child = 3;
 var thumb_1_child;
 var slider_1_child;
+var pos_enable = false;
 $(document).ready(function(){
     thumb = document.querySelector('.slider-thumb');
     slider = document.querySelector('.slider_s');
@@ -107,6 +108,7 @@ $(document).ready(function(){
     fn_Table_SQL_show_data();
     fn_Show_SQL_By_Time();
     fn_excel_01();
+    fn_display_pos_after_xla()
     // fn_check_access_user();
     //////////////////////////////////////////////////////bt_introduce_chuyen trang
     $("#bt_introduce").click(function()
@@ -172,7 +174,7 @@ $(document).ready(function(){
                 $('#scada_display1').hide();
                 $('#scada_display2').show();
             }
-            $('#gd_dk_1').show();
+            $('#gd_dk').show();
 
         }
         else if(document.getElementById("access_user_admin").checked
@@ -195,7 +197,7 @@ $(document).ready(function(){
                 $('#scada_display1').hide();
                 $('#scada_display2').show();
             }
-            $('#gd_dk_1').hide();
+            $('#gd_dk').hide();
         }
         else
         {
@@ -237,7 +239,7 @@ $(document).ready(function(){
             scada_display = 1;
             $("#table").hide();
             $('#user').hide();
-            $('#gd_dk_1').show();
+            $('#gd_dk').show();
         }
         else if(document.getElementById("access_user_report").checked
             | document.getElementById("access_user_admin").checked
@@ -252,7 +254,7 @@ $(document).ready(function(){
             scada_display = 1;
             $("#table").hide();
             $('#user').hide();
-            $('#gd_dk_1').hide();
+            $('#gd_dk').hide();
         }
         else
         {
@@ -283,7 +285,7 @@ $(document).ready(function(){
             scada_display = 2;
             $("#table").hide();
             $('#user').hide();
-            $('#gd_dk_1').show();
+            $('#gd_dk').show();
         }
         else if(document.getElementById("access_user_report").checked
             | document.getElementById("access_user_admin").checked
@@ -298,7 +300,7 @@ $(document).ready(function(){
             scada_display = 2;
             $("#table").hide();
             $('#user').hide();
-            $('#gd_dk_1').hide();
+            $('#gd_dk').hide();
         }
         else
         {
@@ -579,7 +581,7 @@ $(document).ready(function(){
         $(this).css("background-color","#6c757d");
     });
     //////////////////////////////////////////////////////bt_select_im
-    $(".bt_select_im").click(function()
+    $("#bt_select_im").click(function()
     {
         if(($('#pos_im').val() != "") & ($('#pos_im').val() > 0) & ($('#pos_im').val() < 19))
         {
@@ -590,8 +592,12 @@ $(document).ready(function(){
                 || ($('#i4').val() == "C" & ((7 <= $('#pos_im').val() & $('#pos_im').val() <= 9) || (16 <= $('#pos_im').val() & $('#pos_im').val() <= 18))))
                 {
                     var pos = $('#pos_im').val();
-                    $("#i3").val(pos);
+                    // $("#i3").val(pos);
                     socket.emit('cmd_pos', pos);
+                    socket.emit('cmd_pos_enable',true);
+                    setTimeout(function() {
+                        socket.emit('cmd_pos_enable',false);
+                    }, 1000);
                     tempArr[0] = pos;
                     document.getElementById('gd_dk_1').classList.remove('d-none');
                     document.getElementById('gd_dk_2').classList.add('d-none');
@@ -615,7 +621,7 @@ $(document).ready(function(){
         }
     });
     //////////////////////////////////////////////////////bt_select_ex
-    $(".bt_select_ex").click(function()
+    $("#bt_select_ex").click(function()
     {
         if ($('#n'+$('#pos_ex').val()).hasClass('d-none'))
         {
@@ -627,13 +633,17 @@ $(document).ready(function(){
             var pos = $('#pos_ex').val();
             temp = pos;
             socket.emit('cmd_pos', pos);
+            socket.emit('cmd_pos_enable',true);
+            setTimeout(function() {
+                socket.emit('cmd_pos_enable',false);
+            }, 1000);
             document.getElementById('gd_dk_1').classList.remove('d-none');
             document.getElementById('gd_dk_3').classList.add('d-none');
-            fn_Table01_SQL_Show()
+            fn_Table01_SQL_Show();
         }
     });
     //////////////////////////////////////////////////////bt_typeA
-    $(".bt_typeA").click(function()
+    $("#bt_typeA").click(function()
     {
         type = 'A';
         fn_Table01_SQL_Show();
@@ -641,7 +651,7 @@ $(document).ready(function(){
         document.getElementById('gd_dk_4').classList.add('d-none');
     });
     //////////////////////////////////////////////////////bt_typeB
-    $(".bt_typeB").click(function()
+    $("#bt_typeB").click(function()
     {
         type = 'B';
         fn_Table01_SQL_Show();
@@ -649,11 +659,19 @@ $(document).ready(function(){
         document.getElementById('gd_dk_4').classList.add('d-none');
     });
     //////////////////////////////////////////////////////bt_typeC
-    $(".bt_typeC").click(function()
+    $("#bt_typeC").click(function()
     {
         type = 'C';
         fn_Table01_SQL_Show();
         document.getElementById('gd_dk_1').classList.remove('d-none');
+        document.getElementById('gd_dk_4').classList.add('d-none');
+    });
+    //////////////////////////////////////////////////////bt_cancle_panel
+    $(".bt_cancle_panel").click(function()
+    {
+        document.getElementById('gd_dk_1').classList.remove('d-none');
+        document.getElementById('gd_dk_2').classList.add('d-none');
+        document.getElementById('gd_dk_3').classList.add('d-none');
         document.getElementById('gd_dk_4').classList.add('d-none');
     });
 });
@@ -674,6 +692,7 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
                 $("#i1").val("");
                 $("#i2").val("");
                 $("#i3").val("");
+                // document.getElementById('i3').value = "";
                 $("#i4").val("");
                 socket.emit("msg_send_data_SQL",tempArr);
                 if(sw == 1 & sw2 == 1 & type != "")
@@ -700,21 +719,39 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             counter[0] = parseInt(data[1]);
             counter[1] = parseInt(data[4]);
             counter[2] = parseInt(data[7]);
-            document.getElementById("counter_1").innerHTML = counter[0];
-            document.getElementById("counter_2").innerHTML = counter[1];
-            document.getElementById("counter_3").innerHTML = counter[2];
+            document.getElementById("counter_1").innerHTML = counter[0] + "/6";
+            document.getElementById("counter_2").innerHTML = counter[1] + "/6";
+            document.getElementById("counter_3").innerHTML = counter[2] + "/6";
             if(counter[0] == 6)
+            {
                 $('#status_A').css("background-color","green");
+                document.getElementById("counter_A").innerHTML = "Full";
+            }
             else
+            {
                 $('#status_A').css("background-color","#fff");
+                document.getElementById("counter_A").innerHTML = "";
+            }
             if(counter[1] == 6)
+            {
                 $('#status_B').css("background-color","green");
+                document.getElementById("counter_B").innerHTML = "Full";
+            }
             else
+            {
                 $('#status_B').css("background-color","#fff");
+                document.getElementById("counter_B").innerHTML = "";
+            }
             if(counter[2] == 6)
+            {
                 $('#status_C').css("background-color","green");
+                document.getElementById("counter_C").innerHTML = "Full";
+            }
             else
+            {
                 $('#status_C').css("background-color","#fff");
+                document.getElementById("counter_C").innerHTML = "";
+            }
 
         }
         else if(tag == "status_robot"){
@@ -768,8 +805,8 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
         else
         {
             if(tofix == 0)
-                document.getElementById(IOField).value = data * 5;
-            else
+                    document.getElementById(IOField).value = data * 5;
+            else if(tofix != 0)
                 document.getElementById(IOField).value = data.toFixed(tofix);
         }
     });
@@ -900,13 +937,18 @@ function fn_table_01(data){
                             $('#pos_im').val("");
                             $("#i3").val("");
                             document.getElementById('gd_dk_1').classList.add('d-none');
-                            document.getElementById('gd_dk_2').classList.remove('d-none');
+                            if(document.getElementById("access_user_control").checked)
+                                document.getElementById('gd_dk_2').classList.remove('d-none');
                         }
                         else if(sw == 1 & sw2 == 0)  //Tự động
                         {
                             $("#i3").val(data[i].ID);
-                            var pos = $('#i3').val();
+                            // var pos = $('#i3').val();
                             socket.emit('cmd_pos', pos);
+                            socket.emit('cmd_pos_enable',true);
+                            setTimeout(function() {
+                                socket.emit('cmd_pos_enable',false);
+                            }, 1000);
                             tempArr[0] = data[i].ID;
                         }
                         // if(sw2 == 1)
@@ -947,7 +989,7 @@ function fn_table_02(data){
         var t = 0;
         if(len > 0){
             for(var i=0;i<len;i++){
-                if(sw == 0)
+                if(sw == 0)     //Bán tự động
                 {
                     if(data[i].ID == Number(temp))
                     {
@@ -960,7 +1002,7 @@ function fn_table_02(data){
                         break;
                     }
                 }
-                else
+                else            //tự động
                 {
                     if(type == data[i].Type)
                     {
@@ -968,9 +1010,13 @@ function fn_table_02(data){
                         {
                             var pos = data[i].ID;
                             socket.emit('cmd_pos', pos);
+                            socket.emit('cmd_pos_enable',true);
+                            setTimeout(function() {
+                                socket.emit('cmd_pos_enable',false);
+                            }, 1000);
                             $("#i1").val(data[i].QRCode);
                             $("#i2").val(data[i].Name);
-                            $("#i3").val(data[i].ID);
+                            // $("#i3").val(data[i].ID);
                             $("#i4").val(data[i].Type);
                             t = i;
                             y = 1;
@@ -986,7 +1032,10 @@ function fn_table_02(data){
             tempArr[4] = "Xuất";
             if(y == 0)
             {
-                alert('Hoàn thành xuất kho loại ' + type);
+                setTimeout(function() {
+                    alert('Hoàn thành xuất kho loại ' + type);
+                }, 100);
+
             }
         }
     }   
@@ -1098,4 +1147,19 @@ function updateSlider_1_child(data) {
     const thumbPosition_1_child = ratio_1_child * (slider_1_child.offsetWidth - thumb_1_child.offsetWidth);
     thumb_1_child.style.left = `${thumbPosition_1_child}px`;
     slider_1_child.setAttribute('value', data);
+}
+function fn_display_pos_after_xla(){
+    socket.on('pos_enable',function(data){
+        if(data == true)
+        {
+            pos_enable = data;
+            socket.on('send_pos',function(data){
+                if(pos_enable == true)
+                {
+                    document.getElementById('i3').value = data;
+                    pos_enable = false;
+                }
+            });
+        }
+    });
 }

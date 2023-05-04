@@ -65,9 +65,9 @@
                                     CONTROL
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" id="bt_scada" href="#scada">SACADA 1</a></li>
+                                    <li><a class="dropdown-item" id="bt_scada" href="#scada">SCREEN 1</a></li>
                                     <hr class="dropdown-divider">
-                                    <li><a class="dropdown-item" id="bt_scada_display_2" href="#scada">SACADA 2</a></li>
+                                    <li><a class="dropdown-item" id="bt_scada_display_2" href="#scada">SCREEN 2</a></li>
                                     <hr class="dropdown-divider">
                                     <li><a class="dropdown-item" id="bt_table" href="#table">TABLE</a></li>
                                     <li>
@@ -412,13 +412,13 @@
                                 </div>
                                 <div class="row">
                                     <div class="circle counter" id="status_A">
-                                        <span class="panel_content">full</span>
+                                        <span id="counter_A" class="panel_content">0/6</span>
                                     </div>
                                     <div class="circle counter" id="status_B">
-                                        <span class="panel_content">full</span>
+                                        <span id="counter_B" class="panel_content">0/6</span>
                                     </div>
                                     <div class="circle counter" id="status_C">
-                                        <span class="panel_content">full</span>
+                                        <span id="counter_C" class="panel_content">0/6</span>
                                     </div>
                                 </div>
                                 <div class="row text-center mt-2" style="margin: 0;">
@@ -464,7 +464,8 @@
                                             <input id="pos_im" class="panel_content" type="number" min="1" max="18">
                                         </div>
                                         <div>    
-                                            <button type="button" class="btn btn-secondary bt_select_im panel_content">SELECT</button>
+                                            <button id="bt_select_im" type="button" class="btn btn-secondary panel_content">SELECT</button>
+                                            <button type="button" class="bt_cancle_panel btn btn-danger panel_content">CANCLE</button>
                                         </div>
                                     </div>
                                     <div id="gd_dk_3" class="text-center d-none panel_content">
@@ -473,15 +474,19 @@
                                             <input id="pos_ex" class="panel_content" type="number" min="1" max="18">
                                         </div>
                                         <div>    
-                                            <button type="button" class="btn btn-secondary bt_select_ex panel_content">SELECT</button>
+                                            <button id="bt_select_ex" type="button" class="btn btn-secondary panel_content">SELECT</button>
+                                            <button type="button" class="bt_cancle_panel btn btn-danger panel_content">CANCLE</button>
                                         </div>
                                     </div>
                                     <div id="gd_dk_4" class="text-center d-none panel_content">
                                         <label for="pos">Chọn loại hàng xuất kho:</label>
                                         <div class="mx-auto btn_group">
-                                            <button type="button" class="btn btn-secondary bt_typeA panel_content">A</button>
-                                            <button type="button" class="btn btn-secondary bt_typeB panel_content">B</button>
-                                            <button type="button" class="btn btn-secondary bt_typeC panel_content">C</button>
+                                            <button id="bt_typeA" type="button" class="btn btn-secondary panel_content">A</button>
+                                            <button id="bt_typeB" type="button" class="btn btn-secondary panel_content">B</button>
+                                            <button id="bt_typeC" type="button" class="btn btn-secondary panel_content">C</button>
+                                        </div>
+                                        <div class="mx-auto">
+                                            <button type="button" class="bt_cancle_panel btn btn-danger panel_content">CANCLE</button>
                                         </div>
                                     </div>
                                     <div id="gd_dk_5" class="text-center">
