@@ -167,7 +167,7 @@ var enable      = 'enable'; // tag bool
 var err         = 'err'; // tag bool
 var status_robot = 'status_robot'; // tag interger
 var user = 'user'; // tag interger
-var access_user = 'access_user'; // tag string
+var name = 'name'; // tag string
 var ss_x = 'ss_x';              //tag_bool
 var ss_y = 'ss_y';              //tag_bool
 var ss_z = 'ss_z';              //tag_bool
@@ -176,6 +176,7 @@ var step_y = 'step_y';          //tag_bool
 var step_z = 'step_z';          //tag_bool
 var qr_err = 'qr_err';          //tag_bool
 var pos_enable = 'pos_enable'   //tag_bool
+var type = 'type'               //tag char
 // Đọc dữ liệu
 const TagList = tagBuilder
 .read(sw_mode) 
@@ -222,7 +223,7 @@ const TagList = tagBuilder
 .read(err)
 .read(status_robot)
 .read(user)
-.read(access_user)
+.read(name)
 .read(ss_x)
 .read(ss_y)
 .read(ss_z)
@@ -231,6 +232,7 @@ const TagList = tagBuilder
 .read(step_z)
 .read(qr_err)
 .read(pos_enable)
+.read(type)
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -278,7 +280,7 @@ function fn_tag(){
     io.sockets.emit("err", tagArr[41]);
     io.sockets.emit("status_robot", tagArr[42]);
     io.sockets.emit("user", tagArr[43]);
-    io.sockets.emit("access_user", tagArr[44]);
+    io.sockets.emit("name", tagArr[44]);
     io.sockets.emit("ss_x",tagArr[45]);
     io.sockets.emit("ss_y",tagArr[46]);
     io.sockets.emit("ss_z",tagArr[47]);
@@ -287,6 +289,7 @@ function fn_tag(){
     io.sockets.emit("step_z",tagArr[50]);
     io.sockets.emit("qr_err",tagArr[51]);
     io.sockets.emit("pos_enable",tagArr[52]);
+    io.sockets.emit("type",tagArr[53]);
 }
 // ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
@@ -353,6 +356,12 @@ io.on("connection", function(socket){
   });
   socket.on("cmd_pos_enable",function(data){
     fn_Data_Write(pos_enable,data);
+  });
+  socket.on("cmd_name",function(data){
+    fn_Data_Write(name,data);
+  });
+  socket.on("cmd_type",function(data){
+    fn_Data_Write(type,data);
   });
   socket.on("msg_SQL_ByTime", function(data)
   {
