@@ -118,6 +118,8 @@ function fn_user_data(data){
                             document.getElementById("access_user_control").checked = true;
                             document.getElementById("access_user_report").checked = false;
                             document.getElementById("access_user_viewer").checked = false;
+                            socket.emit('cmd_sw_mode',false);
+                            socket.emit('cmd_sw_im_ex', false);
                         }
                         else if(data[i].access == 'Bao cao')
                         {

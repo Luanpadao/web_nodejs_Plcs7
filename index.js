@@ -160,14 +160,14 @@ var processed   = 'processed';   //tag bool
 var sql_insert_Trigger = 'sql_insert_Trigger'; //tag bool
 var counter     = 'counter';         //tag array
 var processed_1 = 'processed_1'; //tag bool
-var pos         = 'pos'; //tag interger
+var send_pos         = 'send_pos'; //tag interger
 var running     = 'running'; //tag bool
 var finished    = 'finished'; //tag bool
 var enable      = 'enable'; // tag bool
 var err         = 'err'; // tag bool
 var status_robot = 'status_robot'; // tag interger
 var user = 'user'; // tag interger
-var access_user = 'access_user'; // tag string
+var name = 'name'; // tag string
 var ss_x = 'ss_x';              //tag_bool
 var ss_y = 'ss_y';              //tag_bool
 var ss_z = 'ss_z';              //tag_bool
@@ -175,6 +175,8 @@ var step_x = 'step_x';          //tag_bool
 var step_y = 'step_y';          //tag_bool
 var step_z = 'step_z';          //tag_bool
 var qr_err = 'qr_err';          //tag_bool
+var pos_enable = 'pos_enable'   //tag_bool
+var type = 'type'               //tag char
 // Đọc dữ liệu
 const TagList = tagBuilder
 .read(sw_mode) 
@@ -214,14 +216,14 @@ const TagList = tagBuilder
 .read(sql_insert_Trigger)
 .read(counter)
 .read(processed_1)
-.read(pos) 
+.read(send_pos) 
 .read(running)
 .read(finished)
 .read(enable)
 .read(err)
 .read(status_robot)
 .read(user)
-.read(access_user)
+.read(name)
 .read(ss_x)
 .read(ss_y)
 .read(ss_z)
@@ -229,6 +231,8 @@ const TagList = tagBuilder
 .read(step_y)
 .read(step_z)
 .read(qr_err)
+.read(pos_enable)
+.read(type)
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -269,14 +273,14 @@ function fn_tag(){
     io.sockets.emit("sql_insert_Trigger", tagArr[34]);
     io.sockets.emit("counter", tagArr[35]);
     io.sockets.emit("processed_1", tagArr[36]);
-    io.sockets.emit("pos", tagArr[37]);
+    io.sockets.emit("send_pos", tagArr[37]);
     io.sockets.emit("running", tagArr[38]);
     io.sockets.emit("finished", tagArr[39]);
     io.sockets.emit("enable", tagArr[40]);
     io.sockets.emit("err", tagArr[41]);
     io.sockets.emit("status_robot", tagArr[42]);
     io.sockets.emit("user", tagArr[43]);
-    io.sockets.emit("access_user", tagArr[44]);
+    io.sockets.emit("name", tagArr[44]);
     io.sockets.emit("ss_x",tagArr[45]);
     io.sockets.emit("ss_y",tagArr[46]);
     io.sockets.emit("ss_z",tagArr[47]);
@@ -284,6 +288,8 @@ function fn_tag(){
     io.sockets.emit("step_y",tagArr[49]);
     io.sockets.emit("step_z",tagArr[50]);
     io.sockets.emit("qr_err",tagArr[51]);
+    io.sockets.emit("pos_enable",tagArr[52]);
+    io.sockets.emit("type",tagArr[53]);
 }
 // ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
@@ -346,7 +352,16 @@ io.on("connection", function(socket){
     ImportExport_table = "'" + data[4] + "'";
   });
   socket.on("cmd_pos",function(data){
-    fn_Data_Write(pos,data);
+    fn_Data_Write(send_pos,data);
+  });
+  socket.on("cmd_pos_enable",function(data){
+    fn_Data_Write(pos_enable,data);
+  });
+  socket.on("cmd_name",function(data){
+    fn_Data_Write(name,data);
+  });
+  socket.on("cmd_type",function(data){
+    fn_Data_Write(type,data);
   });
   socket.on("msg_SQL_ByTime", function(data)
   {

@@ -36,6 +36,12 @@ const minValue_1_child = -3;
 const maxValue_1_child = 3;
 var thumb_1_child;
 var slider_1_child;
+var qrcode_dis;
+var name_dis;
+var type_dis;
+var pos_dis;
+var pos_enable = false;
+var im_ex = false;
 $(document).ready(function(){
     thumb = document.querySelector('.slider-thumb');
     slider = document.querySelector('.slider_s');
@@ -107,6 +113,7 @@ $(document).ready(function(){
     fn_Table_SQL_show_data();
     fn_Show_SQL_By_Time();
     fn_excel_01();
+    fn_display_pos_after_xla();
     // fn_check_access_user();
     //////////////////////////////////////////////////////bt_introduce_chuyen trang
     $("#bt_introduce").click(function()
@@ -172,7 +179,8 @@ $(document).ready(function(){
                 $('#scada_display1').hide();
                 $('#scada_display2').show();
             }
-            $('#gd_dk_1').show();
+            $('#gd_dk').show();
+            $('#gd_dk_viewer').hide();
 
         }
         else if(document.getElementById("access_user_admin").checked
@@ -195,7 +203,8 @@ $(document).ready(function(){
                 $('#scada_display1').hide();
                 $('#scada_display2').show();
             }
-            $('#gd_dk_1').hide();
+            $('#gd_dk').hide();
+            $('#gd_dk_viewer').show();
         }
         else
         {
@@ -237,7 +246,8 @@ $(document).ready(function(){
             scada_display = 1;
             $("#table").hide();
             $('#user').hide();
-            $('#gd_dk_1').show();
+            $('#gd_dk').show();
+            $('#gd_dk_viewer').hide();
         }
         else if(document.getElementById("access_user_report").checked
             | document.getElementById("access_user_admin").checked
@@ -252,7 +262,8 @@ $(document).ready(function(){
             scada_display = 1;
             $("#table").hide();
             $('#user').hide();
-            $('#gd_dk_1').hide();
+            $('#gd_dk').hide();
+            $('#gd_dk_viewer').show();
         }
         else
         {
@@ -283,7 +294,8 @@ $(document).ready(function(){
             scada_display = 2;
             $("#table").hide();
             $('#user').hide();
-            $('#gd_dk_1').show();
+            $('#gd_dk').show();
+            $('#gd_dk_viewer').hide();
         }
         else if(document.getElementById("access_user_report").checked
             | document.getElementById("access_user_admin").checked
@@ -298,7 +310,8 @@ $(document).ready(function(){
             scada_display = 2;
             $("#table").hide();
             $('#user').hide();
-            $('#gd_dk_1').hide();
+            $('#gd_dk').hide();
+            $('#gd_dk_viewer').show();
         }
         else
         {
@@ -463,9 +476,9 @@ $(document).ready(function(){
     {
         if(l2 == false)
         {
+            sw = 0;
             $(".mode_sa").css("background-color", "blue");
             $(".mode_a").css("background-color", "#6c757d");
-            sw = 0;
             mode.placeholder = "SEMI AUTO";
             socket.emit('cmd_sw_mode',false);
         }
@@ -476,9 +489,9 @@ $(document).ready(function(){
     {
         if(l2 == false)
         {
+            sw = 1;
             $(".mode_sa").css("background-color", "#6c757d");
             $(".mode_a").css("background-color", "blue");
-            sw = 1;
             mode.placeholder = "AUTO";
             socket.emit('cmd_sw_mode',true);
         }
@@ -490,9 +503,9 @@ $(document).ready(function(){
     {
         if(l2 == false)
         {
+            sw2 = 0;
             $(".bt_import").css("background-color", "blue");
             $(".bt_export").css("background-color", "#6c757d");
-            sw2 = 0;
             socket.emit('cmd_sw_im_ex', false);
         }
         else
@@ -503,9 +516,9 @@ $(document).ready(function(){
     {
         if(l2 == false)
         {
+            sw2 = 1;
             $(".bt_import").css("background-color", "#6c757d");
             $(".bt_export").css("background-color", "blue");
-            sw2 = 1; 
             socket.emit('cmd_sw_im_ex', true);
         }
         else
@@ -579,7 +592,7 @@ $(document).ready(function(){
         $(this).css("background-color","#6c757d");
     });
     //////////////////////////////////////////////////////bt_select_im
-    $(".bt_select_im").click(function()
+    $("#bt_select_im").click(function()
     {
         if(($('#pos_im').val() != "") & ($('#pos_im').val() > 0) & ($('#pos_im').val() < 19))
         {
@@ -590,8 +603,12 @@ $(document).ready(function(){
                 || ($('#i4').val() == "C" & ((7 <= $('#pos_im').val() & $('#pos_im').val() <= 9) || (16 <= $('#pos_im').val() & $('#pos_im').val() <= 18))))
                 {
                     var pos = $('#pos_im').val();
-                    $("#i3").val(pos);
+                    // $("#i3").val(pos);
                     socket.emit('cmd_pos', pos);
+                    socket.emit('cmd_pos_enable',true);
+                    setTimeout(function() {
+                        socket.emit('cmd_pos_enable',false);
+                    }, 1000);
                     tempArr[0] = pos;
                     document.getElementById('gd_dk_1').classList.remove('d-none');
                     document.getElementById('gd_dk_2').classList.add('d-none');
@@ -615,7 +632,7 @@ $(document).ready(function(){
         }
     });
     //////////////////////////////////////////////////////bt_select_ex
-    $(".bt_select_ex").click(function()
+    $("#bt_select_ex").click(function()
     {
         if ($('#n'+$('#pos_ex').val()).hasClass('d-none'))
         {
@@ -627,13 +644,17 @@ $(document).ready(function(){
             var pos = $('#pos_ex').val();
             temp = pos;
             socket.emit('cmd_pos', pos);
+            socket.emit('cmd_pos_enable',true);
+            setTimeout(function() {
+                socket.emit('cmd_pos_enable',false);
+            }, 1000);
             document.getElementById('gd_dk_1').classList.remove('d-none');
             document.getElementById('gd_dk_3').classList.add('d-none');
-            fn_Table01_SQL_Show()
+            fn_Table01_SQL_Show();
         }
     });
     //////////////////////////////////////////////////////bt_typeA
-    $(".bt_typeA").click(function()
+    $("#bt_typeA").click(function()
     {
         type = 'A';
         fn_Table01_SQL_Show();
@@ -641,7 +662,7 @@ $(document).ready(function(){
         document.getElementById('gd_dk_4').classList.add('d-none');
     });
     //////////////////////////////////////////////////////bt_typeB
-    $(".bt_typeB").click(function()
+    $("#bt_typeB").click(function()
     {
         type = 'B';
         fn_Table01_SQL_Show();
@@ -649,11 +670,19 @@ $(document).ready(function(){
         document.getElementById('gd_dk_4').classList.add('d-none');
     });
     //////////////////////////////////////////////////////bt_typeC
-    $(".bt_typeC").click(function()
+    $("#bt_typeC").click(function()
     {
         type = 'C';
         fn_Table01_SQL_Show();
         document.getElementById('gd_dk_1').classList.remove('d-none');
+        document.getElementById('gd_dk_4').classList.add('d-none');
+    });
+    //////////////////////////////////////////////////////bt_cancle_panel
+    $(".bt_cancle_panel").click(function()
+    {
+        document.getElementById('gd_dk_1').classList.remove('d-none');
+        document.getElementById('gd_dk_2').classList.add('d-none');
+        document.getElementById('gd_dk_3').classList.add('d-none');
         document.getElementById('gd_dk_4').classList.add('d-none');
     });
 });
@@ -675,6 +704,13 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
                 $("#i2").val("");
                 $("#i3").val("");
                 $("#i4").val("");
+                if(im_ex == false)
+                    document.getElementById("nd_tb_viewer").innerHTML = "Hoàn thành nhập kho "+pos_dis+"!";
+                else 
+                    document.getElementById("nd_tb_viewer").innerHTML = "Hoàn thành xuất kho "+pos_dis+"!";
+                setTimeout(function() {
+                    document.getElementById("nd_tb_viewer").innerHTML = "Đang ở chế độ giám sát";
+                }, 1000);
                 socket.emit("msg_send_data_SQL",tempArr);
                 if(sw == 1 & sw2 == 1 & type != "")
                     fn_Table01_SQL_Show();
@@ -700,21 +736,39 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             counter[0] = parseInt(data[1]);
             counter[1] = parseInt(data[4]);
             counter[2] = parseInt(data[7]);
-            document.getElementById("counter_1").innerHTML = counter[0];
-            document.getElementById("counter_2").innerHTML = counter[1];
-            document.getElementById("counter_3").innerHTML = counter[2];
+            document.getElementById("counter_1").innerHTML = counter[0] + "/6";
+            document.getElementById("counter_2").innerHTML = counter[1] + "/6";
+            document.getElementById("counter_3").innerHTML = counter[2] + "/6";
             if(counter[0] == 6)
+            {
                 $('#status_A').css("background-color","green");
+                document.getElementById("counter_A").innerHTML = "Full";
+            }
             else
+            {
                 $('#status_A').css("background-color","#fff");
+                document.getElementById("counter_A").innerHTML = "";
+            }
             if(counter[1] == 6)
+            {
                 $('#status_B').css("background-color","green");
+                document.getElementById("counter_B").innerHTML = "Full";
+            }
             else
+            {
                 $('#status_B').css("background-color","#fff");
+                document.getElementById("counter_B").innerHTML = "";
+            }
             if(counter[2] == 6)
+            {
                 $('#status_C').css("background-color","green");
+                document.getElementById("counter_C").innerHTML = "Full";
+            }
             else
+            {
                 $('#status_C').css("background-color","#fff");
+                document.getElementById("counter_C").innerHTML = "";
+            }
 
         }
         else if(tag == "status_robot"){
@@ -768,8 +822,8 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
         else
         {
             if(tofix == 0)
-                document.getElementById(IOField).value = data * 5;
-            else
+                    document.getElementById(IOField).value = data * 5;
+            else if(tofix != 0)
                 document.getElementById(IOField).value = data.toFixed(tofix);
         }
     });
@@ -888,6 +942,8 @@ function fn_table_01(data){
                     $("#i1").val(data[i].QRCode);
                     $("#i2").val(data[i].Name);
                     $("#i4").val(data[i].Type);
+                    socket.emit("cmd_name",data[i].Name);
+                    socket.emit('cmd_type',data[i].Type);
                     tempArr[1] = data[i].QRCode;
                     tempArr[2] = data[i].Name;
                     tempArr[3] = data[i].Type;
@@ -900,13 +956,26 @@ function fn_table_01(data){
                             $('#pos_im').val("");
                             $("#i3").val("");
                             document.getElementById('gd_dk_1').classList.add('d-none');
-                            document.getElementById('gd_dk_2').classList.remove('d-none');
+                            if(data[i].Type == 'A')
+                                document.getElementById("lb_import").innerHTML = "Loại A: {1 , 2 , 3 , 10 , 11 , 12}";
+                            else if (data[i].Type == 'B')
+                                document.getElementById("lb_import").innerHTML = "Loại B: {4 , 5 , 6 , 13 , 14 , 15}";
+                            else if(data[i].Type == 'C')
+                                document.getElementById("lb_import").innerHTML = "Loại C: {7 , 8 , 9 , 16 , 17 , 18}";
+                            if(document.getElementById("access_user_control").checked)
+                                document.getElementById('gd_dk_2').classList.remove('d-none');
                         }
                         else if(sw == 1 & sw2 == 0)  //Tự động
                         {
+                            socket.emit("cmd_name",data[i].Name);
+                            socket.emit('cmd_type',data[i].Type);
                             $("#i3").val(data[i].ID);
                             var pos = $('#i3').val();
                             socket.emit('cmd_pos', pos);
+                            socket.emit('cmd_pos_enable',true);
+                            setTimeout(function() {
+                                socket.emit('cmd_pos_enable',false);
+                            }, 1000);
                             tempArr[0] = data[i].ID;
                         }
                         // if(sw2 == 1)
@@ -921,20 +990,27 @@ function fn_table_01(data){
             if(qr_status == false)
             {
                 $("#i1").val(temp);
-                socket.emit('cmd_qr_err',true);
+                $("#i2").val("");
+                $("#i3").val("");
+                $("#i4").val("");
+                // socket.emit('cmd_qr_err',true);
+                // setTimeout(function() {
+                //     socket.emit('cmd_qr_err',false);
+                // }, 200);
                 setTimeout(function() {
-                    socket.emit('cmd_qr_err',false);
-                }, 200);
-                setTimeout(function() {
-                    alert('Mã QR không phù hợp');
+                    alert('Mã QR không phù hợp, Đang yêu cầu xuất kho');
                 }, 500);
+                socket.emit('cmd_pos', '20');
                 // $("#i2").val("Không phù hợp");
                 // $("#i3").val("Không phù hợp");
                 // $("#i4").val("Không phù hợp");
             }
             else if(check_empty == false)
             {
-                alert('Đầy hàng rồi, vui lòng xuất kho loại '+ $("#i4").val());
+                setTimeout(function() {
+                    alert('Đầy hàng rồi loại '+ $("#i4").val()+ 'Đang yêu cầu xuất kho');
+                }, 500);
+                socket.emit('cmd_pos', '20');
             }
         }
     }   
@@ -947,20 +1023,24 @@ function fn_table_02(data){
         var t = 0;
         if(len > 0){
             for(var i=0;i<len;i++){
-                if(sw == 0)
+                if(sw == 0)     //Bán tự động
                 {
                     if(data[i].ID == Number(temp))
                     {
-                        $("#i1").val(data[i].QRCode);
-                        $("#i2").val(data[i].Name);
-                        $("#i3").val(data[i].ID);
-                        $("#i4").val(data[i].Type);
+                        // $("#i1").val(data[i].QRCode);
+                        // $("#i2").val(data[i].Name);
+                        // $("#i3").val(data[i].ID);
+                        // $("#i4").val(data[i].Type);
+                        qrcode_dis = data[i].QRCode;
+                        name_dis = data[i].Name;
+                        type_di = data[i].Type;
+                        pos_dis = data[i].ID;
                         t = i;
                         y = 1;
                         break;
                     }
                 }
-                else
+                else            //tự động
                 {
                     if(type == data[i].Type)
                     {
@@ -968,10 +1048,18 @@ function fn_table_02(data){
                         {
                             var pos = data[i].ID;
                             socket.emit('cmd_pos', pos);
-                            $("#i1").val(data[i].QRCode);
-                            $("#i2").val(data[i].Name);
-                            $("#i3").val(data[i].ID);
-                            $("#i4").val(data[i].Type);
+                            socket.emit('cmd_pos_enable',true);
+                            setTimeout(function() {
+                                socket.emit('cmd_pos_enable',false);
+                            }, 1000);
+                            // $("#i1").val(data[i].QRCode);
+                            // $("#i2").val(data[i].Name);
+                            // $("#i3").val(data[i].ID);
+                            //$("#i4").val(data[i].Type);
+                            qrcode_dis = data[i].QRCode;
+                            name_dis = data[i].Name;
+                            type_di = data[i].Type;
+                            pos_dis = data[i].ID;
                             t = i;
                             y = 1;
                             break;
@@ -986,7 +1074,10 @@ function fn_table_02(data){
             tempArr[4] = "Xuất";
             if(y == 0)
             {
-                alert('Hoàn thành xuất kho loại ' + type);
+                setTimeout(function() {
+                    alert('Hoàn thành xuất kho loại ' + type);
+                }, 100);
+
             }
         }
     }   
@@ -1098,4 +1189,40 @@ function updateSlider_1_child(data) {
     const thumbPosition_1_child = ratio_1_child * (slider_1_child.offsetWidth - thumb_1_child.offsetWidth);
     thumb_1_child.style.left = `${thumbPosition_1_child}px`;
     slider_1_child.setAttribute('value', data);
+}
+function fn_display_pos_after_xla(){
+    socket.on('qr_code',function(data){
+        qrcode_dis = data;
+    });
+    socket.on('name',function(data){
+        name_dis = data;
+    });
+    socket.on('send_pos',function(data){
+        pos_dis = data;
+    });
+    socket.on('type',function(data){
+        type_dis = data;
+    });
+    socket.on('sw_im_ex',function(data){
+        if(data == false & pos_enable == true)
+        {
+            document.getElementById("nd_tb_viewer").innerHTML = "Đang nhập ô kho " + pos_dis +" ....";
+            im_ex = false;
+        }
+        else if(data == true & pos_enable == true)
+        {
+            document.getElementById("nd_tb_viewer").innerHTML = "Đang xuất ô kho " + pos_dis +" ....";
+            im_ex = true;
+        }
+    });
+    socket.on('pos_enable',function(data){
+        pos_enable = data;
+        if(data == true)
+        {
+            $("#i1").val(qrcode_dis);
+            $("#i2").val(name_dis);
+            $("#i3").val(pos_dis);
+            $("#i4").val(type_dis);
+        }
+    });
 }
