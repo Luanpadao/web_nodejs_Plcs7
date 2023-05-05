@@ -508,18 +508,17 @@ function fn_excelExport(){
   // Tính tổng
   worksheet.addRow([
     'Tổng cộng:',
-    '',
-    '',
-  {formula: `=sum(D${rowpos + 1}:D${totalNumberOfRows})`},
-  {formula: `=sum(E${rowpos + 1}:E${totalNumberOfRows})`},
+    {formula: `="Nhập : "& COUNTIF(G9:G${totalNumberOfRows},"Nhập") & " | Xuất : " &  COUNTIF(G9:G${totalNumberOfRows},"Xuất")`},
 ])
 // Style cho hàng total (Tổng cộng)
 worksheet.getCell(`A${totalNumberOfRows+1}`).style = { font:{bold: true,size: 12},alignment: {horizontal:'center',}} ;
+worksheet.mergeCells(`B${totalNumberOfRows+1}`+':'+`H${totalNumberOfRows+1}`);
+worksheet.getCell(`B${totalNumberOfRows+1}`).fill = {type: 'pattern',pattern:'solid',fgColor:{ argb:'f2ff00' }};
 // Tô màu cho hàng total (Tổng cộng)
-const total_row = ['A','B', 'C', 'D', 'E','F','G','H']
-total_row.forEach((v) => {
-    worksheet.getCell(`${v}${totalNumberOfRows+1}`).fill = {type: 'pattern',pattern:'solid',fgColor:{ argb:'f2ff00' }}
-}) 
+// const total_row = ['A','B', 'C', 'D', 'E','F','G','H']
+// total_row.forEach((v) => {
+//     worksheet.getCell(`${v}${totalNumberOfRows+1}`).fill = {type: 'pattern',pattern:'solid',fgColor:{ argb:'f2ff00' }}
+// }) 
 
   // =====================STYLE CHO CÁC CỘT/HÀNG=====================
   // Style các cột nhãn
