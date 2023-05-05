@@ -700,6 +700,7 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
         {
             if(data == true & finish_done != data)
             {
+                socket.emit('cmd_pos', 0);
                 $("#i1").val("");
                 $("#i2").val("");
                 $("#i3").val("");
