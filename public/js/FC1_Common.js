@@ -42,6 +42,7 @@ var type_dis;
 var pos_dis;
 var pos_enable = false;
 var im_ex = false;
+var qr_err = false;
 $(document).ready(function(){
     thumb = document.querySelector('.slider-thumb');
     slider = document.querySelector('.slider_s');
@@ -700,7 +701,11 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
         {
             if(data == true & finish_done != data)
             {
-                socket.emit('cmd_pos', 0);
+                if(qr_err == true)
+                {
+                    socket.emit('cmd_pos', 0);
+                    console.log('alo');
+                }
                 $("#i1").val("");
                 $("#i2").val("");
                 $("#i3").val("");
@@ -984,6 +989,7 @@ function fn_table_01(data){
                         // else
                         tempArr[4] = "Nhập";
                         check_empty = true;
+                        qr_err = false;
                         break;
                     }
                 }
@@ -998,6 +1004,7 @@ function fn_table_01(data){
                 // setTimeout(function() {
                 //     socket.emit('cmd_qr_err',false);
                 // }, 200);
+                qr_err = true;
                 setTimeout(function() {
                     alert('Mã QR không phù hợp, Đang yêu cầu xuất kho');
                 }, 500);
@@ -1008,6 +1015,7 @@ function fn_table_01(data){
             }
             else if(check_empty == false)
             {
+                qr_err = true;
                 setTimeout(function() {
                     alert('Đầy hàng rồi loại '+ $("#i4").val()+ 'Đang yêu cầu xuất kho');
                 }, 500);
@@ -1034,7 +1042,7 @@ function fn_table_02(data){
                         // $("#i4").val(data[i].Type);
                         qrcode_dis = data[i].QRCode;
                         name_dis = data[i].Name;
-                        type_di = data[i].Type;
+                        type_dis = data[i].Type;
                         pos_dis = data[i].ID;
                         t = i;
                         y = 1;
@@ -1059,7 +1067,7 @@ function fn_table_02(data){
                             //$("#i4").val(data[i].Type);
                             qrcode_dis = data[i].QRCode;
                             name_dis = data[i].Name;
-                            type_di = data[i].Type;
+                            type_dis = data[i].Type;
                             pos_dis = data[i].ID;
                             t = i;
                             y = 1;
