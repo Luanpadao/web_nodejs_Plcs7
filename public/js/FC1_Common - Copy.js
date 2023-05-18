@@ -21,7 +21,7 @@ var type = '';
 var finish_done = false;
 var enable_done = false;
 const minValue = 0;
-const maxValue = 155;
+const maxValue = 300;
 var thumb;
 var slider;
 const minValue_child = -3;
@@ -29,7 +29,7 @@ const maxValue_child = 3;
 var thumb_child;
 var slider_child;
 const minValue_1 = 0;
-const maxValue_1 = 355;
+const maxValue_1 = 300;
 var thumb_1;
 var slider_1;
 const minValue_1_child = -3;
@@ -42,6 +42,7 @@ var type_dis;
 var pos_dis;
 var pos_enable = false;
 var im_ex = false;
+// var qr_err = false;
 $(document).ready(function(){
     thumb = document.querySelector('.slider-thumb');
     slider = document.querySelector('.slider_s');
@@ -985,6 +986,7 @@ function fn_table_01(data){
                         // else
                         tempArr[4] = "Nhập";
                         check_empty = true;
+                        // qr_err = false;
                         break;
                     }
                 }
@@ -999,6 +1001,7 @@ function fn_table_01(data){
                 // setTimeout(function() {
                 //     socket.emit('cmd_qr_err',false);
                 // }, 200);
+                // qr_err = true;
                 setTimeout(function() {
                     alert('Mã QR không phù hợp, Đang yêu cầu xuất kho');
                 }, 500);
@@ -1009,6 +1012,7 @@ function fn_table_01(data){
             }
             else if(check_empty == false)
             {
+                // qr_err = true;
                 setTimeout(function() {
                     alert('Đầy hàng rồi loại '+ $("#i4").val()+ 'Đang yêu cầu xuất kho');
                 }, 500);

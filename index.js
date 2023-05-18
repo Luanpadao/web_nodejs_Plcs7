@@ -19,20 +19,8 @@ io.on('connection', (socket) => {
       socket.emit('ip', ip);
   });
 });
-//////////////////////////////////////////////////////////////////// chỉnh sửa
-app.use(session({
-  secret: 'mySecretKey', // chuỗi bí mật dùng để mã hóa session
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false } // khi true, cookie chỉ được gửi qua HTTPS
-}));
-// Lấy IP để gán sang file home.ejs
-// app.get("/ip",function(req,res){
-//   const ip = req.ip;
-//   console.log(`Địa chỉ IP của client là: ${ip}`);
-//   res.send('Địa chỉ ip của bạn là: '+ip);
-// });
-//////////////////////CẤU HÌNH KẾT NỐI KEPWARE////////////////////
+//////////////////////CẤU HÌNH KẾT NỐI KEPWARE (PLC)//////////////////////
+const kepserverex = require('kepserverex-js');
 const {TagBuilder, IotGateway} = require('kepserverex-js');
 const tagBuilder = new TagBuilder({ namespace: 'Channel1.Device1' });
 const iotGateway = new IotGateway({
@@ -49,18 +37,46 @@ var sqlcon = mysql.createConnection({
   database: "sql_plc",
   dateStrings:true
 });
+
 ///////////////////////////QUÉT DỮ LIỆU////////////////////////
+const dayjs = require('dayjs') 
+const fetch = require('isomorphic-fetch');
+function checkURLExists(url) {
+    return fetch(url, { method: 'HEAD' })
+        .then(response => {
+            return response.ok;
+        })
+        .catch(() => {
+            return false;
+        });
+}
 // Tạo Timer quét dữ liệu
 setInterval(
-	() => fn_read_data_scan(),
-	1000 //100ms = 1s
+  function () {
+      let kepUrl = 'http://127.0.0.1:5000/iotgateway/read';
+      checkURLExists(kepUrl).then(exists => {
+          if (exists) {
+              //console.log('URL exists:' + kepUrl);
+              fn_read_data_scan();
+              // io.sockets.emit('plc_connected', true);
+              console.log('\x1b[32m' + dayjs().format('HH:mm:ss') + ': Kết nối Kepware OK' + '\x1b[0m');
+          } 
+          else {
+              console.log('\x1b[91m' + dayjs().format('HH:mm:ss') + ': Mất kết nối Kepware server:' + kepUrl + '\x1b[0m');
+              // io.sockets.emit('plc_connected', false);
+          }
+      });
+  },
+  1000 //1000ms = 1s
 );
- 
+
 // Quét dữ liệu
 function fn_read_data_scan(){
 	fn_tagRead();	// Đọc giá trị tag
   fn_sql_insert(); // Ghi dữ liệu vào SQL
 }
+
+
 // Ghi dữ liệu vào SQL
 var sqlins_done = false; // Biến báo đã ghi xong dữ liệu
 var QRCode_table;
@@ -123,60 +139,60 @@ function fn_Data_Write(tag,data){
 // Mảng xuất dữ liệu Excel
 var SQL_Excel = [];  // Dữ liệu Excel
 // Khai báo tag
-var sw_mode 	= 'sw_mode';    //tag integer
-var sw_im_ex 	= 'sw_im_ex';   //tag bool
-var bt_run 		= 'bt_run';     //tag bool
-var bt_e_stop 	= 'bt_e_stop';  //tag bool
-var bt_stop 	= 'bt_stop';    //tag bool
-var bt_setup 	= 'bt_setup';   //tag bool
-var pos_x 	    = 'pos_x';      //tag real
-var pos_y 	    = 'pos_y';      //tag real
-var pos_z 	    = 'pos_z';      //tag real
-var pos_1 	    = 'pos_1';      //tag bool
-var pos_2 	    = 'pos_2';      //tag bool 
-var pos_3 	    = 'pos_3';      //tag bool
-var pos_4 	    = 'pos_4';      //tag bool
-var pos_5 	    = 'pos_5';      //tag bool 
-var pos_6 	    = 'pos_6';      //tag bool 
-var pos_7 	    = 'pos_7';      //tag bool
-var pos_8 	    = 'pos_8';      //tag bool 
-var pos_9 	    = 'pos_9';      //tag bool
-var pos_10 	    = 'pos_10';     //tag bool
-var pos_11	    = 'pos_11';     //tag bool
-var pos_12 	    = 'pos_12';     //tag bool 
-var pos_13 	    = 'pos_13';     //tag bool
-var pos_14 	    = 'pos_14';     //tag bool
-var pos_15 	    = 'pos_15';     //tag bool 
-var pos_16 	    = 'pos_16';     //tag bool 
-var pos_17 	    = 'pos_17';     //tag bool
-var pos_18 	    = 'pos_18';     //tag bool
-var ss_i1       = 'ss_i1';       //tag bool 
-var ss_i2       = 'ss_i2';       //tag bool 
-var ss_o        = 'ss_o';        //tag bool 
-var dc_i        = 'dc_i';        //tag bool 
-var dc_o        = 'dc_o';        //tag bool 
-var qr_code     = 'qr_code';     //tag_string_10
-var processed   = 'processed';   //tag bool 
-var sql_insert_Trigger = 'sql_insert_Trigger'; //tag bool
-var counter     = 'counter';         //tag array
-var processed_1 = 'processed_1'; //tag bool
-var send_pos         = 'send_pos'; //tag interger
-var running     = 'running'; //tag bool
-var finished    = 'finished'; //tag bool
-var enable      = 'enable'; // tag bool
-var err         = 'err'; // tag bool
-var status_robot = 'status_robot'; // tag interger
-var user = 'user'; // tag interger
-var name = 'name'; // tag string
-var ss_x = 'ss_x';              //tag_bool
-var ss_y = 'ss_y';              //tag_bool
-var ss_z = 'ss_z';              //tag_bool
-var step_x = 'step_x';          //tag_bool
-var step_y = 'step_y';          //tag_bool
-var step_z = 'step_z';          //tag_bool
-var qr_err = 'qr_err';          //tag_bool
-var pos_enable = 'pos_enable'   //tag_bool
-var type = 'type'               //tag char
+var sw_mode 	          = 'sw_mode';            //tag integer
+var sw_im_ex 	          = 'sw_im_ex';           //tag bool
+var bt_run 		          = 'bt_run';             //tag bool
+var bt_e_stop 	        = 'bt_e_stop';          //tag bool
+var bt_stop 	          = 'bt_stop';            //tag bool
+var bt_setup 	          = 'bt_setup';           //tag bool
+var pos_x 	            = 'pos_x';              //tag real
+var pos_y 	            = 'pos_y';              //tag real
+var pos_z 	            = 'pos_z';              //tag real
+var pos_1 	            = 'pos_1';              //tag bool
+var pos_2 	            = 'pos_2';              //tag bool 
+var pos_3 	            = 'pos_3';              //tag bool
+var pos_4 	            = 'pos_4';              //tag bool
+var pos_5 	            = 'pos_5';              //tag bool 
+var pos_6 	            = 'pos_6';              //tag bool 
+var pos_7 	            = 'pos_7';              //tag bool
+var pos_8 	            = 'pos_8';              //tag bool 
+var pos_9 	            = 'pos_9';              //tag bool
+var pos_10 	            = 'pos_10';             //tag bool
+var pos_11	            = 'pos_11';             //tag bool
+var pos_12 	            = 'pos_12';             //tag bool 
+var pos_13 	            = 'pos_13';             //tag bool
+var pos_14 	            = 'pos_14';             //tag bool
+var pos_15 	            = 'pos_15';             //tag bool 
+var pos_16 	            = 'pos_16';             //tag bool 
+var pos_17 	            = 'pos_17';             //tag bool
+var pos_18 	            = 'pos_18';             //tag bool
+var ss_i1               = 'ss_i1';              //tag bool 
+var ss_i2               = 'ss_i2';              //tag bool 
+var ss_o                = 'ss_o';               //tag bool 
+var dc_i                = 'dc_i';               //tag bool 
+var dc_o                = 'dc_o';               //tag bool 
+var qr_code             = 'qr_code';            //tag_string_10
+var processed           = 'processed';          //tag bool 
+var sql_insert_Trigger  = 'sql_insert_Trigger'; //tag bool
+var counter             = 'counter';            //tag array
+var processed_1         = 'processed_1';        //tag bool
+var send_pos            = 'send_pos';           //tag interger
+var running             = 'running';            //tag bool
+var finished            = 'finished';           //tag bool
+var enable              = 'enable';             // tag bool
+var err                 = 'err';                // tag bool
+var status_robot        = 'status_robot';       // tag interger
+var user                = 'user';               // tag interger
+var name                = 'name';               // tag string
+var ss_x                = 'ss_x';               //tag_bool
+var ss_y                = 'ss_y';               //tag_bool
+var ss_z                = 'ss_z';               //tag_bool
+var step_x              = 'step_x';             //tag_bool
+var step_y              = 'step_y';             //tag_bool
+var step_z              = 'step_z';             //tag_bool
+var qr_err              = 'qr_err';             //tag_bool
+var pos_enable          = 'pos_enable'          //tag_bool
+var type                = 'type'                //tag char
 // Đọc dữ liệu
 const TagList = tagBuilder
 .read(sw_mode) 
@@ -236,42 +252,42 @@ const TagList = tagBuilder
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
-    io.sockets.emit("sw_mode", tagArr[0]);  
-    io.sockets.emit("sw_im_ex", tagArr[1]);
-    io.sockets.emit("bt_run", tagArr[2]); 
-    io.sockets.emit("bt_e_stop", tagArr[3]);
-    io.sockets.emit("bt_stop", tagArr[4]);  
-    io.sockets.emit("bt_setup", tagArr[5]);
-    io.sockets.emit("pos_x", tagArr[6]);
-    io.sockets.emit("pos_y", tagArr[7]);
-    io.sockets.emit("pos_z", tagArr[8]);
-    io.sockets.emit("pos_1", tagArr[9]);
-    io.sockets.emit("pos_2", tagArr[10]);
-    io.sockets.emit("pos_3", tagArr[11]);
-    io.sockets.emit("pos_4", tagArr[12]);
-    io.sockets.emit("pos_5", tagArr[13]);
-    io.sockets.emit("pos_6", tagArr[14]);
-    io.sockets.emit("pos_7", tagArr[15]);
-    io.sockets.emit("pos_8", tagArr[16]);
-    io.sockets.emit("pos_9", tagArr[17]);
-    io.sockets.emit("pos_10", tagArr[18]);
-    io.sockets.emit("pos_11", tagArr[19]);
-    io.sockets.emit("pos_12", tagArr[20]);
-    io.sockets.emit("pos_13", tagArr[21]);
-    io.sockets.emit("pos_14", tagArr[22]);
-    io.sockets.emit("pos_15", tagArr[23]);
-    io.sockets.emit("pos_16", tagArr[24]);
-    io.sockets.emit("pos_17", tagArr[25]);
-    io.sockets.emit("pos_18", tagArr[26]);
-    io.sockets.emit("ss_i1", tagArr[27]);
-    io.sockets.emit("ss_i2", tagArr[28]);
-    io.sockets.emit("ss_o", tagArr[29]);
-    io.sockets.emit("dc_i", tagArr[30]);
-    io.sockets.emit("dc_o", tagArr[31]);
-    io.sockets.emit("qr_code", tagArr[32]);
-    io.sockets.emit("processed", tagArr[33]);
+    io.sockets.emit("sw_mode"   , tagArr[0]);  
+    io.sockets.emit("sw_im_ex"  , tagArr[1]);
+    io.sockets.emit("bt_run"    , tagArr[2]); 
+    io.sockets.emit("bt_e_stop" , tagArr[3]);
+    io.sockets.emit("bt_stop"   , tagArr[4]);  
+    io.sockets.emit("bt_setup"  , tagArr[5]);
+    io.sockets.emit("pos_x"     , tagArr[6]);
+    io.sockets.emit("pos_y"     , tagArr[7]);
+    io.sockets.emit("pos_z"     , tagArr[8]);
+    io.sockets.emit("pos_1"     , tagArr[9]);
+    io.sockets.emit("pos_2"     , tagArr[10]);
+    io.sockets.emit("pos_3"     , tagArr[11]);
+    io.sockets.emit("pos_4"     , tagArr[12]);
+    io.sockets.emit("pos_5"     , tagArr[13]);
+    io.sockets.emit("pos_6"     , tagArr[14]);
+    io.sockets.emit("pos_7"     , tagArr[15]);
+    io.sockets.emit("pos_8"     , tagArr[16]);
+    io.sockets.emit("pos_9"     , tagArr[17]);
+    io.sockets.emit("pos_10"    , tagArr[18]);
+    io.sockets.emit("pos_11"    , tagArr[19]);
+    io.sockets.emit("pos_12"    , tagArr[20]);
+    io.sockets.emit("pos_13"    , tagArr[21]);
+    io.sockets.emit("pos_14"    , tagArr[22]);
+    io.sockets.emit("pos_15"    , tagArr[23]);
+    io.sockets.emit("pos_16"    , tagArr[24]);
+    io.sockets.emit("pos_17"    , tagArr[25]);
+    io.sockets.emit("pos_18"    , tagArr[26]);
+    io.sockets.emit("ss_i1"     , tagArr[27]);
+    io.sockets.emit("ss_i2"     , tagArr[28]);
+    io.sockets.emit("ss_o"      , tagArr[29]);
+    io.sockets.emit("dc_i"      , tagArr[30]);
+    io.sockets.emit("dc_o"      , tagArr[31]);
+    io.sockets.emit("qr_code"   , tagArr[32]);
+    io.sockets.emit("processed" , tagArr[33]);
     io.sockets.emit("sql_insert_Trigger", tagArr[34]);
-    io.sockets.emit("counter", tagArr[35]);
+    io.sockets.emit("counter"   , tagArr[35]);
     io.sockets.emit("processed_1", tagArr[36]);
     io.sockets.emit("send_pos", tagArr[37]);
     io.sockets.emit("running", tagArr[38]);
@@ -291,7 +307,7 @@ function fn_tag(){
     io.sockets.emit("pos_enable",tagArr[52]);
     io.sockets.emit("type",tagArr[53]);
 }
-// ///////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
+/////////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
     socket.on("Client-send-data", function(data){
     fn_tag();
