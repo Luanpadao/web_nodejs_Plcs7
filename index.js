@@ -20,13 +20,15 @@ io.on('connection', (socket) => {
   });
 });
 //////////////////////CẤU HÌNH KẾT NỐI KEPWARE (PLC)//////////////////////
-const kepserverex = require('kepserverex-js');
+// const kepserverex = require('kepserverex-js');
 const {TagBuilder, IotGateway} = require('kepserverex-js');
 const tagBuilder = new TagBuilder({ namespace: 'Channel1.Device1' });
 const iotGateway = new IotGateway({
     host: '127.0.0.1',
     port: 5000
 });
+
+
 //////////////////////QUẢN LÝ CƠ SỞ DỮ LIỆU MYSQL////////////////////
 // Khai báo SQL
 var mysql = require('mysql');
@@ -55,8 +57,8 @@ setInterval(
   function () {
       let kepUrl = 'http://127.0.0.1:5000/iotgateway/read';
       checkURLExists(kepUrl).then(exists => {
-          if (exists) {
-              //console.log('URL exists:' + kepUrl);
+        if (exists) {
+            //console.log('URL exists:' + kepUrl);
               fn_read_data_scan();
               // io.sockets.emit('plc_connected', true);
               console.log('\x1b[32m' + dayjs().format('HH:mm:ss') + ': Kết nối Kepware OK' + '\x1b[0m');

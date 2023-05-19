@@ -939,7 +939,7 @@ function fn_table_01(data){
         if(len > 0){
             for(var i=0;i<len;i++){
                 qr_status == false;
-                if(data[i].QRCode == temp)
+                if(data[i].QRCode.substr(6,1) == temp.substr(6,1))
                 {
                     $("#i1").val(data[i].QRCode);
                     $("#i2").val(data[i].Name);
@@ -1010,7 +1010,7 @@ function fn_table_01(data){
             else if(check_empty == false)
             {
                 setTimeout(function() {
-                    alert('Đầy hàng rồi loại '+ $("#i4").val()+ 'Đang yêu cầu xuất kho');
+                    alert('Đầy hàng rồi loại '+ $("#i4").val()+ ' .Đang yêu cầu xuất kho');
                 }, 500);
                 socket.emit('cmd_pos', '20');
             }
