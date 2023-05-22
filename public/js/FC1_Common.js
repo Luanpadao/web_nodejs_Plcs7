@@ -1,18 +1,10 @@
 var sw = 0;
-var sw0 = false;
-var sw1 = false;
 var sw2 = 0;
 var counter = [];
 var temp = "";
+var temp_qr = "";
 var tempArr=[];
-var temp_1 = 0;
-var QRCode_table = "";
-var Name_table = "";
-var Type_table = 0;
-var Position_table = 0;
 var pl_done = false;
-var lock_1 = 0;
-var lock_2 = 0;
 var l2 = false;
 var l3 = false;
 var scada_display = 0;
@@ -42,6 +34,8 @@ var type_dis;
 var pos_dis;
 var pos_enable = false;
 var im_ex = false;
+var fc_user = '';
+var user_viewer = false;
 $(document).ready(function(){
     thumb = document.querySelector('.slider-thumb');
     slider = document.querySelector('.slider_s');
@@ -84,7 +78,7 @@ $(document).ready(function(){
     fn_SymbolStatus('n17','','pos_17');
     fn_SymbolStatus('n18','','pos_18');
     fn_SymbolStatus('led_2','','running');
-    fn_SymbolStatus('led_3','','err');
+    fn_SymbolStatus('led_3','','process_stop');
     fn_SymbolStatus('ss_i1_display2','sstc','ss_i1');
     fn_SymbolStatus('ss_i2_display2','sstc','ss_i2');
     fn_SymbolStatus('ss_o_display2','sstc','ss_o');
@@ -114,7 +108,7 @@ $(document).ready(function(){
     fn_Show_SQL_By_Time();
     fn_excel_01();
     fn_display_pos_after_xla();
-    // fn_check_access_user();
+    data_fc();
     //////////////////////////////////////////////////////bt_introduce_chuyen trang
     $("#bt_introduce").click(function()
     {
@@ -332,12 +326,8 @@ $(document).ready(function(){
         $('#introduce').hide();
         $('#member').hide();
         fn_Table01_SQL_Show_data();
-        if(document.getElementById("access_user_control").checked
-            | document.getElementById("access_user_viewer").checked )
+        if(document.getElementById("access_user_viewer").checked )
         {
-            // setTimeout(function() {
-            //     alert('Bạn chỉ được truy cập ở phần điều khiển!');
-            // }, 500);
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
             $('#control').show();
@@ -348,7 +338,8 @@ $(document).ready(function(){
 
         }
         else if(document.getElementById("access_user_admin").checked
-                | document.getElementById("access_user_report").checked)
+                | document.getElementById("access_user_report").checked
+                | document.getElementById("access_user_control").checked)
         {
             $('#bt_control').addClass('active');
             $('#bt_user').removeClass('active');
@@ -603,7 +594,6 @@ $(document).ready(function(){
                 || ($('#i4').val() == "C" & ((7 <= $('#pos_im').val() & $('#pos_im').val() <= 9) || (16 <= $('#pos_im').val() & $('#pos_im').val() <= 18))))
                 {
                     var pos = $('#pos_im').val();
-                    // $("#i3").val(pos);
                     socket.emit('cmd_pos', pos);
                     socket.emit('cmd_pos_enable',true);
                     setTimeout(function() {
@@ -643,11 +633,6 @@ $(document).ready(function(){
         {
             var pos = $('#pos_ex').val();
             temp = pos;
-            socket.emit('cmd_pos', pos);
-            socket.emit('cmd_pos_enable',true);
-            setTimeout(function() {
-                socket.emit('cmd_pos_enable',false);
-            }, 1000);
             document.getElementById('gd_dk_1').classList.remove('d-none');
             document.getElementById('gd_dk_3').classList.add('d-none');
             fn_Table01_SQL_Show();
@@ -695,7 +680,7 @@ function myTimer() {
 function fn_IOFieldDataShow(tag, IOField, tofix){
     socket.on(tag,function(data){
         if(tag == 'qr_code')
-            temp = data;
+            temp_qr = data;
         else if(tag == 'finished')
         {
             if(data == true & finish_done != data)
@@ -704,17 +689,22 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
                 $("#i2").val("");
                 $("#i3").val("");
                 $("#i4").val("");
-                if(im_ex == false)
+                if(user_viewer == false)
+                {
+                    if(im_ex == false)
                     document.getElementById("nd_tb_viewer").innerHTML = "Hoàn thành nhập kho "+pos_dis+"!";
-                else 
+                    else 
                     document.getElementById("nd_tb_viewer").innerHTML = "Hoàn thành xuất kho "+pos_dis+"!";
+                }
+                else
+                    document.getElementById("nd_tb_viewer").innerHTML = "Hoàn thành xuất kho!";
                 setTimeout(function() {
                     document.getElementById("nd_tb_viewer").innerHTML = "Đang ở chế độ giám sát";
                 }, 1000);
                 socket.emit("msg_send_data_SQL",tempArr);
-                if(sw2 == 0)
-                    socket.emit('cmd_pos', 0);
-                if(sw == 1 & sw2 == 1 & type != "")
+                // if(sw2 == 0 & fc_user == 'DieuKhien')
+                //     socket.emit('cmd_pos', 0);
+                if(sw == 1 & sw2 == 1 & type != "")     // chế độ xuất kho tự động sẽ thực hiện tiếp
                     fn_Table01_SQL_Show();
             }
             finish_done = data;
@@ -867,17 +857,14 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
             if (data == false)
             {
                 $("#led_3").css("background-color","#6c757d");
-                document.querySelector(".bt_run").disabled = false;
-                document.querySelector(".bt_stop").disabled = false;
-                document.querySelector(".bt_e_stop").disabled = false;
             }
             else if (data == true)
             {
                 $("#led_3").css("background-color","yellow");
-                $("#led_1").css("background-color","#6c757d");
-                document.querySelector(".bt_run").disabled = true;
-                document.querySelector(".bt_stop").disabled = true;
-                document.querySelector(".bt_e_stop").disabled = true;
+                // $("#led_1").css("background-color","#6c757d");
+                // document.querySelector(".bt_run").disabled = true;
+                // document.querySelector(".bt_stop").disabled = true;
+                // document.querySelector(".bt_e_stop").disabled = true;
                 l3 = true;
             }
 
@@ -924,9 +911,9 @@ function fn_Table01_SQL_Show(){
 function fn_Table_SQL_show_pre_data()
 {
     socket.on('SQL_Show_pre_data',function(data){
-        if(sw2 == 0)
+        if(sw2 == 0)        // nhập kho
             fn_table_01(data);
-        if(sw2 == 1)
+        if(sw2 == 1)        // xuất kho
             fn_table_02(data);
     }); 
 }
@@ -939,22 +926,24 @@ function fn_table_01(data){
         if(len > 0){
             for(var i=0;i<len;i++){
                 qr_status == false;
-                if(data[i].QRCode.substr(6,1) == temp.substr(6,1))
+                if(data[i].QRCode == temp_qr)
                 {
-                    $("#i1").val(data[i].QRCode);
-                    $("#i2").val(data[i].Name);
-                    $("#i4").val(data[i].Type);
-                    socket.emit("cmd_name",data[i].Name);
-                    socket.emit('cmd_type',data[i].Type);
-                    tempArr[1] = data[i].QRCode;
+                    tempArr[1] = temp_qr;
                     tempArr[2] = data[i].Name;
                     tempArr[3] = data[i].Type;
+                    socket.emit('cmd_qr_dis',temp_qr);
+                    socket.emit("cmd_name",data[i].Name);
+                    socket.emit('cmd_type',data[i].Type);
                     qr_status = true;
-                    if($('#n'+(i+1)).hasClass('d-none'))
+                    user_viewer = false;
+                    if($('#n'+(i+1)).hasClass('d-none'))            //nếu ô trống
                     {
                         //Xác định nhập kho tự động hoặc bán tự động
                         if(sw == 0 & sw2 == 0) // bán tự động
                         {
+                            $("#i1").val(temp_qr);
+                            $("#i2").val(data[i].Name);
+                            $("#i4").val(data[i].Type);
                             $('#pos_im').val("");
                             $("#i3").val("");
                             document.getElementById('gd_dk_1').classList.add('d-none');
@@ -969,50 +958,56 @@ function fn_table_01(data){
                         }
                         else if(sw == 1 & sw2 == 0)  //Tự động
                         {
-                            socket.emit("cmd_name",data[i].Name);
-                            socket.emit('cmd_type',data[i].Type);
-                            $("#i3").val(data[i].ID);
-                            var pos = $('#i3').val();
-                            socket.emit('cmd_pos', pos);
+                            socket.emit('cmd_pos', data[i].ID);
                             socket.emit('cmd_pos_enable',true);
                             setTimeout(function() {
                                 socket.emit('cmd_pos_enable',false);
                             }, 1000);
                             tempArr[0] = data[i].ID;
                         }
-                        // if(sw2 == 1)
-                        //     tempArr[4] = "Export";
-                        // else
                         tempArr[4] = "Nhập";
                         check_empty = true;
+                        user_viewer = false;
                         break;
                     }
                 }
             }
             if(qr_status == false)
             {
-                $("#i1").val(temp);
+                $("#i1").val(temp_qr);
                 $("#i2").val("");
                 $("#i3").val("");
                 $("#i4").val("");
-                // socket.emit('cmd_qr_err',true);
-                // setTimeout(function() {
-                //     socket.emit('cmd_qr_err',false);
-                // }, 200);
-                setTimeout(function() {
-                    alert('Mã QR không phù hợp, Đang yêu cầu xuất kho');
-                }, 500);
-                socket.emit('cmd_pos', '20');
-                // $("#i2").val("Không phù hợp");
-                // $("#i3").val("Không phù hợp");
-                // $("#i4").val("Không phù hợp");
+                if(fc_user == 'DieuKhien')
+                {
+                    setTimeout(function() {
+                        alert('Mã QR không phù hợp, Đang yêu cầu xuất kho');
+                    }, 500);
+                    socket.emit('cmd_pos', '20');
+                }
+                else
+                {
+                    document.getElementById("nd_tb_viewer").innerHTML = "Mã QR không phù hợp, Đang yêu cầu xuất kho...";
+                    user_viewer = true;
+                }
             }
             else if(check_empty == false)
             {
                 setTimeout(function() {
-                    alert('Đầy hàng rồi loại '+ $("#i4").val()+ ' .Đang yêu cầu xuất kho');
-                }, 500);
-                socket.emit('cmd_pos', '20');
+                    if(fc_user == 'DieuKhien')
+                    {
+                        alert('Đầy hàng rồi loại '+ type_dis + ' .Đang yêu cầu xuất kho');
+                        socket.emit('cmd_pos', '20');
+                    }
+                    else
+                    {
+                        document.getElementById("nd_tb_viewer").innerHTML = "Đầy hàng rồi loại " + type_dis + " .Đang yêu cầu xuất kho...";
+                        user_viewer = true;
+                    }
+                    $("#i1").val(qrcode_dis);
+                    $("#i2").val(name_dis);
+                    $("#i4").val(type_dis);
+                }, 1000);
             }
         }
     }   
@@ -1029,14 +1024,14 @@ function fn_table_02(data){
                 {
                     if(data[i].ID == Number(temp))
                     {
-                        // $("#i1").val(data[i].QRCode);
-                        // $("#i2").val(data[i].Name);
-                        // $("#i3").val(data[i].ID);
-                        // $("#i4").val(data[i].Type);
-                        qrcode_dis = data[i].QRCode;
-                        name_dis = data[i].Name;
-                        type_dis = data[i].Type;
-                        pos_dis = data[i].ID;
+                        socket.emit('cmd_pos', temp);
+                        socket.emit("cmd_name",data[i].Name);
+                        socket.emit('cmd_type',data[i].Type);
+                        socket.emit('cmd_qr_dis',data[i].QRCode);
+                        socket.emit('cmd_pos_enable',true);
+                        setTimeout(function() {
+                            socket.emit('cmd_pos_enable',false);
+                        }, 1000);
                         t = i;
                         y = 1;
                         break;
@@ -1048,20 +1043,14 @@ function fn_table_02(data){
                     {
                         if(!($('#n'+data[i].ID).hasClass('d-none')))
                         {
-                            var pos = data[i].ID;
-                            socket.emit('cmd_pos', pos);
+                            socket.emit('cmd_pos', data[i].ID);
+                            socket.emit('cmd_qr_dis',data[i].QRCode);
+                            socket.emit("cmd_name",data[i].Name);
+                            socket.emit('cmd_type',data[i].Type);
                             socket.emit('cmd_pos_enable',true);
                             setTimeout(function() {
                                 socket.emit('cmd_pos_enable',false);
                             }, 1000);
-                            // $("#i1").val(data[i].QRCode);
-                            // $("#i2").val(data[i].Name);
-                            // $("#i3").val(data[i].ID);
-                            //$("#i4").val(data[i].Type);
-                            qrcode_dis = data[i].QRCode;
-                            name_dis = data[i].Name;
-                            type_dis = data[i].Type;
-                            pos_dis = data[i].ID;
                             t = i;
                             y = 1;
                             break;
@@ -1100,7 +1089,7 @@ function fn_table_data(data){
         var len = data.length;
         var txt = "<tbody>";
         if(len > 0){
-            for(var i=0;i<len;i++){
+            for(var i=(len-1);i>=0;i--){
                     txt += "<tr><td>"+data[i].date_time
                         +"</td><td>"+data[i].QR_Code
                         +"</td><td>"+data[i].Name
@@ -1193,7 +1182,7 @@ function updateSlider_1_child(data) {
     slider_1_child.setAttribute('value', data);
 }
 function fn_display_pos_after_xla(){
-    socket.on('qr_code',function(data){
+    socket.on('qr_dis',function(data){
         qrcode_dis = data;
     });
     socket.on('name',function(data){
@@ -1227,4 +1216,12 @@ function fn_display_pos_after_xla(){
             $("#i4").val(type_dis);
         }
     });
+}
+function data_fc(){
+    socket.on('fc_user',function(data){
+        fc_user = data;
+    });
+}
+function CallPageHome(){
+    window.location.href = window.location.origin;
 }

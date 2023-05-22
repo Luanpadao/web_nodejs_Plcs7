@@ -87,7 +87,7 @@ var Type_table;
 var Position_table;
 var ImportExport_table;
 function fn_sql_insert(){
-    var trigger = tagArr[39];  // Trigger đọc về từ PLC
+    var trigger = tagArr[36];  // Trigger đọc về từ PLC
     var sqltable_Name = "data";
     // Lấy thời gian hiện tại
     var tzoffset = (new Date()).getTimezoneOffset() * 60000; //Vùng Việt Nam (GMT7+)
@@ -146,7 +146,6 @@ var sw_im_ex 	          = 'sw_im_ex';           //tag bool
 var bt_run 		          = 'bt_run';             //tag bool
 var bt_e_stop 	        = 'bt_e_stop';          //tag bool
 var bt_stop 	          = 'bt_stop';            //tag bool
-var bt_setup 	          = 'bt_setup';           //tag bool
 var pos_x 	            = 'pos_x';              //tag real
 var pos_y 	            = 'pos_y';              //tag real
 var pos_z 	            = 'pos_z';              //tag real
@@ -173,16 +172,13 @@ var ss_i2               = 'ss_i2';              //tag bool
 var ss_o                = 'ss_o';               //tag bool 
 var dc_i                = 'dc_i';               //tag bool 
 var dc_o                = 'dc_o';               //tag bool 
-var qr_code             = 'qr_code';            //tag_string_10
+var qr_code             = 'qr_code';            //tag string 10
 var processed           = 'processed';          //tag bool 
-var sql_insert_Trigger  = 'sql_insert_Trigger'; //tag bool
 var counter             = 'counter';            //tag array
-var processed_1         = 'processed_1';        //tag bool
 var send_pos            = 'send_pos';           //tag interger
 var running             = 'running';            //tag bool
 var finished            = 'finished';           //tag bool
 var enable              = 'enable';             // tag bool
-var err                 = 'err';                // tag bool
 var status_robot        = 'status_robot';       // tag interger
 var user                = 'user';               // tag interger
 var name                = 'name';               // tag string
@@ -192,9 +188,10 @@ var ss_z                = 'ss_z';               //tag_bool
 var step_x              = 'step_x';             //tag_bool
 var step_y              = 'step_y';             //tag_bool
 var step_z              = 'step_z';             //tag_bool
-var qr_err              = 'qr_err';             //tag_bool
-var pos_enable          = 'pos_enable'          //tag_bool
-var type                = 'type'                //tag char
+var pos_enable          = 'pos_enable';         //tag_bool
+var type                = 'type';               //tag char
+var qr_dis              = 'qr_dis';             //tag string 10
+var process_stop        = 'process_stop';       //tag_bool
 // Đọc dữ liệu
 const TagList = tagBuilder
 .read(sw_mode) 
@@ -202,7 +199,6 @@ const TagList = tagBuilder
 .read(bt_run) 
 .read(bt_e_stop)
 .read(bt_stop)
-.read(bt_setup)
 .read(pos_x)
 .read(pos_y)
 .read(pos_z)
@@ -231,14 +227,11 @@ const TagList = tagBuilder
 .read(dc_o)
 .read(qr_code)
 .read(processed)
-.read(sql_insert_Trigger)
 .read(counter)
-.read(processed_1)
 .read(send_pos) 
 .read(running)
 .read(finished)
 .read(enable)
-.read(err)
 .read(status_robot)
 .read(user)
 .read(name)
@@ -248,66 +241,64 @@ const TagList = tagBuilder
 .read(step_x)
 .read(step_y)
 .read(step_z)
-.read(qr_err)
 .read(pos_enable)
 .read(type)
+.read(qr_dis)
+.read(process_stop)
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
-    io.sockets.emit("sw_mode"   , tagArr[0]);  
-    io.sockets.emit("sw_im_ex"  , tagArr[1]);
-    io.sockets.emit("bt_run"    , tagArr[2]); 
-    io.sockets.emit("bt_e_stop" , tagArr[3]);
-    io.sockets.emit("bt_stop"   , tagArr[4]);  
-    io.sockets.emit("bt_setup"  , tagArr[5]);
-    io.sockets.emit("pos_x"     , tagArr[6]);
-    io.sockets.emit("pos_y"     , tagArr[7]);
-    io.sockets.emit("pos_z"     , tagArr[8]);
-    io.sockets.emit("pos_1"     , tagArr[9]);
-    io.sockets.emit("pos_2"     , tagArr[10]);
-    io.sockets.emit("pos_3"     , tagArr[11]);
-    io.sockets.emit("pos_4"     , tagArr[12]);
-    io.sockets.emit("pos_5"     , tagArr[13]);
-    io.sockets.emit("pos_6"     , tagArr[14]);
-    io.sockets.emit("pos_7"     , tagArr[15]);
-    io.sockets.emit("pos_8"     , tagArr[16]);
-    io.sockets.emit("pos_9"     , tagArr[17]);
-    io.sockets.emit("pos_10"    , tagArr[18]);
-    io.sockets.emit("pos_11"    , tagArr[19]);
-    io.sockets.emit("pos_12"    , tagArr[20]);
-    io.sockets.emit("pos_13"    , tagArr[21]);
-    io.sockets.emit("pos_14"    , tagArr[22]);
-    io.sockets.emit("pos_15"    , tagArr[23]);
-    io.sockets.emit("pos_16"    , tagArr[24]);
-    io.sockets.emit("pos_17"    , tagArr[25]);
-    io.sockets.emit("pos_18"    , tagArr[26]);
-    io.sockets.emit("ss_i1"     , tagArr[27]);
-    io.sockets.emit("ss_i2"     , tagArr[28]);
-    io.sockets.emit("ss_o"      , tagArr[29]);
-    io.sockets.emit("dc_i"      , tagArr[30]);
-    io.sockets.emit("dc_o"      , tagArr[31]);
-    io.sockets.emit("qr_code"   , tagArr[32]);
-    io.sockets.emit("processed" , tagArr[33]);
-    io.sockets.emit("sql_insert_Trigger", tagArr[34]);
-    io.sockets.emit("counter"   , tagArr[35]);
-    io.sockets.emit("processed_1", tagArr[36]);
-    io.sockets.emit("send_pos", tagArr[37]);
-    io.sockets.emit("running", tagArr[38]);
-    io.sockets.emit("finished", tagArr[39]);
-    io.sockets.emit("enable", tagArr[40]);
-    io.sockets.emit("err", tagArr[41]);
-    io.sockets.emit("status_robot", tagArr[42]);
-    io.sockets.emit("user", tagArr[43]);
-    io.sockets.emit("name", tagArr[44]);
-    io.sockets.emit("ss_x",tagArr[45]);
-    io.sockets.emit("ss_y",tagArr[46]);
-    io.sockets.emit("ss_z",tagArr[47]);
-    io.sockets.emit("step_x",tagArr[48]);
-    io.sockets.emit("step_y",tagArr[49]);
-    io.sockets.emit("step_z",tagArr[50]);
-    io.sockets.emit("qr_err",tagArr[51]);
-    io.sockets.emit("pos_enable",tagArr[52]);
-    io.sockets.emit("type",tagArr[53]);
+    io.sockets.emit("sw_mode"       , tagArr[0]);  
+    io.sockets.emit("sw_im_ex"      , tagArr[1]);
+    io.sockets.emit("bt_run"        , tagArr[2]); 
+    io.sockets.emit("bt_e_stop"     , tagArr[3]);
+    io.sockets.emit("bt_stop"       , tagArr[4]);  
+    io.sockets.emit("pos_x"         , tagArr[5]);
+    io.sockets.emit("pos_y"         , tagArr[6]);
+    io.sockets.emit("pos_z"         , tagArr[7]);
+    io.sockets.emit("pos_1"         , tagArr[8]);
+    io.sockets.emit("pos_2"         , tagArr[9]);
+    io.sockets.emit("pos_3"         , tagArr[10]);
+    io.sockets.emit("pos_4"         , tagArr[11]);
+    io.sockets.emit("pos_5"         , tagArr[12]);
+    io.sockets.emit("pos_6"         , tagArr[13]);
+    io.sockets.emit("pos_7"         , tagArr[14]);
+    io.sockets.emit("pos_8"         , tagArr[15]);
+    io.sockets.emit("pos_9"         , tagArr[16]);
+    io.sockets.emit("pos_10"        , tagArr[17]);
+    io.sockets.emit("pos_11"        , tagArr[18]);
+    io.sockets.emit("pos_12"        , tagArr[19]);
+    io.sockets.emit("pos_13"        , tagArr[20]);
+    io.sockets.emit("pos_14"        , tagArr[21]);
+    io.sockets.emit("pos_15"        , tagArr[22]);
+    io.sockets.emit("pos_16"        , tagArr[23]);
+    io.sockets.emit("pos_17"        , tagArr[24]);
+    io.sockets.emit("pos_18"        , tagArr[25]);
+    io.sockets.emit("ss_i1"         , tagArr[26]);
+    io.sockets.emit("ss_i2"         , tagArr[27]);
+    io.sockets.emit("ss_o"          , tagArr[28]);
+    io.sockets.emit("dc_i"          , tagArr[29]);
+    io.sockets.emit("dc_o"          , tagArr[30]);
+    io.sockets.emit("qr_code"       , tagArr[31]);
+    io.sockets.emit("processed"     , tagArr[32]);
+    io.sockets.emit("counter"       , tagArr[33]);
+    io.sockets.emit("send_pos"      , tagArr[34]);
+    io.sockets.emit("running"       , tagArr[35]);
+    io.sockets.emit("finished"      , tagArr[36]);
+    io.sockets.emit("enable"        , tagArr[37]);
+    io.sockets.emit("status_robot"  , tagArr[38]);
+    io.sockets.emit("user"          , tagArr[39]);
+    io.sockets.emit("name"          , tagArr[40]);
+    io.sockets.emit("ss_x"          , tagArr[41]);
+    io.sockets.emit("ss_y"          , tagArr[42]);
+    io.sockets.emit("ss_z"          , tagArr[43]);
+    io.sockets.emit("step_x"        , tagArr[44]);
+    io.sockets.emit("step_y"        , tagArr[45]);
+    io.sockets.emit("step_z"        , tagArr[46]);
+    io.sockets.emit("pos_enable"    , tagArr[47]);
+    io.sockets.emit("type"          , tagArr[48]);
+    io.sockets.emit("qr_dis"        , tagArr[49]);
+    io.sockets.emit("process_stop"  , tagArr[50]);
 }
 /////////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
@@ -334,9 +325,6 @@ io.on("connection", function(socket){
   socket.on("cmd_processed", function(data){
 		fn_Data_Write(processed,data);
 	});
-  socket.on("cmd_qr_err",function(data){
-    fn_Data_Write(qr_err,data);
-  });
   socket.on("msg_SQL_Show", function(data)
   {
       // var sqltable_Name = "pre_data";
@@ -380,6 +368,12 @@ io.on("connection", function(socket){
   });
   socket.on("cmd_type",function(data){
     fn_Data_Write(type,data);
+  });
+  socket.on("cmd_qr_dis",function(data){
+    fn_Data_Write(qr_dis,data);
+  });
+  socket.on("fc2_user",function(data){
+    socket.emit('fc_user',data);
   });
   socket.on("msg_SQL_ByTime", function(data)
   {
@@ -441,24 +435,24 @@ const Excel = require('exceljs');
 const { CONNREFUSED } = require('dns');
 function fn_excelExport(){
   // =====================CÁC THUỘC TÍNH CHUNG=====================
-      // Lấy ngày tháng hiện tại
-      let date_ob = new Date();
-      let date = ("0" + date_ob.getDate()).slice(-2);
-      let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-      let year = date_ob.getFullYear();
-      let hours = date_ob.getHours();
-      let minutes = date_ob.getMinutes();
-      let seconds = date_ob.getSeconds();
-      let day = date_ob.getDay();
-      var dayName = '';
-      if(day == 0){dayName = 'Chủ nhật,'}
-      else if(day == 1){dayName = 'Thứ hai,'}
-      else if(day == 2){dayName = 'Thứ ba,'}
-      else if(day == 3){dayName = 'Thứ tư,'}
-      else if(day == 4){dayName = 'Thứ năm,'}
-      else if(day == 5){dayName = 'Thứ sáu,'}
-      else if(day == 6){dayName = 'Thứ bảy,'}
-      else{};
+  // Lấy ngày tháng hiện tại
+  let date_ob = new Date();
+  let date = ("0" + date_ob.getDate()).slice(-2);
+  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+  let year = date_ob.getFullYear();
+  let hours = date_ob.getHours();
+  let minutes = date_ob.getMinutes();
+  let seconds = date_ob.getSeconds();
+  let day = date_ob.getDay();
+  var dayName = '';
+  if(day == 0){dayName = 'Chủ nhật,'}
+  else if(day == 1){dayName = 'Thứ hai,'}
+  else if(day == 2){dayName = 'Thứ ba,'}
+  else if(day == 3){dayName = 'Thứ tư,'}
+  else if(day == 4){dayName = 'Thứ năm,'}
+  else if(day == 5){dayName = 'Thứ sáu,'}
+  else if(day == 6){dayName = 'Thứ bảy,'}
+  else{};
   // Tạo và khai báo Excel
   let workbook = new Excel.Workbook()
   let worksheet =  workbook.addWorksheet('Báo cáo sản xuất', {

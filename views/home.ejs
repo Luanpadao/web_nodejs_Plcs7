@@ -17,14 +17,6 @@
         <script src="js/bootstrap.bundle.min.js"></script>
         <script>
             const socket = io();
-            // socket.emit('get_ip');
-
-            // socket.on('ip', (ip) => {
-            //     // const socket = io(`http://${ip}:3000`);
-            // });
-            //IP tĩnh (hoặc IP động, localhost)
-            // var socket = io("http://luannguyen.ddns.net:3000")
-            // var socket = io("localhost:3000")
         </script>
         <script src = "js/FC1_Common.js"></script>
         <script src = "js/FC2_UserManagement.js"></script>
@@ -41,7 +33,7 @@
             </div>
             <nav class="navbar navbar-expand-md bg-light p-0" id="navbar">
                 <div class="container-fluid" id="slider">
-                    <a class="navbar-brand" href="http://localhost:3000">
+                    <a class="navbar-brand" onclick="CallPageHome()">
                         <img id="logo_HALA" src="images/logo_HALA.png" title="logo_HALA" height="60px" alt="Logo">
                         HALA
                     </a>

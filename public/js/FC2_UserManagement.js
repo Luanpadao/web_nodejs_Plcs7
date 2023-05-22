@@ -62,13 +62,13 @@ function fn_show_user_data()
         fn_user_data(data);
     });
 }
-function fn_user_data(data){
+function fn_user_data(data){            //Hàm truy xuất dữ liệu đến cơ sở dữ liệu người dùng
     if(data){
         var len = data.length;
         var check_wrong = true;
         if(len > 0){
             for(var i=0;i<len;i++){
-                if(num == 0)
+                if(num == 0)            // truy xuất dữ liệu khi đăng nhập
                 {
                     if(data[i].user == a & data[i].pass == b)
                     {
@@ -120,6 +120,7 @@ function fn_user_data(data){
                             document.getElementById("access_user_viewer").checked = false;
                             socket.emit('cmd_sw_mode',false);
                             socket.emit('cmd_sw_im_ex', false);
+                            socket.emit('fc2_user','DieuKhien');
                         }
                         else if(data[i].access == 'Bao cao')
                         {
@@ -145,67 +146,7 @@ function fn_user_data(data){
                         break;
                     }
                 }
-                // else if (num == 5)
-                // {
-                //     if(stt_user == data[i].stt)
-                //     {
-                //         fn_sent_user_plc([data[i].access,data[i].stt]);
-                //         $("#ten_user").val(data[i].name);
-                //         $("#mssv_user").val(data[i].mssv);
-                //         $("#ns_user").val(data[i].Date_Of_Birth);
-                //         user_present = data[i].stt;
-                //         stt_temp = data[i].stt;
-                //         if(data[i].stt == 1)
-                //         {
-                //             lock_edit = true;
-                //             lock_mssv = false;
-                //         }
-                //         else
-                //             lock_mssv = true;
-                //         if(data[i].sex == "Nam")
-                //         {
-                //             document.getElementById("sex_user_nam").checked = true;
-                //             document.getElementById("sex_user_nu").checked = false;
-                //         }
-                //         else
-                //         {
-                //             document.getElementById("sex_user_nam").checked = false;
-                //             document.getElementById("sex_user_nu").checked = true;
-                //         }
-                //         $("#qq_user").val(data[i].address);
-                //         $("#email_user").val(data[i].email);
-                //         $("#user_user").val(data[i].user);
-                //         $("#pass_user").val(data[i].pass);
-                //         $("#pass_2_user").val(data[i].pass);
-                //         if(data[i].access == 'Toan quyen')
-                //         {
-                //             document.getElementById("access_user_admin").checked = true;
-                //             document.getElementById("access_user_control").checked = false;
-                //             document.getElementById("access_user_report").checked = false;
-                //             document.getElementById('next_page').classList.remove('d-none');
-                //             document.getElementById('user_'+data[i].stt).classList.add('disabled');
-                //             admin = true;
-                //         }
-                //         else if(data[i].access == 'Dieu khien')
-                //         {
-                //             document.getElementById("access_user_admin").checked =false;
-                //             document.getElementById("access_user_control").checked = true;
-                //             document.getElementById("access_user_report").checked = false;
-                //         }
-                //         else
-                //         {
-                //             document.getElementById("access_user_admin").checked =false;
-                //             document.getElementById("access_user_control").checked = false;
-                //             document.getElementById("access_user_report").checked = true;
-                //         }
-                //         document.getElementById('bt_login').classList.add('d-none');
-                //         document.getElementById('bt_logout').classList.remove('d-none');
-                //         document.getElementById('bt_edit').classList.remove('d-none');
-                //         check_wrong = false;
-                //         break;
-                //     }
-                // }
-                else
+                else                // truy xuất dữ liệu với quyền toàn quyền
                 {
                     if(num == data[i].stt)
                     {
@@ -310,6 +251,7 @@ function logout()
     document.getElementById("access_user_control").disabled = true;
     document.getElementById("access_user_report").disabled = true;
     $('#confirm_pass').addClass('d-none');
+    socket.emit('fc2_user','');
 }
 function fn_edit(){
     document.getElementById('bt_logout').classList.add('d-none');
