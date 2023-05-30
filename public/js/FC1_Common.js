@@ -11,6 +11,7 @@ var scada_display = 0;
 var check_empty = false;
 var type = '';
 var finish_done = false;
+var finish_1_done = false;
 var enable_done = false;
 const minValue = 0;
 const maxValue = 155;
@@ -36,6 +37,8 @@ var pos_enable = false;
 var im_ex = false;
 var fc_user = '';
 var user_viewer = false;
+var status_plc = false;
+var status_connect_plc = true;
 $(document).ready(function(){
     thumb = document.querySelector('.slider-thumb');
     slider = document.querySelector('.slider_s');
@@ -84,8 +87,8 @@ $(document).ready(function(){
     fn_SymbolStatus('ss_o_display2','sstc','ss_o');
     fn_SymbolStatus('dc_i_display2','motor','dc_i');
     fn_SymbolStatus('dc_o_display2','motor','dc_o');
-    fn_SymbolStatus('stepx','step','ss_i1');
-    fn_SymbolStatus('stepz','step','ss_i1');
+    fn_SymbolStatus('stepx','step','step_x');
+    fn_SymbolStatus('stepz','step','step_z');
     fn_SymbolStatus('led_dc_i','motor','dc_i');
     fn_SymbolStatus('led_dc_o','motor','dc_o');
     fn_SymbolStatus('led_ss_i1','sstc','ss_i1');
@@ -109,6 +112,7 @@ $(document).ready(function(){
     fn_excel_01();
     fn_display_pos_after_xla();
     data_fc();
+    fn_process_stop();
     //////////////////////////////////////////////////////bt_introduce_chuyen trang
     $("#bt_introduce").click(function()
     {
@@ -685,10 +689,12 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
         {
             if(data == true & finish_done != data)
             {
+                console.log('alo_finished');
                 $("#i1").val("");
                 $("#i2").val("");
                 $("#i3").val("");
                 $("#i4").val("");
+                socket.emit('cmd_pos', '0');
                 if(user_viewer == false)
                 {
                     if(im_ex == false)
@@ -705,7 +711,12 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
                 // if(sw2 == 0 & fc_user == 'DieuKhien')
                 //     socket.emit('cmd_pos', 0);
                 if(sw == 1 & sw2 == 1 & type != "")     // chế độ xuất kho tự động sẽ thực hiện tiếp
-                    fn_Table01_SQL_Show();
+                {
+                    setTimeout(function() {
+                        fn_Table01_SQL_Show();
+                    }, 200);
+
+                }    
             }
             finish_done = data;
         }
@@ -719,6 +730,7 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             else if(data == false & enable_done == data)
             {
                 document.getElementById('gd_dk_1').classList.add('d-none');
+                document.getElementById("nd_tb").innerHTML = "Vui lòng nhấn ON tại tủ điện để cho phép điều khiển!";
                 document.getElementById('gd_dk_5').classList.remove('d-none');
             }
             enable_done = data;
@@ -807,7 +819,7 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
         {
             if(data == true & pl_done != data ){
                 fn_Table01_SQL_Show();
-                socket.emit('cmd_processed', false);
+                // socket.emit('cmd_processed', false);
             }
             pl_done = data;
         }
@@ -857,6 +869,7 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
             if (data == false)
             {
                 $("#led_3").css("background-color","#6c757d");
+                l3 = false;
             }
             else if (data == true)
             {
@@ -920,7 +933,7 @@ function fn_Table_SQL_show_pre_data()
 // Hiển thị dữ liệu từ bảng pre_data khi nhập
 function fn_table_01(data){
     if(data){
-        check_empty = false;
+        var check_empty = false;
         var qr_status = false;
         var len = data.length;
         if(len > 0){
@@ -996,7 +1009,9 @@ function fn_table_01(data){
                 setTimeout(function() {
                     if(fc_user == 'DieuKhien')
                     {
-                        alert('Đầy hàng rồi loại '+ type_dis + ' .Đang yêu cầu xuất kho');
+                        setTimeout(function() {
+                            alert('Đầy hàng rồi loại '+ type_dis + ' .Đang yêu cầu xuất kho');
+                        }, 500);
                         socket.emit('cmd_pos', '20');
                     }
                     else
@@ -1067,7 +1082,7 @@ function fn_table_02(data){
             {
                 setTimeout(function() {
                     alert('Hoàn thành xuất kho loại ' + type);
-                }, 100);
+                }, 3000);
 
             }
         }
@@ -1225,3 +1240,63 @@ function data_fc(){
 function CallPageHome(){
     window.location.href = window.location.origin;
 }
+function fn_process_stop(){
+    socket.on('finished_1',function(data){
+        if(data == true & finish_1_done != data)
+        {
+            console.log('alo_finished_1');
+            $("#i1").val("");
+            $("#i2").val("");
+            $("#i3").val("");
+            $("#i4").val("");
+            socket.emit('cmd_pos', '0');
+        }
+        finish_1_done = data;
+    });
+    socket.on('clock_plc',function(data){
+        status_plc = data;
+    });
+}
+
+let previousState = false;
+let unchangedCounter = 0;
+
+// Hàm kiểm tra sự thay đổi trạng thái
+function checkStateChange(data) 
+{
+    if (data == previousState) 
+    {
+        unchangedCounter = unchangedCounter + 1;
+        if (unchangedCounter >= 3) 
+        {
+        // Hiển thị cảnh báo nếu không có sự thay đổi trong 2 giây
+            console.log('mất kết nối plc');
+            console.log(status_connect_plc);
+            if(status_connect_plc == false)
+            {
+                document.getElementById('gd_dk_1').classList.add('d-none');
+                document.getElementById('gd_dk_2').classList.add('d-none');
+                document.getElementById('gd_dk_3').classList.add('d-none');
+                document.getElementById('gd_dk_4').classList.add('d-none');
+                document.getElementById("nd_tb").innerHTML = "Mất kết nối với PLC!";
+                document.getElementById('gd_dk_5').classList.remove('d-none');
+                status_connect_plc == true;
+            }
+        }
+    } 
+    else 
+    {
+        status_connect_plc == false;
+        unchangedCounter = 0;
+        previousState = data;
+    }
+}
+
+// Lặp lại việc mô phỏng thay đổi trạng thái sau mỗi 2 giây
+setInterval(
+    function(){
+        socket.emit('cmd_status_plc',!status_plc);
+        setTimeout(function() {
+            checkStateChange(status_plc);
+        }, 500);
+}, 1000);

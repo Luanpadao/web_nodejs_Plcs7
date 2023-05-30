@@ -192,6 +192,9 @@ var pos_enable          = 'pos_enable';         //tag_bool
 var type                = 'type';               //tag char
 var qr_dis              = 'qr_dis';             //tag string 10
 var process_stop        = 'process_stop';       //tag_bool
+var clock_plc           = 'clock_plc';          //tag_bool
+var finished_1            = 'finished_1';       //tag bool
+var qr_err            = 'qr_err';       //tag bool
 // Đọc dữ liệu
 const TagList = tagBuilder
 .read(sw_mode) 
@@ -245,6 +248,9 @@ const TagList = tagBuilder
 .read(type)
 .read(qr_dis)
 .read(process_stop)
+.read(clock_plc)
+.read(finished_1)
+.read(qr_err)
 .get();
 // ///////////LẬP BẢNG TAG ĐỂ GỬI QUA CLIENT (TRÌNH DUYỆT)///////////
 function fn_tag(){
@@ -299,6 +305,9 @@ function fn_tag(){
     io.sockets.emit("type"          , tagArr[48]);
     io.sockets.emit("qr_dis"        , tagArr[49]);
     io.sockets.emit("process_stop"  , tagArr[50]);
+    io.sockets.emit("clock_plc"     , tagArr[51]);
+    io.sockets.emit("finished_1"    , tagArr[52]);
+    io.sockets.emit("qr_err"        , tagArr[53]);
 }
 /////////////GỬI DỮ LIỆU ĐẾN CLIENT (TRÌNH DUYỆT)///////////
 io.on("connection", function(socket){
@@ -371,6 +380,9 @@ io.on("connection", function(socket){
   });
   socket.on("cmd_qr_dis",function(data){
     fn_Data_Write(qr_dis,data);
+  });
+  socket.on("cmd_status_plc",function(data){
+    fn_Data_Write(clock_plc,data);
   });
   socket.on("fc2_user",function(data){
     socket.emit('fc_user',data);
