@@ -1,3 +1,4 @@
+// khai báo biến
 var sw = 0;
 var sw2 = 0;
 var counter = [];
@@ -39,6 +40,7 @@ var fc_user = '';
 var user_viewer = false;
 var status_plc = false;
 var status_connect_plc = true;
+// Chương trình xử lý sự khi sau khi đã load web
 $(document).ready(function(){
     thumb = document.querySelector('.slider-thumb');
     slider = document.querySelector('.slider_s');
@@ -216,17 +218,8 @@ $(document).ready(function(){
         }
         $('#introduce').hide();
         $('#member').hide();
-
-        //sd để edit
-        // $('#scada').show();
-        // $("#table").hide();
-        // $('#control').show();
-        // $('#user').hide();
-        // $('#scada_display1').hide();
-        // $('#scada_display2').show();
-        // sd để edit//
     });
-        //////////////////////////////////////////////////////bt_scada_1chuyen trang
+    //////////////////////////////////////////////////////bt_scada_1chuyen trang
     $("#bt_scada").click(function(){
         document.getElementById('navbarResponsive').classList.remove('show');
         $('#bt_introduce').removeClass('active');
@@ -1244,7 +1237,6 @@ function fn_process_stop(){
     socket.on('finished_1',function(data){
         if(data == true & finish_1_done != data)
         {
-            console.log('alo_finished_1');
             $("#i1").val("");
             $("#i2").val("");
             $("#i3").val("");
@@ -1271,7 +1263,6 @@ function checkStateChange(data)
         {
         // Hiển thị cảnh báo nếu không có sự thay đổi trong 2 giây
             console.log('mất kết nối plc');
-            console.log(status_connect_plc);
             if(status_connect_plc == false)
             {
                 document.getElementById('gd_dk_1').classList.add('d-none');

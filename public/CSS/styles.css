@@ -18,9 +18,6 @@ html, body{
 #slider{
     max-width: 960px;
 }
-/* .container-fluid{
-    max-width: 960px;
-} */
 .navbar li a{
     color: #fff;
 }
@@ -52,8 +49,6 @@ ul li:hover .dropdown-menu{
 }.object{
     position: relative;
     min-height:26rem;
-    /* padding: 0 !important; */
-    /* margin: auto; */
     width: 100%;
     height: 100%;
     background-image: url(../images/backGround_display.png);
@@ -122,7 +117,6 @@ ul li:hover .dropdown-menu{
 .object #mt_o{
     left: 76%;
 }
-/* ---------------------------------------------------------------------------------------------------------------------------------- */
 /* --------------------------------------------------CSS cho màn hình SCADA_2-------------------------------------------------------- */
 .object_display2{
     position: relative;
@@ -170,7 +164,7 @@ ul li:hover .dropdown-menu{
 .object_display2 .row-5{
     top: 59.5%;
 }
-/* --------------CSS cho scada robot--------------- */
+/* --------------CSS cho vùng giám sát robot--------------- */
 .slider_s {
     width: 34%;
     height: 10px;
@@ -229,7 +223,6 @@ height: 10px;
 background-color: yellow;
 position: absolute;
 top: 10px;
-/* top: 60px; */
 left: 0px;
 cursor: grab;
 }
@@ -401,7 +394,7 @@ cursor: grab;
     align-items: center;
     margin: auto;
 }
-/*//////////////Hiển thị dữ liệu bảng 1 - Start/////////////////*/
+/*//////////////CSS cho vùng hiển thị bảng báo cáo/////////////////*/
 #table_show_SQL{
     /* position: absolute;  */
     width: 100%; height: 680px;
@@ -465,12 +458,11 @@ transform: rotateY(180deg);
     height: 300px;
     width: 300px;
 }
-
+/*--------------------------- CSS PHẦN FOOTER TRANG WEB -------------------------*/
 footer{
     color: #fff;
     opacity: 0.8;
 }
-/*------------------------ Màn hình 100% --------------------------*/
 #scada_display1{
     max-width: 65%;
     float: left;
@@ -484,6 +476,7 @@ footer{
     min-height: 722px;
     display: inline-flex;
 }
+/*------------------------ Màn hình 100% --------------------------*/
 @media (max-width: 1600px){
     #title_web{
         font-size: 25px;
@@ -570,8 +563,6 @@ footer{
         top: 77%;
     }
     .circle {
-        /* border: 2px solid black; */
-        /* border-radius: 50%; */
         width: 45px;
         height: 45px;
     }

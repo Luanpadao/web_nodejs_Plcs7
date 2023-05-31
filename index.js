@@ -10,7 +10,6 @@ var io = require("socket.io")(server);
 server.listen(3000);
 // Home calling
 app.get("/", function(req, res){
-  // const ip_host_local = req.ip;
   res.render("home");
 });
 io.on('connection', (socket) => {
