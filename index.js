@@ -18,6 +18,7 @@ io.on('connection', (socket) => {
       socket.emit('ip', ip);
   });
 });
+
 //////////////////////CẤU HÌNH KẾT NỐI KEPWARE (PLC)//////////////////////
 // const kepserverex = require('kepserverex-js');
 const {TagBuilder, IotGateway} = require('kepserverex-js');
@@ -26,7 +27,6 @@ const iotGateway = new IotGateway({
     host: '127.0.0.1',
     port: 5000
 });
-
 
 //////////////////////QUẢN LÝ CƠ SỞ DỮ LIỆU MYSQL////////////////////
 // Khai báo SQL

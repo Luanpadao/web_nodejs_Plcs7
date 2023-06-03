@@ -40,6 +40,10 @@ var fc_user = '';
 var user_viewer = false;
 var status_plc = false;
 var status_connect_plc = true;
+let previousState = false;
+let unchangedCounter = 0;
+var step = 100;
+var enable_done_2 = false;
 // Chương trình xử lý sự khi sau khi đã load web
 $(document).ready(function(){
     thumb = document.querySelector('.slider-thumb');
@@ -54,8 +58,8 @@ $(document).ready(function(){
     $("#control").hide();
     $("#member").hide();
     $("#user").hide();
-    $(".mode_sa").css("background-color", "blue");
-    $(".bt_import").css("background-color", "blue");
+    $("#mode_sa").css("background-color", "blue");
+    $("#bt_import").css("background-color", "blue");
     fn_IOFieldDataShow('pos_x','px',1);
     fn_IOFieldDataShow('pos_y','py',1);
     fn_IOFieldDataShow('pos_z','pz',1);
@@ -460,84 +464,85 @@ $(document).ready(function(){
         $("#member").show();
     });
     //////////////////////////////////////////////////////switch_Mode
-    $(".mode_sa").click(function()
+    $("#mode_sa").click(function()
     {
         if(l2 == false)
         {
             sw = 0;
-            $(".mode_sa").css("background-color", "blue");
-            $(".mode_a").css("background-color", "#6c757d");
+            $("#mode_sa").css("background-color", "blue");
+            $("#mode_a").css("background-color", "#6c757d");
             mode.placeholder = "SEMI AUTO";
-            socket.emit('cmd_sw_mode',false);
+            socket.emit('cmd_sw_mode',false);       //gửi yêu cầu server set tag sw_mode giá trị false
         }
         else
             alert("Robot đang hoạt động, không đổi được chế độ!");
     });
-    $(".mode_a").click(function()
+    $("#mode_a").click(function()
     {
         if(l2 == false)
         {
             sw = 1;
-            $(".mode_sa").css("background-color", "#6c757d");
-            $(".mode_a").css("background-color", "blue");
+            $("#mode_sa").css("background-color", "#6c757d");
+            $("#mode_a").css("background-color", "blue");
             mode.placeholder = "AUTO";
-            socket.emit('cmd_sw_mode',true);
+            socket.emit('cmd_sw_mode',true);        //gửi yêu cầu server set tag sw_mode giá trị true
         }
         else
             alert("Robot đang hoạt động, không đổi được chế độ!");
     });
     //////////////////////////////////////////////////////bt_import
-    $(".bt_import").click(function()
+    $("#bt_import").click(function()
     {
         if(l2 == false)
         {
             sw2 = 0;
-            $(".bt_import").css("background-color", "blue");
-            $(".bt_export").css("background-color", "#6c757d");
+            $("#bt_import").css("background-color", "blue");
+            $("#bt_export").css("background-color", "#6c757d");
             socket.emit('cmd_sw_im_ex', false);
         }
         else
             alert("Robot đang hoạt động, không đổi được chế độ!");
     });
     //////////////////////////////////////////////////////bt_export
-    $(".bt_export").click(function()
+    $("#bt_export").click(function()
     {
         if(l2 == false)
         {
             sw2 = 1;
-            $(".bt_import").css("background-color", "#6c757d");
-            $(".bt_export").css("background-color", "blue");
+            $("#bt_import").css("background-color", "#6c757d");
+            $("#bt_export").css("background-color", "blue");
             socket.emit('cmd_sw_im_ex', true);
         }
         else
             alert("Robot đang hoạt động, không đổi được chế độ!");
     });
     //////////////////////////////////////////////////////bt_stop
-    $(".bt_stop").mousedown(function()
+    $("#bt_stop").mousedown(function()
     {
         $(this).css("background-color","green");
         socket.emit('cmd_bt_stop', true);
     });
-    $(".bt_stop").mouseup(function()
+    $("#bt_stop").mouseup(function()
     {
         $(this).css("background-color","#6c757d");
         socket.emit('cmd_bt_stop', false);
     });
-    $(".bt_stop").mouseout(function()
+    $("#bt_stop").mouseout(function()
     {
         $(this).css("background-color","#6c757d");
         socket.emit('cmd_bt_stop', false);
     });
     //////////////////////////////////////////////////////bt_run
-    $(".bt_run").mousedown(function()
+    $("#bt_run").mousedown(function()
     {
-        if(sw == 0 & sw2 == 1)
+        if(sw == 0 & sw2 == 1)      //Chế độ xuất bán tự động
         {
             document.getElementById('gd_dk_1').classList.add('d-none');
             document.getElementById('gd_dk_3').classList.remove('d-none');
+            step_process(1);
             $('#pos_ex').val("");
         }
-        else if(sw == 1 & sw2 == 1)
+        else if(sw == 1 & sw2 == 1) //Chế độ xuất tự động
         {
             document.getElementById('gd_dk_1').classList.add('d-none');
             document.getElementById('gd_dk_4').classList.remove('d-none');
@@ -545,95 +550,41 @@ $(document).ready(function(){
         $(this).css("background-color","green");
         socket.emit('cmd_bt_run', true);
     });
-    $(".bt_run").mouseup(function()
+    $("#bt_run").mouseup(function()
     {
         $(this).css("background-color","#6c757d");
         socket.emit('cmd_bt_run', false);
     });
-    $(".bt_run").mouseout(function()
+    $("#bt_run").mouseout(function()
     {
         $(this).css("background-color","#6c757d");
         socket.emit('cmd_bt_run', false);
     });
     //////////////////////////////////////////////////////bt_e_stop
-    $(".bt_e_stop").mousedown(function()
+    $("#bt_e_stop").mousedown(function()
     {
         $(this).css("background-color","green");
         socket.emit('cmd_bt_e_stop', true);
     });
-    $(".bt_e_stop").mouseup(function()
+    $("#bt_e_stop").mouseup(function()
     {
         $(this).css("background-color","#6c757d");
         socket.emit('cmd_bt_e_stop', false);
     });
-    $(".bt_e_stop").mouseout(function()
+    $("#bt_e_stop").mouseout(function()
     {
         $(this).css("background-color","#6c757d");
         socket.emit('cmd_bt_e_stop', false);
-    });
-    $(".bt_e-stop").mouseup(function()
-    {
-        $(this).css("background-color","#6c757d");
-    });
-    $(".bt_e-stop").mouseout(function()
-    {
-        $(this).css("background-color","#6c757d");
     });
     //////////////////////////////////////////////////////bt_select_im
     $("#bt_select_im").click(function()
     {
-        if(($('#pos_im').val() != "") & ($('#pos_im').val() > 0) & ($('#pos_im').val() < 19))
-        {
-            if ($('#n'+$('#pos_im').val()).hasClass('d-none'))
-            {
-                if(($('#i4').val() == "A" & ((1 <= $('#pos_im').val() & $('#pos_im').val() <= 3) || (10 <= $('#pos_im').val() & $('#pos_im').val() <= 12))) 
-                || ($('#i4').val() == "B" & ((4 <= $('#pos_im').val() & $('#pos_im').val() <= 6) || (13 <= $('#pos_im').val() & $('#pos_im').val() <= 15))) 
-                || ($('#i4').val() == "C" & ((7 <= $('#pos_im').val() & $('#pos_im').val() <= 9) || (16 <= $('#pos_im').val() & $('#pos_im').val() <= 18))))
-                {
-                    var pos = $('#pos_im').val();
-                    socket.emit('cmd_pos', pos);
-                    socket.emit('cmd_pos_enable',true);
-                    setTimeout(function() {
-                        socket.emit('cmd_pos_enable',false);
-                    }, 1000);
-                    tempArr[0] = pos;
-                    document.getElementById('gd_dk_1').classList.remove('d-none');
-                    document.getElementById('gd_dk_2').classList.add('d-none');
-                }
-                else
-                {
-                    alert("Sai vị trí, vui lòng nhập lại!");
-                    $('#pos_im').val("");
-                }
-            }
-            else
-            {
-                alert("Ô kho đã có hàng, vui lòng nhập lại!");
-                $('#pos_im').val("");
-            }
-        }
-        else
-        {
-            alert("Ô kho không tồn tại, vui lòng nhập lại!");
-            $('#pos_im').val("");
-        }
+        select_im();
     });
     //////////////////////////////////////////////////////bt_select_ex
     $("#bt_select_ex").click(function()
     {
-        if ($('#n'+$('#pos_ex').val()).hasClass('d-none'))
-        {
-            $('#pos_ex').val("");
-            alert("Ô hàng trống, vui lòng nhập lại!");
-        }
-        else
-        {
-            var pos = $('#pos_ex').val();
-            temp = pos;
-            document.getElementById('gd_dk_1').classList.remove('d-none');
-            document.getElementById('gd_dk_3').classList.add('d-none');
-            fn_Table01_SQL_Show();
-        }
+        select_ex();
     });
     //////////////////////////////////////////////////////bt_typeA
     $("#bt_typeA").click(function()
@@ -666,6 +617,7 @@ $(document).ready(function(){
         document.getElementById('gd_dk_2').classList.add('d-none');
         document.getElementById('gd_dk_3').classList.add('d-none');
         document.getElementById('gd_dk_4').classList.add('d-none');
+        step_process(100);
     });
 });
 ////////////// YÊU CẦU DỮ LIỆU TỪ SERVER- REQUEST DATA //////////////
@@ -673,16 +625,17 @@ var myVar = setInterval(myTimer, 100);
 function myTimer() {
     socket.emit("Client-send-data", "Request data client");
 }
-// Hàm hiển thị dữ liệu lên IO Field
+// HÀM HIỂN THỊ DỮ LIỆU LÊN IO FIELD
 function fn_IOFieldDataShow(tag, IOField, tofix){
     socket.on(tag,function(data){
+        // Chương trình xử lý tag qr_code
         if(tag == 'qr_code')
             temp_qr = data;
-        else if(tag == 'finished')
+        // Chương trình xử lý tag finished ở cuối mỗi quy trình
+        else if(tag == 'finished')  
         {
             if(data == true & finish_done != data)
             {
-                console.log('alo_finished');
                 $("#i1").val("");
                 $("#i2").val("");
                 $("#i3").val("");
@@ -701,9 +654,7 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
                     document.getElementById("nd_tb_viewer").innerHTML = "Đang ở chế độ giám sát";
                 }, 1000);
                 socket.emit("msg_send_data_SQL",tempArr);
-                // if(sw2 == 0 & fc_user == 'DieuKhien')
-                //     socket.emit('cmd_pos', 0);
-                if(sw == 1 & sw2 == 1 & type != "")     // chế độ xuất kho tự động sẽ thực hiện tiếp
+                if(sw == 1 & sw2 == 1 & type != "")     //nếu là chế độ xuất kho, tự động gửi vị trí xuất mới
                 {
                     setTimeout(function() {
                         fn_Table01_SQL_Show();
@@ -713,21 +664,27 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             }
             finish_done = data;
         }
+        // Chương trình xử lý tag enable (tag được sử dụng để cho phép điều khiển sau khi tủ điện ON)
         else if(tag == 'enable')
         {
-            if(data == true & enable_done != data)
+            if(enable_done != data)
             {
-                document.getElementById('gd_dk_1').classList.remove('d-none');
-                document.getElementById('gd_dk_5').classList.add('d-none');
-            }
-            else if(data == false & enable_done == data)
-            {
-                document.getElementById('gd_dk_1').classList.add('d-none');
-                document.getElementById("nd_tb").innerHTML = "Vui lòng nhấn ON tại tủ điện để cho phép điều khiển!";
-                document.getElementById('gd_dk_5').classList.remove('d-none');
+                if(data == true)
+                {
+                    document.getElementById('gd_dk_1').classList.remove('d-none');
+                    document.getElementById('gd_dk_5').classList.add('d-none');
+                    enable_done_2 = true;
+                }
+                else if(data == false )
+                {
+                    document.getElementById('gd_dk_1').classList.add('d-none');
+                    document.getElementById("nd_tb").innerHTML = "Vui lòng nhấn ON tại tủ điện để cho phép điều khiển!";
+                    document.getElementById('gd_dk_5').classList.remove('d-none');
+                }
             }
             enable_done = data;
         }
+        // Chương trình xử lý các giá trị tag counter, đếm số lượng ô đã nhập
         else if(tag == 'counter')
         {
             counter[0] = parseInt(data[1]);
@@ -766,7 +723,7 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
                 $('#status_C').css("background-color","#fff");
                 document.getElementById("counter_C").innerHTML = "";
             }
-
+        // Chương trình xử lý hiển thị theo giá trị tag status_robot
         }
         else if(tag == "status_robot"){
             if(data == 0)
@@ -784,6 +741,7 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             else if(data == 6)
             document.getElementById(IOField).innerHTML = "ROBOT ĐANG ĐƯA HÀNG RA BĂNG TẢI XUẤT";
         }
+        // Chương trình xử lý hiển thị vị trí robot
         else if(tag.substr(0,2) == "po")
         {
             temp = "";
@@ -808,11 +766,11 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             else if(tag == "pos_z")
                 updateSlider_1(data);
         }
+        // Chương trình xử lý khi quét được mã QR
         else if(tag == 'processed')
         {
             if(data == true & pl_done != data ){
                 fn_Table01_SQL_Show();
-                // socket.emit('cmd_processed', false);
             }
             pl_done = data;
         }
@@ -825,10 +783,10 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
         }
     });
 }
-// Hàm chức năng hiển thị trạng thái symbol
+// HÀM CHỨC NĂNG HIỂN THỊ TRẠNG THÁI SYMBOL
 function fn_SymbolStatus(ObjectID, SymName, Tag)
 {
-    if(ObjectID.substr(0,1) == "n")
+    if(ObjectID.substr(0,1) == "n") // Hiển thị trang thái ô hàng
     {
         socket.on(Tag, function(data){
             if (data == false)
@@ -837,7 +795,7 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
                 document.getElementById(ObjectID).classList.remove('d-none');
         });
     }
-    else if(ObjectID == "led_2")
+    else if(ObjectID == "led_2")    //Led ON sáng và led OFF tắt khi tag = true và ngược lại
     {
         socket.on(Tag, function(data){
             if (data == false)
@@ -856,7 +814,7 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
 
         });
     }
-    else if(ObjectID == "led_3")
+    else if(ObjectID == "led_3")    //Led TRIP sáng sau khi nhấn STOP (báo hiệu hệ thống dừng cuối quy trình)
     {
         socket.on(Tag, function(data){
             if (data == false)
@@ -867,10 +825,6 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
             else if (data == true)
             {
                 $("#led_3").css("background-color","yellow");
-                // $("#led_1").css("background-color","#6c757d");
-                // document.querySelector(".bt_run").disabled = true;
-                // document.querySelector(".bt_stop").disabled = true;
-                // document.querySelector(".bt_e_stop").disabled = true;
                 l3 = true;
             }
 
@@ -880,6 +834,7 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
     {
         var imglink_0 = "images/Symbol/" + SymName + "_0.png"; // Trạng thái tag = false
         var imglink_1 = "images/Symbol/" + SymName + "_1.png"; // Trạng thái tag = true
+        // Chương trình hiển thị symbol theo trạng thái
         socket.on(Tag, function(data){
             if (data == false)
             {
@@ -910,10 +865,11 @@ function fn_SymbolStatus(ObjectID, SymName, Tag)
         });
     }
 }
-// Yêu cầu dữ liệu bảng pre_data
+// HÀM YÊU CẦU DỮ LIỆU TỪ BẢNG SQL pre_data
 function fn_Table01_SQL_Show(){
     socket.emit("msg_SQL_Show", "pre_data");
 }
+// HÀM XỬ LÝ SAU KHI NHẬN ĐƯỢC DỮ LIỆU BẢNG SQL TỪ SERVER
 function fn_Table_SQL_show_pre_data()
 {
     socket.on('SQL_Show_pre_data',function(data){
@@ -923,7 +879,7 @@ function fn_Table_SQL_show_pre_data()
             fn_table_02(data);
     }); 
 }
-// Hiển thị dữ liệu từ bảng pre_data khi nhập
+// CHƯƠNG TRÌNH HIỂN THỊ DỮ LIỆU TỪ BẢNG pre_data KHI NHẬP (bảng chứa thông tin mã QR)
 function fn_table_01(data){
     if(data){
         var check_empty = false;
@@ -932,7 +888,7 @@ function fn_table_01(data){
         if(len > 0){
             for(var i=0;i<len;i++){
                 qr_status == false;
-                if(data[i].QRCode == temp_qr)
+                if(data[i].QRCode == temp_qr)   // Nếu mã QR quét được trùng với mã được cung cấp
                 {
                     tempArr[1] = temp_qr;
                     tempArr[2] = data[i].Name;
@@ -942,7 +898,7 @@ function fn_table_01(data){
                     socket.emit('cmd_type',data[i].Type);
                     qr_status = true;
                     user_viewer = false;
-                    if($('#n'+(i+1)).hasClass('d-none'))            //nếu ô trống
+                    if($('#n'+(i+1)).hasClass('d-none'))   // Cho phép nhập khi ô còn trống
                     {
                         //Xác định nhập kho tự động hoặc bán tự động
                         if(sw == 0 & sw2 == 0) // bán tự động
@@ -961,6 +917,7 @@ function fn_table_01(data){
                                 document.getElementById("lb_import").innerHTML = "Loại C: {7 , 8 , 9 , 16 , 17 , 18}";
                             if(document.getElementById("access_user_control").checked)
                                 document.getElementById('gd_dk_2').classList.remove('d-none');
+                            step_process(2);
                         }
                         else if(sw == 1 & sw2 == 0)  //Tự động
                         {
@@ -978,7 +935,7 @@ function fn_table_01(data){
                     }
                 }
             }
-            if(qr_status == false)
+            if(qr_status == false)  //Chương trình xử lý khi không tra được mã QR
             {
                 $("#i1").val(temp_qr);
                 $("#i2").val("");
@@ -997,7 +954,7 @@ function fn_table_01(data){
                     user_viewer = true;
                 }
             }
-            else if(check_empty == false)
+            else if(check_empty == false)   // Chương trình xử lý khi đầy hàng
             {
                 setTimeout(function() {
                     if(fc_user == 'DieuKhien')
@@ -1020,7 +977,7 @@ function fn_table_01(data){
         }
     }   
 }
-// Hiển thị dữ liệu từ bảng pre_data khi xuất
+// HIỂN THỊ DỮ LIỆU TỪ BẢNG pre_data KHI XUẤT
 function fn_table_02(data){
     if(data){
         var len = data.length;
@@ -1081,16 +1038,18 @@ function fn_table_02(data){
         }
     }   
 }
-// Yêu cầu dữ liệu bảng data
+// HÀM YÊU CẦU DỮ LIỆU TỪ BẢNG SQL data (bảng chứa thông tin báo cáo sản xuất)
 function fn_Table01_SQL_Show_data(){
     socket.emit("msg_SQL_Show", "data");
 }
+// HÀM XỬ LÝ SAU KHI NHẬN ĐƯỢC DỮ LIỆU BẢNG SQL TỪ SERVER
 function fn_Table_SQL_show_data()
 {
     socket.on('SQL_Show_data',function(data){
         fn_table_data(data);
     }); 
 }
+// HÀM HIỂN THỊ DỮ LIỆU ĐÃ NHẬP / XUẤT LÊN WEB
 function fn_table_data(data){
     if(data){
         $("#table_data tbody").empty();
@@ -1113,7 +1072,7 @@ function fn_table_data(data){
         }
     }   
 }
-// Tìm kiếm SQL theo khoảng thời gian
+// TÌM KIẾM SQL THEO KHOẢNG THỜI GIAN
 function fn_SQL_By_Time()
 {
     var val = [document.getElementById('dtpk_Search_Start').value,
@@ -1126,10 +1085,10 @@ function fn_SQL_By_Time()
 function fn_Show_SQL_By_Time()
 {
     socket.on('SQL_ByTime', function(data){
-        fn_table_data(data); // Show sdata
+        fn_table_data(data); // Show data
     });
 }
-// Hàm chức năng xuất dữ liệu Excel
+// HÀM CHỨC NĂNG XUẤT DỮ LIỆU RA EXCEL
 function fn_excel(){
     var linktext = "";
     var bookname = "";
@@ -1140,12 +1099,14 @@ function fn_excel_01(){
         linktext = data[0];
         bookname = data[1];
         // Delay save as
-        var delayInMilliseconds = 1000; //Delay 1 second
+        var delayInMilliseconds = 1000;
         setTimeout(function() {
             saveAs(linktext, bookname);
         }, delayInMilliseconds);          
     }); 
 }
+
+// CÁC HÀM CẬP NHẤT VỊ TRÍ CỦA ROBOT LÊN GIAO DIỆN 2
 function updateSlider(data) {
     var ratio;
     if(data>=0)
@@ -1189,6 +1150,7 @@ function updateSlider_1_child(data) {
     thumb_1_child.style.left = `${thumbPosition_1_child}px`;
     slider_1_child.setAttribute('value', data);
 }
+// HÀM HIỂN THỊ HOẠT ĐỘNG HỆ THỐNG ĐẾN MỌI NGƯỜI DÙNG
 function fn_display_pos_after_xla(){
     socket.on('qr_dis',function(data){
         qrcode_dis = data;
@@ -1230,9 +1192,11 @@ function data_fc(){
         fc_user = data;
     });
 }
+// CHƯƠNG TRÌNH RELOAD TRANG
 function CallPageHome(){
     window.location.href = window.location.origin;
 }
+// CHƯƠNG TRÌNH XỬ LÝ STOP
 function fn_process_stop(){
     socket.on('finished_1',function(data){
         if(data == true & finish_1_done != data)
@@ -1250,8 +1214,14 @@ function fn_process_stop(){
     });
 }
 
-let previousState = false;
-let unchangedCounter = 0;
+// Lặp lại việc mô phỏng kết nối PLC
+setInterval(
+    function(){
+        socket.emit('cmd_status_plc',!status_plc);
+        setTimeout(function() {
+            checkStateChange(status_plc);
+        }, 500);
+}, 1000);
 
 // Hàm kiểm tra sự thay đổi trạng thái
 function checkStateChange(data) 
@@ -1259,7 +1229,7 @@ function checkStateChange(data)
     if (data == previousState) 
     {
         unchangedCounter = unchangedCounter + 1;
-        if (unchangedCounter >= 3) 
+        if (unchangedCounter >= 5) 
         {
         // Hiển thị cảnh báo nếu không có sự thay đổi trong 2 giây
             console.log('mất kết nối plc');
@@ -1271,23 +1241,97 @@ function checkStateChange(data)
                 document.getElementById('gd_dk_4').classList.add('d-none');
                 document.getElementById("nd_tb").innerHTML = "Mất kết nối với PLC!";
                 document.getElementById('gd_dk_5').classList.remove('d-none');
-                status_connect_plc == true;
+                enable_done_2 = false;
+                status_connect_plc = true;
             }
         }
     } 
     else 
     {
-        status_connect_plc == false;
+        if(enable_done_2 == false)
+        {
+            document.getElementById('gd_dk_1').classList.add('d-none');
+            document.getElementById("nd_tb").innerHTML = "Vui lòng nhấn ON tại tủ điện để cho phép điều khiển!";
+            document.getElementById('gd_dk_5').classList.remove('d-none');
+            enable_done_2 = true;
+        }
+        status_connect_plc = false;
         unchangedCounter = 0;
         previousState = data;
     }
 }
+// Hàm chức năng của nút select_im
+function select_im()
+{
+    // Chương trình kiểm tra ô đã nhập phù hợp với vùng được phấn hay chưa ?
+    if(($('#pos_im').val() != "") & ($('#pos_im').val() > 0) & ($('#pos_im').val() < 19))
+    {
+        if ($('#n'+$('#pos_im').val()).hasClass('d-none'))
+        {
+            if(($('#i4').val() == "A" & ((1 <= $('#pos_im').val() & $('#pos_im').val() <= 3) || (10 <= $('#pos_im').val() & $('#pos_im').val() <= 12))) 
+            || ($('#i4').val() == "B" & ((4 <= $('#pos_im').val() & $('#pos_im').val() <= 6) || (13 <= $('#pos_im').val() & $('#pos_im').val() <= 15))) 
+            || ($('#i4').val() == "C" & ((7 <= $('#pos_im').val() & $('#pos_im').val() <= 9) || (16 <= $('#pos_im').val() & $('#pos_im').val() <= 18))))
+            {
+                var pos = $('#pos_im').val();
+                socket.emit('cmd_pos', pos);
+                socket.emit('cmd_pos_enable',true);
+                setTimeout(function() {
+                    socket.emit('cmd_pos_enable',false);
+                }, 1000);
+                tempArr[0] = pos;
+                document.getElementById('gd_dk_1').classList.remove('d-none');
+                document.getElementById('gd_dk_2').classList.add('d-none');
+                step_process(100);
+            }
+            else
+            {
+                alert("Sai vị trí, vui lòng nhập lại!");
+                $('#pos_im').val("");
+            }
+        }
+        else
+        {
+            alert("Ô kho đã có hàng, vui lòng nhập lại!");
+            $('#pos_im').val("");
+        }
+    }
+    else
+    {
+        alert("Ô kho không tồn tại, vui lòng nhập lại!");
+        $('#pos_im').val("");
+    }
+}
+// Hàm chức năng của nút select_ex
+function select_ex()
+{
+    if($('#pos_ex').val() == "")
+        alert("Vui lòng nhập vị trí")
+    else if ($('#n'+$('#pos_ex').val()).hasClass('d-none'))
+    {
+        $('#pos_ex').val("");
+        alert("Ô hàng trống, vui lòng nhập lại!");
+    }
+    else
+    {
+        step_process(100);
+        var pos = $('#pos_ex').val();
+        temp = pos;
+        document.getElementById('gd_dk_1').classList.remove('d-none');
+        document.getElementById('gd_dk_3').classList.add('d-none');
+        fn_Table01_SQL_Show();
+    }
+}
 
-// Lặp lại việc mô phỏng thay đổi trạng thái sau mỗi 2 giây
-setInterval(
-    function(){
-        socket.emit('cmd_status_plc',!status_plc);
-        setTimeout(function() {
-            checkStateChange(status_plc);
-        }, 500);
-}, 1000);
+function step_process(data)
+{
+    step = data;
+}
+// Lắng nghe sự kiện nhấn ENTER
+document.addEventListener("keypress", function(event){
+    if (event.keyCode == 13 & step == 0)
+        login();
+    else if(event.keyCode == 13 & step == 1)
+        select_ex();
+    else if(event.keyCode == 13 & step == 2)
+        select_im();
+});

@@ -10,22 +10,8 @@ var stt_user;
 var user_present;
 $(document).ready(function(){
     fn_show_user_data();
-    // fn_check_stt_user();
-    //////////////////////////////////////////////////////bt_user_chuyen trang
-    // $("#bt_user").click(function()
-    // {
-    //     if(stt_user != 0)
-    //     {
-    //         num = 5;
-    //         document.getElementById('user_1').classList.remove('disabled');
-    //         document.getElementById('user_2').classList.remove('disabled');
-    //         document.getElementById('user_3').classList.remove('disabled');
-    //         document.getElementById('user_4').classList.remove('disabled');
-    //         socket.emit("msg_SQL_Show", "user_data");
-    //     }
-    // });
 });
-// Chương trình con
+// CHƯƠNG TRÌNH ĐĂNG NHẬP
 function login()
 {
     a = document.getElementById("inputuser").value;
@@ -45,9 +31,10 @@ function fn_bt_login()
 {
     $("#inputuser").val("");
     $("#inputpass").val("");
+    step_process(0);
 }
+// HÀM YÊU CẦU DỮ LIỆU TỪ BẢNG SQL user_data (bảng chứa thông tin người dùng)
 function fn_user_number(data){
-    // user_present = data;
     num = data;
     lock_edit = false;
     document.getElementById('user_1').classList.remove('disabled');
@@ -56,6 +43,7 @@ function fn_user_number(data){
     document.getElementById('user_4').classList.remove('disabled');
     socket.emit("msg_SQL_Show", "user_data");
 }
+// HÀM XỬ LÝ SAU KHI NHẬN ĐƯỢC DỮ LIỆU BẢNG SQL TỪ SERVER
 function fn_show_user_data()
 {
     socket.on('SQL_Show_user_data',function(data){
@@ -72,6 +60,7 @@ function fn_user_data(data){            //Hàm truy xuất dữ liệu đến c�
                 {
                     if(data[i].user == a & data[i].pass == b)
                     {
+                        step_process(100);
                         setTimeout(function() {
                             alert("Xin chào " + data[i].name);
                         }, 200);
@@ -211,10 +200,7 @@ function fn_user_data(data){            //Hàm truy xuất dữ liệu đến c�
         }
     }
 };
-function login_num(data)
-{
-
-}
+// CHƯƠNG TRÌNH ĐĂNG XUẤT
 function logout()
 {
     setTimeout(function() {
@@ -252,7 +238,9 @@ function logout()
     document.getElementById("access_user_report").disabled = true;
     $('#confirm_pass').addClass('d-none');
     socket.emit('fc2_user','');
+    step_process(100);
 }
+// CHƯƠNG TRÌNH CHỈNH SỬA THÔNG TIN NGƯỜI DÙNG
 function fn_edit(){
     document.getElementById('bt_logout').classList.add('d-none');
     document.getElementById('bt_edit').classList.add('d-none');
@@ -280,6 +268,7 @@ function fn_edit(){
     }
     $('#confirm_pass').removeClass('d-none');
 }
+// CHƯƠNG TRÌNH LƯU THÔNG TIN ĐÃ CHỈNH SỬA
 function fn_save()
 {
     if( $("#ten_user").val() == "" 
@@ -345,6 +334,7 @@ function fn_save()
     }
 
 }
+// CHƯƠNG TRÌNH NÚT HỦY CHỈNH SỬA
 function fn_cancle(){
     document.getElementById('bt_edit').classList.remove('d-none');
         document.getElementById('bt_save').classList.add('d-none');
@@ -377,9 +367,5 @@ function fn_user_pre(){
         user_present = 4;
     fn_user_number(user_present);
 }
-// document.addEventListener("keypress", function(event){
-//     if (event.keyCode === 13 & bootstrap.Modal.getInstance(document.getElementById("myModal")).show())
-//     {
-//         login();
-//     }
-// });
+
+

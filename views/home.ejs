@@ -10,7 +10,6 @@
         <link rel="stylesheet" href="CSS/all.min.css">
         <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
         <script src = "socket.io/socket.io.js"></script>
-        <!-- <script src="js/jquery-3.6.4.min.js"></script> -->
         <script src="js/FileSaver.js"></script>
         <script src="js/bootstrap.bundle.min.js"></script>
         <!-- khai báo địa chỉ trang web có thể dùng localhost:3000 hoặc địa chỉ ip của máy tính -->
@@ -53,7 +52,7 @@
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" id="bt_tongquan" href="#TongQuan" >TỔNG QUAN</a></li>
                                     <hr class="dropdown-divider">
-                                    <li><a class="dropdown-item" id="bt_mohinh" href="#MoHinh" >MÔ HÌNH</a></li>
+                                    <li><a class="dropdown-item" id="bt_mohinh" href="#MoHinh" >SƠ ĐỒ KHỐI</a></li>
                                     <li>
                                     </li>
                                 </ul>
@@ -108,13 +107,13 @@
                         </div>
                         <div class="carousel-inner">
                           <div class="carousel-item active carouser_img">
-                            <img src="images/background-plc.jpg" style="width: 100%;" alt="photo_1" class="d-block">
+                            <img src="images/introduce/background-plc.png" style="width: 100%;" alt="photo_1" class="d-block">
                           </div>
                           <div class="carousel-item carouser_img">
-                            <img src="https://www.infoplc.net/media/k2/items/cache/384ad86f2bc78174ef5499506b7b7703_XL.jpg" style="width: 100%;" alt="" class="d-block">
+                            <img src="images/introduce/plc_2.png" style="width: 100%;" alt="" class="d-block">
                           </div>
                           <div class="carousel-item carouser_img">
-                            <img src="https://ctisupply.vn/wp-content/uploads/2020/03/step-7-basic-and-s7-1200.png" style="width: 100%;" alt="" class="d-block">
+                            <img src="images/introduce/plc_3.png" style="width: 100%;" alt="" class="d-block">
                           </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
@@ -138,8 +137,8 @@
                         Trong khi đó phần mềm sẽ giữ vai trò điều khiển giám sát và quản lý dữ liệu hàng hoá.<br>
                     </p>
                         <div class="text-center">
-                            <img class="img_contain" class="text-center" src="images/ASRS.png" alt=""><br>
-                            <span class="text-center text_13">Hệ thống lưu kho tự động AS-RS</span><br>
+                            <img class="img_contain" class="text-center" src="images/introduce/ASRS.png" alt="" style="max-width: 40%; max-height: 40%;"><br>
+                            <span class="text-center text_11" style="font-style: italic;">Hệ thống lưu kho tự động AS-RS</span><br>
                         </div>
                         <dt class="text_13">Ưu điểm hệ thống lưu kho.</dt>
                         <dd class="text_13">- Giảm số lượng nhân công.<br>
@@ -152,6 +151,14 @@
                         <dd class="text_13">- Chi phí đầu tư ban đầu có thể cao.
                         </dd>
                         <h5  class="mt-2 text_14" style="font-weight: bold;">Một số ứng dụng của hệ thống lưu kho?</h5>
+                        <dt class="text_13"> - Ứng dụng vào các nhà máy sản xuất: tiết kiệm được không gian và chi phí thuê đất.</dt>
+                        <div class="text-center">
+                            <img class="img_contain" class="text-center" src="images/introduce/HeThongLuuKho.png" alt="" style="max-width: 40%; max-height: 40%;"><br>
+                        </div>
+                        <dt class="text_13"> - Ứng dụng trong các bãi đỗ xe: Giúp định hình đô thị thông minh trong tương lai.</dt>
+                        <div class="text-center">
+                            <img class="img_contain" class="text-center" src="images/introduce/HeThongBaiGiuXe.png" alt="" style="max-width: 40%; max-height: 40%;"><br>
+                        </div>
                 </div>
                 <div id="MoHinh">
                     <h4  class="mt-2 text-bg-info text-center text_15" style="font-weight: bold;">Sơ Đồ Khối</h4>
@@ -168,33 +175,24 @@
                         - Hệ thống xuất nhập (2 băng tải xuất và nhập hàng).<br>
                         - Hệ thống lưu giữ (kho, giá đặt hàng).<br>
                     </dd>
+                    <dt class="text_13">Từ các thành phần trên, cần giải quyết 2 vấn đề chính:</dt>
+                    <dd class="text_13">- Bài toán vận chuyển hàng: 
+                        Cần điều khiển được hệ thống 2 băng tải giữ nhiệm vụ xuất nhập hàng. 
+                        Điều khiển robot mang hàng từ băng tải vào kệ kho và lấy hàng từ kệ ra băng tải.<br>
+                        -	Bài toán phân loại sản phẩm: 
+                        Yêu cầu phải phân loại được sản phẩm thông qua mã QR bằng những hình ảnh thu được từ camera đưa về máy tính, 
+                        gửi lệnh cho Robot để nhập hàng vào đúng vị trí ô kho và gửi lệnh cho Robot lấy hàng đúng vị trí ô kho xuất ra ngoài. <br>
+                    </dd>
+                    <dt class="text_13">Từ đó, quy trình xử lý được được ra:</dt>
+                    <li>Băng tải đưa hàng vào kho.</li>
+                    <li>Camera thu hình ảnh và gửi về cho máy tính xử lý ảnh nhận diện và phân loại.</li>
+                    <li>Máy tính giải mã QR và gửi dữ liệu tới PLC.</li>
+                    <li>PLC nhận tín hiệu và điều khiển Robot thực thi nhập hàng đến ô kho đã được chỉ định.</li>
+                    <div class="text-center">
+                        <img class="img_contain" class="text-center" src="images/introduce/SoDoKhoi.png" alt="" style="max-width: 50%; max-height: 50%;"><br>
+                        <span class="text-center text_11" style="font-style: italic;">Mô hình hóa hệ thống</span><br>
+                    </div>
                 </div>
-                
-                <p class="text_13">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Qui vel perspiciatis sapiente. Distinctio nulla
-                dolore qui nemo non consequatur ullam quo, asperiores aut repellat nostrum perspiciatis iure odio quos
-                necessitatibus similique, minima quibusdam nesciunt quis modi commodi hic sapiente aspernatur
-                voluptates?
-                Consectetur ab, quasi excepturi eum cum suscipit voluptate? Molestiae nostrum assumenda veritatis
-                dolore,
-                minima numquam itaque quibusdam voluptate commodi maiores nobis doloremque accusantium ducimus veniam ut
-                delectus amet, neque sunt et cumque, dolorum voluptatibus saepe eligendi! Nobis odit optio accusantium
-                in
-                officia? Architecto, molestias. Molestiae qui excepturi quasi similique vero, quis, error, expedita
-                culpa
-                aliquid deserunt blanditiis tempore impedit.</p>
-
-                <p class="text_13">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Qui vel perspiciatis sapiente. Distinctio nulla
-                dolore qui nemo non consequatur ullam quo, asperiores aut repellat nostrum perspiciatis iure odio quos
-                necessitatibus similique, minima quibusdam nesciunt quis modi commodi hic sapiente aspernatur
-                voluptates?
-                Consectetur ab, quasi excepturi eum cum suscipit voluptate? Molestiae nostrum assumenda veritatis
-                dolore,
-                minima numquam itaque quibusdam voluptate commodi maiores nobis doloremque accusantium ducimus veniam ut
-                delectus amet, neque sunt et cumque, dolorum voluptatibus saepe eligendi! Nobis odit optio accusantium
-                in
-                officia? Architecto, molestias. Molestiae qui excepturi quasi similique vero, quis, error, expedita
-                culpa
-                aliquid deserunt blanditiis tempore impedit.</p>
             </div>
             <!-- ////////////// NỘI DUNG TRANG ĐIỀU KHIỂN, GIÁM XÁT VÀ BÁO CÁO //////////////  -->
             <div class="container" id="control">
@@ -442,21 +440,21 @@
                                             </div>
                                         </div>  
                                         <div class="mx-auto btn_group text-center">
-                                            <button type="button" class="btn btn-secondary mode_sa panel_content" title="SEMI AUTO">S-A</button> 
-                                            <button type="button" class="btn btn-secondary mode_a panel_content" title="AUTO">A</button>
+                                            <button type="button" class="btn btn-secondary panel_content" title="SEMI AUTO" id="mode_sa">S-A</button> 
+                                            <button type="button" class="btn btn-secondary panel_content" title="AUTO" id="mode_a">A</button>
                                         </div>
                                         <div class="text-center" >
                                             <input class="text-center panel_content" id="mode" type="text" size="12" disabled placeholder="SEMI AUTO">
                                         </div>
                                         <div class="mx-auto btn_group text-center">
                                             <div class="mx-auto btn_group text-center">
-                                                <button type="button" class="btn btn-secondary bt_import panel_content" title="button import">IMPORT</button> 
-                                                <button type="button" class="btn btn-secondary bt_export panel_content" title="button export">EXPORT</button>
+                                                <button type="button" class="btn btn-secondary panel_content" title="button import" id="bt_import">IMPORT</button> 
+                                                <button type="button" class="btn btn-secondary panel_content" title="button export" id="bt_export">EXPORT</button>
                                             </div>
                                             <div class="mx-auto  btn_group text-center">
-                                                <button type="button" class="btn btn-secondary bt_run panel_content" title="button run">RUN</button>
-                                                <button type="button" class="btn btn-secondary bt_stop panel_content" title="button stop">STOP</button>
-                                                <button type="button" class="btn btn-secondary bt_e_stop panel_content" title="button e-stop" >E-STOP</button>
+                                                <button type="button" class="btn btn-secondary panel_content" title="button run" id="bt_run">RUN</button>
+                                                <button type="button" class="btn btn-secondary panel_content" title="button stop" id="bt_stop">STOP</button>
+                                                <button type="button" class="btn btn-secondary panel_content" title="button e-stop" id="bt_e_stop" >E-STOP</button>
                                             </div>
                                         </div>
                                     </div>
@@ -639,7 +637,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="text-center">
-                                <img id = "img_avatar" src="images/user.png" alt="Avatar" class="avatar" style="width: 40%;">
+                                <img id = "img_avatar" src="images/member/user.png" alt="Avatar" class="avatar" style="width: 40%;">
                             </div>
                                 <div class="mb-1 mt-1">
                                     <label for="inputuser">User:</label>
@@ -649,13 +647,8 @@
                                     <label for="inputpass">Password:</label>
                                     <input type="password" class="form-control" id="inputpass" placeholder="Enter password" name="inputpass">
                                 </div>
-                                <div class="form-check mb-1">
-                                    <label class="form-check-label">
-                                    <input class="form-check-input" type="checkbox" name="remember"> Remember me
-                                    </label>
-                                </div>
                                 <button class="text-bg-primary mb-1" style="width: 100% !important;" onclick="login()">Login</button>
-                            <button type="button" class="text-bg-danger" style="float: right;" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="text-bg-danger" style="float: right;" data-bs-dismiss="modal"; onclick="step_process(100);">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -665,7 +658,7 @@
                 <div id="member1" class=" flip-card container-fluid pt-3">
                     <div class="flip-card-inner">
                       <div class="flip-card-front">
-                        <img src="images/user.png" alt="Avatar">
+                        <img src="images/member/user.png" alt="Avatar">
                         <h7>GVHD: ThS.Hà Chí Kiên</h7> 
                       </div>
                       <div class="flip-card-back">
@@ -679,7 +672,7 @@
                     <div id="member2" class=" flip-card container-fluid">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="images/user.png" alt="Avatar" >
+                            <img src="images/member/user.png" alt="Avatar" >
                             <h7>Bạch Hoàng Ân</h7> 
                           </div>
                           <div class="flip-card-back">
@@ -692,7 +685,7 @@
                     <div id="member3" class=" flip-card container-fluid">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="images/user.png" alt="Avatar">
+                            <img src="images/member/user.png" alt="Avatar">
                             <h7>Trần Tiến Anh</h7> 
                           </div>
                           <div class="flip-card-back">
@@ -707,7 +700,7 @@
                     <div id="member4" class=" flip-card container-fluid">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="images/user.png" alt="Avatar">
+                            <img src="images/member/user.png" alt="Avatar">
                             <h7>Nguyễn Phan Châu Huân</h7> 
                           </div>
                           <div class="flip-card-back">
@@ -720,7 +713,7 @@
                     <div id="member5" class=" flip-card container-fluid">
                         <div class="flip-card-inner">
                           <div class="flip-card-front">
-                            <img src="images/user.png" alt="Avatar">
+                            <img src="images/member/NguyenThanhLuan.png" alt="Avatar">
                             <h7>Nguyễn Thành Luân</h7> 
                           </div>
                           <div class="flip-card-back">

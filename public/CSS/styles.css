@@ -45,13 +45,13 @@ ul li:hover .dropdown-menu{
 .carousel-inner img {
     width: 100%;
     height: 100%;
-/* --------------------------------------------------CSS cho màn hình SCADA_1-------------------------------------------------------- */
+/* --------------------------------------------------CSS cho màn hình SCREEN_1-------------------------------------------------------- */
 }.object{
     position: relative;
     min-height:26rem;
     width: 100%;
     height: 100%;
-    background-image: url(../images/backGround_display.png);
+    background-image: url(../images/control/backGround_display.png);
     background-size:contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -117,13 +117,13 @@ ul li:hover .dropdown-menu{
 .object #mt_o{
     left: 76%;
 }
-/* --------------------------------------------------CSS cho màn hình SCADA_2-------------------------------------------------------- */
+/* --------------------------------------------------CSS cho màn hình SCREEN_2-------------------------------------------------------- */
 .object_display2{
     position: relative;
     min-height:26rem;
     width: 100%;
     height: 100%;
-    background-image: url(../images/backGround_display_2_edit.png);
+    background-image: url(../images/control/backGround_display_2_edit.png);
     background-size:contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -420,6 +420,7 @@ background-color: transparent;
 width: 300px;
 height: 300px;
 perspective: 1000px;
+padding: 0;
 }
 
 .flip-card-inner {
@@ -725,6 +726,9 @@ footer{
     }
     .text_13{
         font-size: 13px;
+    }
+    .text_11{
+        font-size: 11px;
     }
     .img_contain{
         max-width: 250px;
