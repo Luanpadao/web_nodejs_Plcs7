@@ -192,8 +192,8 @@ var type                = 'type';               //tag char
 var qr_dis              = 'qr_dis';             //tag string 10
 var process_stop        = 'process_stop';       //tag_bool
 var clock_plc           = 'clock_plc';          //tag_bool
-var finished_1            = 'finished_1';       //tag bool
-var qr_err            = 'qr_err';       //tag bool
+var finished_1          = 'finished_1';       //tag bool
+var qr_err              = 'qr_err';       //tag bool
 // Đọc dữ liệu
 const TagList = tagBuilder
 .read(sw_mode) 
@@ -382,6 +382,9 @@ io.on("connection", function(socket){
   });
   socket.on("cmd_status_plc",function(data){
     fn_Data_Write(clock_plc,data);
+  });
+  socket.on("cmd_qr_err",function(data){
+    fn_Data_Write(qr_err,data);
   });
   socket.on("fc2_user",function(data){
     socket.emit('fc_user',data);

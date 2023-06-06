@@ -44,6 +44,7 @@ let previousState = false;
 let unchangedCounter = 0;
 var step = 100;
 var enable_done_2 = false;
+var qr_err_done = false;
 // Chương trình xử lý sự khi sau khi đã load web
 $(document).ready(function(){
     thumb = document.querySelector('.slider-thumb');
@@ -63,6 +64,7 @@ $(document).ready(function(){
     fn_IOFieldDataShow('pos_x','px',1);
     fn_IOFieldDataShow('pos_y','py',1);
     fn_IOFieldDataShow('pos_z','pz',1);
+    fn_IOFieldDataShow('qr_err','','');
     fn_SymbolStatus('ss_i1','sstc','ss_i1');
     fn_SymbolStatus('ss_i2','sstc','ss_i2');
     fn_SymbolStatus('ss_o','sstc','ss_o');
@@ -684,6 +686,17 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             }
             enable_done = data;
         }
+        else if (tag == 'qr_err')
+        {
+            if(data == true & qr_err_done != data)
+            {
+                socket.emit("cmd_qr_err", false);
+                setTimeout(function() {
+                    alert('Không phát hiện được mã QR!');
+                }, 500);
+            }
+            qr_err_done = data;
+        }
         // Chương trình xử lý các giá trị tag counter, đếm số lượng ô đã nhập
         else if(tag == 'counter')
         {
@@ -1229,7 +1242,7 @@ function checkStateChange(data)
     if (data == previousState) 
     {
         unchangedCounter = unchangedCounter + 1;
-        if (unchangedCounter >= 5) 
+        if (unchangedCounter >= 7) 
         {
         // Hiển thị cảnh báo nếu không có sự thay đổi trong 2 giây
             console.log('mất kết nối plc');
