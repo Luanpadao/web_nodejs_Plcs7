@@ -45,8 +45,12 @@ ul li:hover .dropdown-menu{
 .carousel-inner img {
     width: 100%;
     height: 100%;
+}
+.t_i4{
+    margin-left: 12px;
+}
 /* --------------------------------------------------CSS cho màn hình SCREEN_1-------------------------------------------------------- */
-}.object{
+.object{
     position: relative;
     min-height:26rem;
     width: 100%;
@@ -172,13 +176,13 @@ ul li:hover .dropdown-menu{
     position: relative;
 }
 .slider-thumb {
-width: 40px;
-height: 80px;
-background-color: blue;
-position: absolute;
-top: -30px;
-left: 0px;
-cursor: grab;
+    width: 40px;
+    height: 80px;
+    background-color: blue;
+    position: absolute;
+    top: -30px;
+    left: 0px;
+    cursor: grab;
 }
 .slider_child {
     width: 500%;
@@ -187,14 +191,14 @@ cursor: grab;
     position: relative;
 }
 .slider-thumb_child {
-width: 70px;
-height: 25px;
-background-color: yellow;
-position: absolute;
-top: -52px;
-/* top: 107px; */
-left: 0px;
-cursor: grab;
+    width: 70px;
+    height: 25px;
+    background-color: yellow;
+    position: absolute;
+    top: -52px;
+    /* top: 107px; */
+    left: 0px;
+    cursor: grab;
 }
 .slider_1_s {
     width: 22%;
@@ -203,13 +207,13 @@ cursor: grab;
     position: relative;
 }
 .slider_1-thumb {
-width: 20px;
-height: 80px;
-background-color: blue;
-position: absolute;
-top: 22px;
-left: 0px;
-cursor: grab;
+    width: 20px;
+    height: 80px;
+    background-color: blue;
+    position: absolute;
+    top: 22px;
+    left: 0px;
+    cursor: grab;
 }
 .slider_1_child {
     width: 4%;
@@ -218,13 +222,13 @@ cursor: grab;
     position: relative;
 }
 .slider_1-thumb_child {
-width: 80px;
-height: 10px;
-background-color: yellow;
-position: absolute;
-top: 10px;
-left: 0px;
-cursor: grab;
+    width: 80px;
+    height: 10px;
+    background-color: yellow;
+    position: absolute;
+    top: 10px;
+    left: 0px;
+    cursor: grab;
 }
 /* -------------------------------------------------- */
 .object_display2 #led_ss_i1{
@@ -597,19 +601,19 @@ footer{
         height: 40px;
     }
     .object .row-1{
-        top: 27.8%;
+        top: 26%;
     }
     .object .row-2{
-        top: 35.8%;
+        top: 34.5%;
     }
     .object .row-3{
-        top: 43.8%;
+        top: 43.2%;
     }
     .object .row-4{
-        top: 63.5%;
+        top: 66%;
     }
     .object .row-5{
-        top: 74%;
+        top: 75%;
     }
     .circle {
         width: 40px;
@@ -626,6 +630,103 @@ footer{
     }
     #panel{
         min-height: 710px;
+    }
+    .object_display2 .row-1{
+        top: 35%;
+    }
+    .object_display2 .row-2{
+        top: 48%;
+    }
+    .object_display2 .row-3{
+        top: 49%;
+    }
+    .object_display2 .row-4{
+        top: 57%;
+    }
+    .object_display2 .row-5{
+        top: 56.5%;
+    }
+    .object_display2 .row-6{
+        top:64.5%;
+    }
+    .object_display2 .row-7{
+        top:64%;
+    }
+    .object_display2 .row-8{
+        top: 71%;
+    }
+    .object_display2 .row-9{
+        top:70.5%;
+    }
+    /* --------------CSS cho vùng giám sát robot--------------- */
+    .slider_s {
+        width: 40%;
+        height: 15px;
+    }
+    .slider-thumb {
+        width: 30px;
+        height: 60px;
+        top: -35px;
+        left:-15px;
+    }
+    .slider_child {
+        height: 63px;
+        width: 500%;
+    }
+    .slider-thumb_child {
+        width: 50px;
+        height: 20px;
+        top: -39.5px;
+        left: 0px;
+    }
+    .slider_1_s {
+        width: 23.5%;
+        height: 10px;
+    }
+    .slider_1-thumb {
+        width: 13px;
+        height: 60px;
+        top: 10px;
+        left: -5px;
+    }
+    .slider_1_child {
+        height: 60px;
+    }
+    .slider_1-thumb_child {
+        width: 60px;
+        height: 6px;
+        top: 10px;
+    }
+    /* -------------------------------------------------- */
+    /* Thanh slider x */
+    #px_range {
+        width: 90%;
+    }
+    /* Nút trượt trên thanh slider x */
+    #px_range::-webkit-slider-thumb {
+        width: 15px;
+        height: 15px;
+    }
+    /* Thanh slider y */
+    #py_range {
+        width: 90%;
+    }
+    /* Nút trượt trên thanh slider y */
+    #py_range::-webkit-slider-thumb {
+        width: 15px;
+        height: 15px;
+    }
+    /* Thanh slider z */
+    #pz_range {
+        width: 90%;
+    }
+    /* Nút trượt trên thanh slider z */
+    #pz_range::-webkit-slider-thumb {
+        width: 15px;
+        height: 15px;
+    }
+    .t_i4{
+        margin-left: -10px;
     }
 }
 /*------------------------ Màn hình 175% --------------------------*/

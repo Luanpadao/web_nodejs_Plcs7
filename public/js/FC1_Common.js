@@ -45,6 +45,7 @@ let unchangedCounter = 0;
 var step = 100;
 var enable_done_2 = false;
 var qr_err_done = false;
+var logined = false;
 // Chương trình xử lý sự khi sau khi đã load web
 $(document).ready(function(){
     thumb = document.querySelector('.slider-thumb');
@@ -224,6 +225,13 @@ $(document).ready(function(){
         }
         $('#introduce').hide();
         $('#member').hide();
+        // sd để edit
+        // $('#introduce').hide();
+        // $('#control').show();
+        // $('#scada_display1').hide();
+        // $('#scada_display2').show();
+        // $("#table").hide();
+        // sd để edit
     });
     //////////////////////////////////////////////////////bt_scada_1chuyen trang
     $("#bt_scada").click(function(){
