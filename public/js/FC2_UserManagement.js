@@ -8,8 +8,18 @@ var stt_temp = 0;
 var lock_mssv = true;
 var stt_user;
 var user_present;
+var user_logined = "";
+// Kiểm tra sự tồn tại của cookies đăng nhập
+//-----------------------------------------------Bổ xung ngày 9/6/2023
+var loggedInCookie = document.cookie
+    .split(';')
+    .find(cookie => {
+        var [name, value] = cookie.trim().split('=');
+        return [name,value]
+    });
 $(document).ready(function(){
     fn_show_user_data();
+    fn_checkCookies();//-----------------------------------------------Bổ xung ngày 9/6/2023
 });
 // CHƯƠNG TRÌNH ĐĂNG NHẬP
 function login()
@@ -132,6 +142,8 @@ function fn_user_data(data){            //Hàm truy xuất dữ liệu đến c�
                         document.getElementById("inputuser").value = "";
                         document.getElementById("inputpass").value = "";
                         check_wrong = false;
+                        document.cookie = data[i].access + "=" + data[i].stt + "; expires=,"+ setTimeCookie()+"; path=/";//-----------------------------------------------Bổ xung ngày 9/6/2023
+                        user_logined = data[i].access;//-----------------------------------------------Bổ xung ngày 9/6/2023
                         break;
                     }
                 }
@@ -238,6 +250,7 @@ function logout()
     document.getElementById("access_user_report").disabled = true;
     $('#confirm_pass').addClass('d-none');
     socket.emit('fc2_user','');
+    deleteCookie();//-----------------------------------------------Bổ xung ngày 9/6/2023
     step_process(100);
 }
 // CHƯƠNG TRÌNH CHỈNH SỬA THÔNG TIN NGƯỜI DÙNG
@@ -366,6 +379,44 @@ function fn_user_pre(){
     if(user_present == 0)
         user_present = 4;
     fn_user_number(user_present);
+}
+
+//-----------------------------------------------Bổ xung ngày 9/6/2023
+function fn_checkCookies()
+{
+    if (loggedInCookie != "") 
+    {
+        console.log(loggedInCookie);
+        // Xác minh tính hợp lệ của cookies đăng nhập
+        var loggedInValue = loggedInCookie.split('=')[1];
+        user_logined = loggedInCookie.split('=')[0];;
+        fn_user_number(loggedInValue);
+        document.getElementById('bt_login').classList.add('d-none');
+        document.getElementById('bt_logout').classList.remove('d-none');
+        document.getElementById('bt_edit').classList.remove('d-none');
+        document.getElementById("inputuser").value = "";
+        document.getElementById("inputpass").value = "";
+        if(user_logined == "Toan quyen")
+        {
+            document.getElementById('next_page').classList.remove('d-none');
+            document.getElementById('user_'+data[i].stt).classList.add('disabled');
+            admin = true;
+        }
+        else if(user_logined == "Dieu khien")
+        {
+            socket.emit('cmd_sw_mode',false);
+            socket.emit('cmd_sw_im_ex', false);
+            socket.emit('fc2_user','DieuKhien');
+        }
+    }
+}
+function setTimeCookie() {
+    var now = new Date();
+    var expirationTime = new Date(now.getTime() + 5 * 60 * 1000); // 5 phút
+    return expirationTime.toUTCString();
+}
+function deleteCookie() {
+    document.cookie = user_logined + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
 
