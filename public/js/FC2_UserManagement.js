@@ -60,7 +60,7 @@ function fn_user_data(data){            //Hàm truy xuất dữ liệu đến c�
                 {
                     if(data[i].user == a & data[i].pass == b)
                     {
-                        step_process(100);
+                        step_process(99);
                         setTimeout(function() {
                             alert("Xin chào " + data[i].name);
                         }, 200);

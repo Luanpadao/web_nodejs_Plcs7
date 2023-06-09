@@ -39,13 +39,14 @@ var im_ex = false;
 var fc_user = '';
 var user_viewer = false;
 var status_plc = false;
-var status_connect_plc = true;
+var status_connect_plc = false;
 let previousState = false;
 let unchangedCounter = 0;
 var step = 100;
 var enable_done_2 = false;
 var qr_err_done = false;
 var logined = false;
+var test = false;
 // Chương trình xử lý sự khi sau khi đã load web
 $(document).ready(function(){
     thumb = document.querySelector('.slider-thumb');
@@ -562,6 +563,7 @@ $(document).ready(function(){
     });
     $("#bt_run").mouseup(function()
     {
+        // document.getElementById("bt_run").disabled = true;
         $(this).css("background-color","#6c757d");
         socket.emit('cmd_bt_run', false);
     });
@@ -685,7 +687,7 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
                     document.getElementById('gd_dk_5').classList.add('d-none');
                     enable_done_2 = true;
                 }
-                else if(data == false )
+                else if(data == false & test == true)
                 {
                     document.getElementById('gd_dk_1').classList.add('d-none');
                     document.getElementById("nd_tb").innerHTML = "Vui lòng nhấn ON tại tủ điện để cho phép điều khiển!";
@@ -699,9 +701,12 @@ function fn_IOFieldDataShow(tag, IOField, tofix){
             if(data == true & qr_err_done != data)
             {
                 socket.emit("cmd_qr_err", false);
-                setTimeout(function() {
-                    alert('Không phát hiện được mã QR!');
-                }, 500);
+                if(logined == true)
+                {
+                    setTimeout(function() {
+                        alert('Không phát hiện được mã QR!');
+                    }, 500);
+                }
             }
             qr_err_done = data;
         }
@@ -964,9 +969,12 @@ function fn_table_01(data){
                 $("#i4").val("");
                 if(fc_user == 'DieuKhien')
                 {
-                    setTimeout(function() {
-                        alert('Mã QR không phù hợp, Đang yêu cầu xuất kho');
-                    }, 500);
+                    if(logined == true)
+                    {
+                        setTimeout(function() {
+                            alert('Mã QR không phù hợp, Đang yêu cầu xuất kho');
+                        }, 500);
+                    }
                     socket.emit('cmd_pos', '20');
                 }
                 else
@@ -980,9 +988,12 @@ function fn_table_01(data){
                 setTimeout(function() {
                     if(fc_user == 'DieuKhien')
                     {
-                        setTimeout(function() {
-                            alert('Đầy hàng rồi loại '+ type_dis + ' .Đang yêu cầu xuất kho');
-                        }, 500);
+                        if(logined == true)
+                        {
+                            setTimeout(function() {
+                                alert('Đầy hàng rồi loại '+ type_dis + ' .Đang yêu cầu xuất kho');
+                            }, 500);
+                        }
                         socket.emit('cmd_pos', '20');
                     }
                     else
@@ -1051,9 +1062,12 @@ function fn_table_02(data){
             tempArr[4] = "Xuất";
             if(y == 0)
             {
-                setTimeout(function() {
-                    alert('Hoàn thành xuất kho loại ' + type);
-                }, 3000);
+                if(logined == true)
+                {
+                    setTimeout(function() {
+                        alert('Hoàn thành xuất kho loại ' + type);
+                    }, 3000);
+                }
 
             }
         }
@@ -1213,74 +1227,6 @@ function data_fc(){
         fc_user = data;
     });
 }
-// CHƯƠNG TRÌNH RELOAD TRANG
-function CallPageHome(){
-    window.location.href = window.location.origin;
-}
-// CHƯƠNG TRÌNH XỬ LÝ STOP
-function fn_process_stop(){
-    socket.on('finished_1',function(data){
-        if(data == true & finish_1_done != data)
-        {
-            $("#i1").val("");
-            $("#i2").val("");
-            $("#i3").val("");
-            $("#i4").val("");
-            socket.emit('cmd_pos', '0');
-        }
-        finish_1_done = data;
-    });
-    socket.on('clock_plc',function(data){
-        status_plc = data;
-    });
-}
-
-// Lặp lại việc mô phỏng kết nối PLC
-setInterval(
-    function(){
-        socket.emit('cmd_status_plc',!status_plc);
-        setTimeout(function() {
-            checkStateChange(status_plc);
-        }, 500);
-}, 1000);
-
-// Hàm kiểm tra sự thay đổi trạng thái
-function checkStateChange(data) 
-{
-    if (data == previousState) 
-    {
-        unchangedCounter = unchangedCounter + 1;
-        if (unchangedCounter >= 7) 
-        {
-        // Hiển thị cảnh báo nếu không có sự thay đổi trong 2 giây
-            console.log('mất kết nối plc');
-            if(status_connect_plc == false)
-            {
-                document.getElementById('gd_dk_1').classList.add('d-none');
-                document.getElementById('gd_dk_2').classList.add('d-none');
-                document.getElementById('gd_dk_3').classList.add('d-none');
-                document.getElementById('gd_dk_4').classList.add('d-none');
-                document.getElementById("nd_tb").innerHTML = "Mất kết nối với PLC!";
-                document.getElementById('gd_dk_5').classList.remove('d-none');
-                enable_done_2 = false;
-                status_connect_plc = true;
-            }
-        }
-    } 
-    else 
-    {
-        if(enable_done_2 == false)
-        {
-            document.getElementById('gd_dk_1').classList.add('d-none');
-            document.getElementById("nd_tb").innerHTML = "Vui lòng nhấn ON tại tủ điện để cho phép điều khiển!";
-            document.getElementById('gd_dk_5').classList.remove('d-none');
-            enable_done_2 = true;
-        }
-        status_connect_plc = false;
-        unchangedCounter = 0;
-        previousState = data;
-    }
-}
 // Hàm chức năng của nút select_im
 function select_im()
 {
@@ -1346,6 +1292,8 @@ function select_ex()
 function step_process(data)
 {
     step = data;
+    if(data == 99)
+        logined = true;
 }
 // Lắng nghe sự kiện nhấn ENTER
 document.addEventListener("keypress", function(event){
@@ -1356,3 +1304,76 @@ document.addEventListener("keypress", function(event){
     else if(event.keyCode == 13 & step == 2)
         select_im();
 });
+// CHƯƠNG TRÌNH RELOAD TRANG
+function CallPageHome(){
+    window.location.href = window.location.origin;
+}
+// CHƯƠNG TRÌNH XỬ LÝ STOP
+function fn_process_stop(){
+    socket.on('finished_1',function(data){
+        if(data == true & finish_1_done != data)
+        {
+            $("#i1").val("");
+            $("#i2").val("");
+            $("#i3").val("");
+            $("#i4").val("");
+            socket.emit('cmd_pos', '0');
+        }
+        finish_1_done = data;
+    });
+    socket.on('clock_plc',function(data){
+        status_plc = data;
+    });
+}
+
+// Lặp lại việc mô phỏng kết nối PLC
+setInterval(
+    function(){
+        socket.emit('cmd_status_plc',!status_plc);
+        setTimeout(function() {
+            checkStateChange(status_plc);
+        }, 500);
+}, 1000);
+// Hàm kiểm tra sự thay đổi trạng thái
+function checkStateChange(data) 
+{
+    if (data == previousState) 
+    {
+        unchangedCounter = unchangedCounter + 1;
+        if (unchangedCounter >= 5) 
+        {
+        // Hiển thị cảnh báo nếu không có sự thay đổi trong 2 giây
+            console.log('mất kết nối plc');
+            if(status_connect_plc == false)
+            {
+                $("#i1").val("");
+                $("#i2").val("");
+                $("#i3").val("");
+                $("#i4").val("");
+                document.getElementById('gd_dk_1').classList.add('d-none');
+                document.getElementById('gd_dk_2').classList.add('d-none');
+                document.getElementById('gd_dk_3').classList.add('d-none');
+                document.getElementById('gd_dk_4').classList.add('d-none');
+                document.getElementById("nd_tb").innerHTML = "Mất kết nối với PLC!";
+                document.getElementById('gd_dk_5').classList.remove('d-none');
+                enable_done_2 = false;
+                status_connect_plc = true;
+                test = false;
+            }
+        }
+    } 
+    else 
+    {
+        if(enable_done_2 == false)
+        {
+            document.getElementById('gd_dk_1').classList.add('d-none');
+            document.getElementById("nd_tb").innerHTML = "Vui lòng nhấn ON tại tủ điện để cho phép điều khiển!";
+            document.getElementById('gd_dk_5').classList.remove('d-none');
+            enable_done_2 = true;
+            test = true;
+        }
+        status_connect_plc = false;
+        unchangedCounter = 0;
+        previousState = data;
+    }
+}
