@@ -1332,7 +1332,7 @@ setInterval(
         socket.emit('cmd_status_plc',!status_plc);
         setTimeout(function() {
             checkStateChange(status_plc);
-        }, 500);
+        }, 1000);
 }, 1000);
 // Hàm kiểm tra sự thay đổi trạng thái
 function checkStateChange(data) 
@@ -1366,6 +1366,10 @@ function checkStateChange(data)
     {
         if(enable_done_2 == false)
         {
+            $("#bt_import").css("background-color", "blue");
+            $("#bt_export").css("background-color", "#6c757d");
+            $("#mode_sa").css("background-color", "blue");
+            $("#mode_a").css("background-color", "#6c757d");
             document.getElementById('gd_dk_1').classList.add('d-none');
             document.getElementById("nd_tb").innerHTML = "Vui lòng nhấn ON tại tủ điện để cho phép điều khiển!";
             document.getElementById('gd_dk_5').classList.remove('d-none');
@@ -1373,6 +1377,7 @@ function checkStateChange(data)
             test = true;
         }
         status_connect_plc = false;
+        console.log(unchangedCounter);
         unchangedCounter = 0;
         previousState = data;
     }

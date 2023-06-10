@@ -386,7 +386,6 @@ function fn_checkCookies()
 {
     if (loggedInCookie != "") 
     {
-        console.log(loggedInCookie);
         // Xác minh tính hợp lệ của cookies đăng nhập
         var loggedInValue = loggedInCookie.split('=')[1];
         user_logined = loggedInCookie.split('=')[0];;
