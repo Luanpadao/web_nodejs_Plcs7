@@ -1377,7 +1377,6 @@ function checkStateChange(data)
             test = true;
         }
         status_connect_plc = false;
-        console.log(unchangedCounter);
         unchangedCounter = 0;
         previousState = data;
     }
